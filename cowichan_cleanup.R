@@ -1,9 +1,9 @@
 # Cowichan Diversity Analysis Data Cleaning
-# Adapted from code by Lauren (plants_cleanup.Rmd)
+# Adapted from code by Lauren Smith (plants_cleanup.Rmd)
 # email: robinbradley210@gmail.com
 
 
-# Set Up
+## Set Up
 setwd("C:/Users/Robin/Dropbox/Williams' Lab/Cowichan IDE/Data & Plot info")
 
 library(tidyverse)
@@ -13,8 +13,14 @@ library(plyr)
 library(vegan)
 library(ggplot2)
 
-# Read in data
+#### Diversity Data ####
+## Read in plot data
+plots <- read.csv("IDE_plotinfo.csv", header = TRUE)
+plots <- plots %>% 
+  dplyr::rename("treatment" = "trt")
+plots$plot <- as.character(plots$plot)
 
+## Read in cover data
 # IDE surveys (mid growing season, 2015-2021)
 cover_mids20152021 <- read.csv("Diversity/cowichan_community5_19_2021.csv", header = TRUE, na.strings = c("", " ")) %>% 
   dplyr::select(-quadID, -notes, -X, -X.1, -X.2, -X.3, -X.4, -X.5)
@@ -62,4 +68,32 @@ cover_late2024 <- read.csv("Diversity/cowichan_community_6_09_2024.csv", header 
   dplyr::select(-quadID, -notes)
 cover_late2024$date <- "late"
 
+## Read in trait info
+traits <- read.csv("species_traits.csv", header = TRUE)
 
+#traits <- traits %>% 
+  #dplyr::rename("species" = "ï..species") ## not sure what this is for and I cant get it to work
+
+## bind all diversity surveys together
+cover_all <- rbind(cover_mids20152021, cover_late2020, cover_early2021, cover_late2021, 
+                   cover_mid2022, cover_mid2023, cover_mid2024, cover_late2024)
+
+# fix plot column name
+#cover_all <- cover_all %>% 
+  #dplyr::rename("plot" = "ï..plot") ##again unclear on what this is doing
+
+# change cover column to numbers not characters, and plot to factor
+cover_all$cover <- as.numeric(as.character(cover_all$cover))  
+cover_all$plot <- as.factor(as.numeric(cover_all$plot))
+
+# get rid of NAs in the cover column
+cover_all <- cover_all %>%
+  filter(cover != "NA")
+
+# fix treatments
+cover_all$treatment[cover_all$treatment == "Irrigated"] <- "irrigated"
+cover_all$treatment[cover_all$treatment == "Control"] <- "control"
+cover_all$treatment[cover_all$treatment == "Drought"] <- "drought"
+
+
+#### Biomass Data ####
