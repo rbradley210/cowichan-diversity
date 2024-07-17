@@ -95,6 +95,59 @@ cover_all$treatment[cover_all$treatment == "Irrigated"] <- "irrigated"
 cover_all$treatment[cover_all$treatment == "Control"] <- "control"
 cover_all$treatment[cover_all$treatment == "Drought"] <- "drought"
 
+# separate coarse cover from plant cover
+# just coarse cover, doesn't get used for any analyses
+coarsecover <- cover_all %>%
+  filter(species == "Litter" | species == "Bare Soil" | species == "Moss")
+
+# just plant cover
+plants <- cover_all %>%
+  filter(species != "Litter") %>%
+  filter(species != "Bare Soil") %>%
+  filter(species != "Moss")
+
+# fix plant names
+plants$species[plants$species == "Unkown furry"] <- "Lonicera spp."
+plants$species[plants$species == "Unknown fuzzy"] <- "Lonicera spp."
+plants$species[plants$species == "Mystery fuzzy"] <- "Lonicera spp."
+plants$species[plants$species == "mystery honey suckle"] <- "Lonicera spp."
+plants$species[plants$species == "Unknown H"] <- "Lonicera spp."
+
+plants$species[plants$species == 'Unknown G '] <- "Unknown G"
+
+plants$species[plants$species == 'Unknown mint'] <- "Clinopodium douglasii"
+plants$species[plants$species == 'Unknown F'] <- "Clinopodium douglasii"
+
+plants$species[plants$species == 'Wood rush'] <- "Luzula spp."
+plants$species[plants$species == 'wood rush'] <- "Luzula spp."
+plants$species[plants$species == 'Luzula'] <- "Luzula spp."
+
+plants$species[plants$species == 'Unknown B'] <- "Trifolium dubium"
+#plants$species[plants_tr$species == 'Unknown C'] <- "Teesdalia nudicalis"
+
+plants$species[plants$species == "Grass B"] <- "Vulpia spp."
+plants$species[plants$species == "Vulpia spp"] <- "Vulpia spp."
+
+plants$species[plants$species == "Grass 9" & plants$plot == "14"] <- "Bromus hordeaceus"
+plants$species[plants$species == "Grass 9"] <- "Bromus carinatus"
+plants$species[plants$species == "Bromus hordaceous"] <- "Bromus hordeaceus"
+
+plants$species[plants$species == "Fuzzy giant thistle"] <- "Cirsium vulgare"
+plants$species[plants$species == "fuzzy giant thistle"] <- "Cirsium vulgare"
+
+plants$species[plants$species == "Alium ampoplectens"] <- "Allium amplectens"
+
+plants$species[plants$species == "mystery orchid (Platanthera from twitter?)"] <- "Platanthera spp."
+plants$species[plants$species == "Platanthera spp"] <- "Platanthera spp."
+
+plants$species[plants$species == "bur chervil/mystery carrot"] <- "Torilis arvensis"
+plants$species[plants$species == "mystery carrot (not bur chervil)"] <- "Torilis arvensis"
+
+plants$species[plants$species == "Berberis nervosa"] <- "Berberis aquifolium"
+
+#Create list of unique species names
+plant_species <- data.frame(unique(plants$species[plants$cover > 0]))
+plant_species
 
 #### Biomass Data ####
 biomass <- read.csv("Biomass/cowichan_biomass_master_2024.csv", header = TRUE)
