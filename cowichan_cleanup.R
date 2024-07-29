@@ -82,13 +82,18 @@ cover_all <- rbind(cover_mids20152021, cover_late2020, cover_early2021, cover_la
 #cover_all <- cover_all %>% 
   #dplyr::rename("plot" = "ï..plot") ##again unclear on what this is doing
 
-# change cover column to numbers not characters, and plot to factor
+# change cover column to numbers not characters, and plot to factor and year to factor
 cover_all$cover <- as.numeric(as.character(cover_all$cover))  
 cover_all$plot <- as.factor(as.numeric(cover_all$plot))
+cover_all$year <- as.factor(as.numeric(cover_all$year))
 
 # get rid of NAs in the cover column
+# cover_all <- cover_all %>%
+  # filter(cover != "NA")
+
+# replace NAs with zeros
 cover_all <- cover_all %>%
-  filter(cover != "NA")
+  replace(is.na(.), 0)
 
 # fix treatments
 cover_all$treatment[cover_all$treatment == "Irrigated"] <- "irrigated"
@@ -104,7 +109,8 @@ coarsecover <- cover_all %>%
 plants <- cover_all %>%
   filter(species != "Litter") %>%
   filter(species != "Bare Soil") %>%
-  filter(species != "Moss")
+  filter(species != "Moss") %>%
+  filter(species != "total grass")
 
 # fix plant names
 plants$species[plants$species == "Unkown furry"] <- "Lonicera spp."
@@ -112,8 +118,6 @@ plants$species[plants$species == "Unknown fuzzy"] <- "Lonicera spp."
 plants$species[plants$species == "Mystery fuzzy"] <- "Lonicera spp."
 plants$species[plants$species == "mystery honey suckle"] <- "Lonicera spp."
 plants$species[plants$species == "Unknown H"] <- "Lonicera spp."
-
-plants$species[plants$species == 'Unknown G '] <- "Unknown G"
 
 plants$species[plants$species == 'Unknown mint'] <- "Clinopodium douglasii"
 plants$species[plants$species == 'Unknown F'] <- "Clinopodium douglasii"
@@ -142,12 +146,38 @@ plants$species[plants$species == "Platanthera spp"] <- "Platanthera spp."
 
 plants$species[plants$species == "bur chervil/mystery carrot"] <- "Torilis arvensis"
 plants$species[plants$species == "mystery carrot (not bur chervil)"] <- "Torilis arvensis"
+plants$species[plants$species == 'Unknown G '] <- "Torilis arvensis"
+plants$species[plants$species == "Unknown G"] <- "Torilis arvensis"
 
 plants$species[plants$species == "Berberis nervosa"] <- "Berberis aquifolium"
+
+plants$species[plants$species == "Pseudostuga menziesii"] <- "Pseudotsuga menziesii"
+
+plants$species[plants$species == "Oemlaria cerasiformis"] <- "Oemleria cerasiformis"
+
 
 #Create list of unique species names
 plant_species <- data.frame(unique(plants$species[plants$cover > 0]))
 plant_species
+
+
+## Cover of snowberry over time
+snowberry_cover <- filter(cover_all, species == "Symphoricarpos albus" & date == "mid")
+SB_cover_means <- snowberry_cover %>%
+  dplyr::group_by(year)%>%
+  dplyr::summarise(n = n(), mean_cover = mean(cover), se_cover = sd(cover)/sqrt(n))
+
+snowberry_timeseries <- ggplot(SB_cover_means,
+                                   aes(x = year,
+                                       y = mean_cover))+
+  geom_point()+
+  xlab("Year")+
+  ylab("Snowberry Cover (%)")+
+  geom_errorbar(aes(x = year,
+                    ymin=mean_cover-se_cover,
+                    ymax=mean_cover+se_cover))+
+  theme_test()
+snowberry_timeseries
 
 #### Biomass Data ####
 biomass <- read.csv("Biomass/cowichan_biomass_master_2024.csv", header = TRUE)
@@ -192,6 +222,10 @@ totbiomass <- biomass %>%
   dplyr::summarize(totbio = sum(mass, na.rm = TRUE), 
                    totbio_adj = sum(mass_adj, na.rm = TRUE))
 
+#totbiomassavg <- totbiomass %>%
+  #group_by(treatment,year)
+
+
 # widen so that there is one column for each growthform
 biomass_wide <- biomass %>% 
   pivot_wider(names_from = taxa,
@@ -206,23 +240,23 @@ biomass_timeseries_total <- ggplot(totbiomass,
                              aes(x = year,
                                  y = totbio_adj,
                                  color = as.factor(treatment)))+
-  geom_boxplot()+
+  geom_point()+
   labs(color='Treatment')+
   xlab("Year")+
-  ylab("Total Mass (g/m^2)")+
+  ylab("Total Biomass (g/m^2)")+
   theme_test()
 biomass_timeseries_total
 
-biomass_timeseries_total <- ggplot(totbiomass,
+biomass_boxplot_total <- ggplot(totbiomass,
                                    aes(x = treatment,
                                        y = totbio_adj,
                                        color = as.factor(treatment)))+
   geom_boxplot()+
   labs(color='Treatment')+
   xlab("Treatment")+
-  ylab("Total Mass (g/m^2)")+
+  ylab("Total Biomass (g/m^2)")+
   theme_test()
-biomass_timeseries_total
+biomass_boxplot_total
 
 ## 2018 biomass
 biomass2018 <- ggplot(biomass[biomass$year == 2018, ],
