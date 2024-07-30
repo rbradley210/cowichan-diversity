@@ -3,7 +3,7 @@
 # email: robinbradley210@gmail.com
 
 
-## Set Up
+# Set Up ----
 setwd("C:/Users/Robin/Dropbox/Williams' Lab/Cowichan IDE/Data & Plot info")
 
 library(tidyverse)
@@ -13,14 +13,15 @@ library(plyr)
 library(vegan)
 library(ggplot2)
 
-#### Diversity Data ####
-## Read in plot data
+# Diversity Data ----
+## Read in data ----
+### Read in plot data ----
 plots <- read.csv("IDE_plotinfo.csv", header = TRUE)
 plots <- plots %>% 
   dplyr::rename("treatment" = "trt")
 plots$plot <- as.character(plots$plot)
 
-## Read in cover data
+### Read in cover data ----
 # IDE surveys (mid growing season, 2015-2021)
 cover_mids20152021 <- read.csv("Diversity/cowichan_community5_19_2021.csv", header = TRUE, na.strings = c("", " ")) %>% 
   dplyr::select(-quadID, -notes, -X, -X.1, -X.2, -X.3, -X.4, -X.5)
@@ -68,13 +69,14 @@ cover_late2024 <- read.csv("Diversity/cowichan_community_6_09_2024.csv", header 
   dplyr::select(-quadID, -notes)
 cover_late2024$date <- "late"
 
-## Read in trait info
+### Read in trait info ----
 traits <- read.csv("species_traits.csv", header = TRUE)
 
 #traits <- traits %>% 
   #dplyr::rename("species" = "ï..species") ## not sure what this is for and I cant get it to work
 
-## bind all diversity surveys together
+## Cleaning cover data ----
+# bind all diversity surveys together
 cover_all <- rbind(cover_mids20152021, cover_late2020, cover_early2021, cover_late2021, 
                    cover_mid2022, cover_mid2023, cover_mid2024, cover_late2024)
 
@@ -88,12 +90,12 @@ cover_all$plot <- as.factor(as.numeric(cover_all$plot))
 cover_all$year <- as.factor(as.numeric(cover_all$year))
 
 # get rid of NAs in the cover column
-# cover_all <- cover_all %>%
-  # filter(cover != "NA")
+ cover_all <- cover_all %>%
+   filter(cover != "NA")
 
 # replace NAs with zeros
-cover_all <- cover_all %>%
-  replace(is.na(.), 0)
+#cover_all <- cover_all %>%
+ # replace(is.na(.), 0)
 
 # fix treatments
 cover_all$treatment[cover_all$treatment == "Irrigated"] <- "irrigated"
@@ -156,18 +158,35 @@ plants$species[plants$species == "Pseudostuga menziesii"] <- "Pseudotsuga menzie
 plants$species[plants$species == "Oemlaria cerasiformis"] <- "Oemleria cerasiformis"
 
 
-#Create list of unique species names
+## Create list of unique species names ----
 plant_species <- data.frame(unique(plants$species[plants$cover > 0]))
 plant_species
 
 
-## Cover of snowberry over time
+## Cover of snowberry over time ----
+
+### Pulling snowberry cover out
 snowberry_cover <- filter(cover_all, species == "Symphoricarpos albus" & date == "mid")
+
+### Taking average/SEM of snowberry cover
 SB_cover_means <- snowberry_cover %>%
   dplyr::group_by(year)%>%
   dplyr::summarise(n = n(), mean_cover = mean(cover), se_cover = sd(cover)/sqrt(n))
 
-snowberry_timeseries <- ggplot(SB_cover_means,
+### Plotting cover of snowberry over time
+
+#### Cover (points)
+SB_timeseries <- ggplot(snowberry_cover,
+                              aes(x = year,
+                                  y = cover))+
+  geom_point()+
+  xlab("Year")+
+  ylab("Snowberry Cover (%)")+
+  theme_test()
+SB_timeseries
+
+#### Means of each year
+SB_timeseries_means <- ggplot(SB_cover_means,
                                    aes(x = year,
                                        y = mean_cover))+
   geom_point()+
@@ -177,9 +196,33 @@ snowberry_timeseries <- ggplot(SB_cover_means,
                     ymin=mean_cover-se_cover,
                     ymax=mean_cover+se_cover))+
   theme_test()
-snowberry_timeseries
+SB_timeseries_means
 
-#### Biomass Data ####
+#### Plotting cover by plot
+SB_timeseries_plots <- ggplot(snowberry_cover#[snowberry_cover$treatment == "control", ]
+                        ,
+                     aes(x = year,
+                         y = cover,
+                         color = as.factor(plot)))+
+  geom_point()+
+  xlab("Year")+
+  ylab("Snowberry Cover (%)")+
+  labs(color = 'Plot Number')+
+  geom_line(aes(group = plot))+
+  theme_test()
+SB_timeseries_plots
+
+#### Number of plots with snowberry present per year
+SB_plot_pres <- ggplot(SB_cover_means,
+                       aes(x = year,
+                           y = n))+
+  geom_point()+
+  xlab("Year")+
+  ylab("Number of Plots with Snowberry Present")+
+  theme_test()
+SB_plot_pres
+  
+# Biomass Data ----
 biomass <- read.csv("Biomass/cowichan_biomass_master_2024.csv", header = TRUE)
 
 # read in the biomass data, get rid of unnecessary columns and rename mass column
