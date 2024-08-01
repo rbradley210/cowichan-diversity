@@ -1,4 +1,4 @@
-# Cowichan Diversity Analysis Data Cleaning
+# Cowichan Diversity Analysis
 # Adapted from code by Lauren Smith (plants_cleanup.Rmd)
 # email: robinbradley210@gmail.com
 
@@ -12,6 +12,7 @@ library(tidyr)
 library(plyr)
 library(vegan)
 library(ggplot2)
+library(reshape)
 
 # Diversity Data ----
 ## Read in data ----
@@ -77,8 +78,16 @@ traits <- read.csv("species_traits.csv", header = TRUE)
 
 ## Cleaning cover data ----
 # bind all diversity surveys together
-cover_all <- rbind(cover_mids20152021, cover_late2020, cover_early2021, cover_late2021, 
-                   cover_mid2022, cover_mid2023, cover_mid2024, cover_late2024)
+cover_all <- rbind(cover_mids20152021, 
+                   #cover_late2020, 
+                   #cover_early2021, 
+                   #cover_late2021, 
+                   cover_mid2022, 
+                   cover_mid2023, 
+                   cover_mid2024
+                   #, 
+                   #cover_late2024
+                   )
 
 # fix plot column name
 #cover_all <- cover_all %>% 
@@ -137,6 +146,7 @@ plants$species[plants$species == "Vulpia spp"] <- "Vulpia spp."
 plants$species[plants$species == "Grass 9" & plants$plot == "14"] <- "Bromus hordeaceus"
 plants$species[plants$species == "Grass 9"] <- "Bromus carinatus"
 plants$species[plants$species == "Bromus hordaceous"] <- "Bromus hordeaceus"
+plants$species[plants$species == "Bromus tectorum"] <- "Bromus sterilis"
 
 plants$species[plants$species == "Fuzzy giant thistle"] <- "Cirsium vulgare"
 plants$species[plants$species == "fuzzy giant thistle"] <- "Cirsium vulgare"
@@ -222,6 +232,10 @@ SB_plot_pres <- ggplot(SB_cover_means,
   theme_test()
 SB_plot_pres
   
+## Species-Plot Matrix ----
+spe.matrix <- cast(plants, plot + year ~ species, value = 'cover', fun.aggregate = mean)
+spe.matrix[is.na(spe.matrix)] <- 0 #convert NAs to 0s
+
 # Biomass Data ----
 biomass <- read.csv("Biomass/cowichan_biomass_master_2024.csv", header = TRUE)
 
