@@ -176,7 +176,7 @@ plant_species
 ## Cover of snowberry over time ----
 
 ### Pulling snowberry cover out
-snowberry_cover <- filter(cover_all, species == "Symphoricarpos albus" & date == "mid")
+snowberry_cover <- filter(plants, species == "Symphoricarpos albus" & date == "mid")
 
 ### Taking average/SEM of snowberry cover
 SB_cover_means <- snowberry_cover %>%
@@ -232,6 +232,54 @@ SB_plot_pres <- ggplot(SB_cover_means,
   theme_test()
 SB_plot_pres
   
+## Cover of Bromus sterlis over time ----
+BRST_cover <- filter(plants, species == "Bromus sterilis" & date == "mid")
+
+BRST_timeseries <- ggplot(BRST_cover,
+                        aes(x = year,
+                            y = cover))+
+  geom_point()+
+  xlab("Year")+
+  ylab("Bromus sterilis Cover (%)")+
+  theme_test()
+BRST_timeseries          
+
+## Cover of Galium over time ----
+GAAP_cover <- filter(plants, species == "Galium aparine" & date == "mid")
+
+GAAP_timeseries <- ggplot(GAAP_cover,
+                          aes(x = year,
+                              y = cover))+
+  geom_point()+
+  xlab("Year")+
+  ylab("Galium aparine Cover (%)")+
+  theme_test()
+GAAP_timeseries   
+
+## Cover of Lonicera spp over time ----
+LOSP_cover <- filter(plants, species == "Lonicera spp.")
+
+LOSP_timeseries <- ggplot(LOSP_cover,
+                          aes(x = year,
+                              y = cover))+
+  geom_point()+
+  xlab("Year")+
+  ylab("Lonicera spp. Cover (%)")+
+  theme_test()
+LOSP_timeseries
+
+LOSP_timeseries_plots <- ggplot(LOSP_cover,
+                              aes(x = year,
+                                  y = cover,
+                                  color = as.factor(plot)))+
+  geom_point()+
+  xlab("Year")+
+  ylab("LOSP Cover (%)")+
+  labs(color = 'Plot Number')+
+  geom_line(aes(group = plot))+
+  theme_test()
+LOSP_timeseries_plots
+
 ## Species-Plot Matrix ----
 spe.matrix <- cast(plants, plot + year ~ species, value = 'cover', fun.aggregate = mean)
 spe.matrix[is.na(spe.matrix)] <- 0 #convert NAs to 0s
