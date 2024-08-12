@@ -124,37 +124,37 @@ plants <- cover_all %>%
   filter(species != "total grass")
 
 # fix plant names
-plants$species[plants$species == "Unkown furry"] <- "Lonicera spp."
-plants$species[plants$species == "Unknown fuzzy"] <- "Lonicera spp."
-plants$species[plants$species == "Mystery fuzzy"] <- "Lonicera spp."
-plants$species[plants$species == "mystery honey suckle"] <- "Lonicera spp."
-plants$species[plants$species == "Unknown H"] <- "Lonicera spp."
+plants$species[plants$species == "Unkown furry"] <- "Lonicera sp."
+plants$species[plants$species == "Unknown fuzzy"] <- "Lonicera sp."
+plants$species[plants$species == "Mystery fuzzy"] <- "Lonicera sp."
+plants$species[plants$species == "mystery honey suckle"] <- "Lonicera sp."
+plants$species[plants$species == "Unknown H"] <- "Lonicera sp."
 
 plants$species[plants$species == 'Unknown mint'] <- "Clinopodium douglasii"
 plants$species[plants$species == 'Unknown F'] <- "Clinopodium douglasii"
 
-plants$species[plants$species == 'Wood rush'] <- "Luzula spp."
-plants$species[plants$species == 'wood rush'] <- "Luzula spp."
-plants$species[plants$species == 'Luzula'] <- "Luzula spp."
+plants$species[plants$species == 'Wood rush'] <- "Luzula sp."
+plants$species[plants$species == 'wood rush'] <- "Luzula sp."
+plants$species[plants$species == 'Luzula'] <- "Luzula sp."
 
 plants$species[plants$species == 'Unknown B'] <- "Trifolium dubium"
 #plants$species[plants_tr$species == 'Unknown C'] <- "Teesdalia nudicalis"
 
-plants$species[plants$species == "Grass B"] <- "Vulpia spp."
-plants$species[plants$species == "Vulpia spp"] <- "Vulpia spp."
+plants$species[plants$species == "Grass B"] <- "Vulpia sp."
+plants$species[plants$species == "Vulpia spp"] <- "Vulpia sp."
 
 plants$species[plants$species == "Grass 9" & plants$plot == "14"] <- "Bromus hordeaceus"
 plants$species[plants$species == "Grass 9"] <- "Bromus carinatus"
 plants$species[plants$species == "Bromus hordaceous"] <- "Bromus hordeaceus"
-plants$species[plants$species == "Bromus tectorum"] <- "Bromus sterilis"
+#plants$species[plants$species == "Bromus tectorum"] <- "Bromus sterilis"
 
 plants$species[plants$species == "Fuzzy giant thistle"] <- "Cirsium vulgare"
 plants$species[plants$species == "fuzzy giant thistle"] <- "Cirsium vulgare"
 
 plants$species[plants$species == "Alium ampoplectens"] <- "Allium amplectens"
 
-plants$species[plants$species == "mystery orchid (Platanthera from twitter?)"] <- "Platanthera spp."
-plants$species[plants$species == "Platanthera spp"] <- "Platanthera spp."
+plants$species[plants$species == "mystery orchid (Platanthera from twitter?)"] <- "Platanthera sp."
+plants$species[plants$species == "Platanthera spp"] <- "Platanthera sp."
 
 plants$species[plants$species == "bur chervil/mystery carrot"] <- "Torilis arvensis"
 plants$species[plants$species == "mystery carrot (not bur chervil)"] <- "Torilis arvensis"
@@ -166,7 +166,8 @@ plants$species[plants$species == "Berberis nervosa"] <- "Berberis aquifolium"
 plants$species[plants$species == "Pseudostuga menziesii"] <- "Pseudotsuga menziesii"
 
 plants$species[plants$species == "Oemlaria cerasiformis"] <- "Oemleria cerasiformis"
-
+plants$species[plants$species == "mystery oval pointy leaf"] <- "Chenopodium album"
+plants$species[plants$species == "Triteleia spp"] <- "Triteleia sp."
 
 ## Create list of unique species names ----
 plant_species <- data.frame(unique(plants$species[plants$cover > 0]))
@@ -233,16 +234,31 @@ SB_plot_pres <- ggplot(SB_cover_means,
 SB_plot_pres
   
 ## Cover of Bromus sterlis over time ----
-BRST_cover <- filter(plants, species == "Bromus sterilis" & date == "mid")
+BRST_cover <- filter(plants, species == "Bromus sterilis")
 
-BRST_timeseries <- ggplot(BRST_cover,
-                        aes(x = year,
-                            y = cover))+
+BRST_timeseries <- ggplot(Brome_cover,
+                           aes(x = year,
+                               y = cover))+
   geom_point()+
   xlab("Year")+
   ylab("Bromus sterilis Cover (%)")+
   theme_test()
-BRST_timeseries          
+
+BRST_timeseries
+## Cover of Bromes over time ----
+Brome_cover <- filter(plants, species == "Bromus tectorum"| species == "Bromus hordeaceus"| 
+                        species == "Bromus sterilis"| species == "Bromus carinatus")
+
+Brome_timeseries <- ggplot(Brome_cover,
+                          aes(x = year,
+                              y = cover,
+                              color = as.factor(species)))+
+  geom_point()+
+  xlab("Year")+
+  ylab("Bromus spp. Cover (%)")+
+  labs(color = 'Species')+
+  theme_test()
+Brome_timeseries          
 
 ## Cover of Galium over time ----
 GAAP_cover <- filter(plants, species == "Galium aparine" & date == "mid")
@@ -257,14 +273,15 @@ GAAP_timeseries <- ggplot(GAAP_cover,
 GAAP_timeseries   
 
 ## Cover of Lonicera spp over time ----
-LOSP_cover <- filter(plants, species == "Lonicera spp.")
+LOSP_cover <- filter(plants, species == "Lonicera sp.")
 
 LOSP_timeseries <- ggplot(LOSP_cover,
                           aes(x = year,
                               y = cover))+
   geom_point()+
   xlab("Year")+
-  ylab("Lonicera spp. Cover (%)")+
+  ylab("Lonicera sp. Cover (%)")+
+  ylim(0,6)+
   theme_test()
 LOSP_timeseries
 
@@ -275,6 +292,7 @@ LOSP_timeseries_plots <- ggplot(LOSP_cover,
   geom_point()+
   xlab("Year")+
   ylab("LOSP Cover (%)")+
+  ylim(0,5)+
   labs(color = 'Plot Number')+
   geom_line(aes(group = plot))+
   theme_test()
