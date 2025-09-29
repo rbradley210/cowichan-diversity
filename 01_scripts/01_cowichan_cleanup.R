@@ -197,3 +197,63 @@ plot_year$plot <- factor(plot_year$plot, levels = c("1", "2", "3", "4", "5", "6"
 # 2. Weather Data ----
 ## Read in data
 weather <- read.csv("C:/Users/Robin/Dropbox/Williams' Lab/Cowichan IDE/LoggerData/weather station/WS_cleaned/cgop_weather_daily_interp.csv", header = TRUE)
+
+## Fix and add date columns
+weather$Date <- parse_date_time(weather$Date, "Y-m-d")
+weather$month <- format(as.Date(weather$Date), "%m") # add month column
+weather$year <- format(as.Date(weather$Date), "%Y") # add year column
+
+## Filter to relevant dates and add season column
+weather_clean <- weather %>%
+  filter(Date >= as.Date("2013-01-01"),  #before 2013 has NA's and 2025 data only goes up to June
+         Date <= as.Date("2025-05-31")) %>%
+  mutate(season = case_when(
+    month == "01" ~ "wi",
+    month == "02" ~ "wi",
+    month == "12" ~ "wi",
+    month == "03" ~ "sp",
+    month == "04" ~ "sp",
+    month == "05" ~ "sp",
+    month == "06" ~ "su",
+    month == "07" ~ "su",
+    month == "08" ~ "su",
+    month == "09" ~ "fa",
+    month == "10" ~ "fa",
+    month == "11" ~ "fa"
+  ))
+
+## summarize by year
+year_weather <-  weather_clean %>%
+  filter(Date >= as.Date("2013-01-01"),  #before 2013 has NA's and 2025 data only goes up to June
+         Date <= as.Date("2024-12-31")) %>%
+  dplyr::group_by(year) %>%
+  dplyr::summarize(tot.precip = sum(total_precip_mm), # annual precip
+                   mean.min.temp = round(mean(minTemp_C), 3), # average minimum daily temperature over the year
+                   mean.max.temp = round(mean(maxTemp_C),3), # average maximum daily temperature over the year
+                   mean.temp = round(mean(AveTemp_C),3), # average daily temperature over the year
+                   mean.range.temp = round(mean(maxTemp_C-minTemp_C), 3)) # average daily range of temperature over the year
+
+## summarize by season
+season_weather <- weather_clean %>%
+  filter(Date >= as.Date("2013-01-01"),  #before 2013 has NA's and 2025 data only goes up to June
+         Date <= as.Date("2024-12-31")) %>%
+  dplyr::group_by(year, season) %>%
+  dplyr::summarize(tot.precip = sum(total_precip_mm), # total seasonal precip
+                   mean.min.temp = round(mean(minTemp_C), 3), # average minimum daily temperature over the season
+                   mean.max.temp = round(mean(maxTemp_C),3), # average maximum daily temperature over the season
+                   mean.temp = round(mean(AveTemp_C),3), # average daily temperature over the season
+                   mean.range.temp = round(mean(maxTemp_C-minTemp_C), 3)) # average daily range of temperature over the season
+
+## make yearly stats table for analysis
+weather_fin <- season_weather %>%
+  pivot_wider(
+    names_from = season,
+    values_from = c(tot.precip, mean.min.temp, mean.max.temp, mean.temp, mean.range.temp)
+  ) %>%
+  left_join(year_weather)
+
+## Remove other weather dataframes
+rm(weather)
+rm(weather_clean)
+rm(year_weather)
+rm(season_weather)
