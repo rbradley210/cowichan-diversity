@@ -16,7 +16,7 @@ library(car)
 library(visreg)
 
 ## Source cowichan_cleanup script
-source("~/School/Williams Lab/cowichan-diversity/01_scripts/cowichan_cleanup.R")
+source("~/School/Williams Lab/cowichan-diversity/01_scripts/01_cowichan_cleanup.R")
 
 # Does precipitation change cause plant communities to homogenize or differentiate? ----
 ## Calculate Bray-Curtis pairwise dissimilarity between plots in each treatment in each year ----
@@ -39,6 +39,12 @@ bc.dist$Var2_trt <- plots$trt[match(bc.dist$Var2_plot, plots$plot)]
 
 ### Filter for only values where treatments and years match
 ty.match <- filter(bc.dist, Var1_trt == Var2_trt & Var1_year == Var2_year)
+
+### add weather data
+ty.match <- left_join(ty.match, 
+                       select(weather_gs, 
+                              year, gs.precip, gs.mean.temp), 
+                       by = c("Var1_year" = "year"))
 
 ### Clean up new dataframe for analysis
 ty.match <- ty.match[, -c(2, 6)] # remove extra year and treatment columns
@@ -69,7 +75,7 @@ ggplot(ty.match, aes(x = year, y = bc.dist, color = plot_pair))+
   facet_wrap(~trt)+
   theme_classic()
 
-### Linear Mixed Effects Model
+### Linear Mixed Effects Model ----
 ### response variable: B-C dissimilarity
 ### treatment as between-plots fixed variable
 ### plot_pair as random variable
@@ -84,22 +90,30 @@ z2 <- lme(bc.dist ~ trt*year,
           random = ~1|plot_pair)
 plot(z2) # examine residuals, look fine
 
+### LMER with mean growing season precipitation and temperature ----
+z3 <- lme(bc.dist ~ trt*year+gs.precip+gs.mean.temp, 
+          data = ty.match,
+          random = ~1|plot_pair)
+plot(z3) # examine residuals, look fine
+
+Anova(z3, type = 3) #marginal, not sequential
+
 ### Investigate autocorrelation ----
 # Plot auto-correlation function 
 E <- residuals(z2, type = "normalized") 
 acf(E, main = "Auto-correlation plot for residuals") # appears to be autocorrelation present
 
 # Model with AR(1) temporal autocorrelation structure
-z3 <- lme(bc.dist ~ trt*year, 
+z4 <- lme(bc.dist ~ trt*year, 
           data = ty.match,
           random = ~1|plot_pair,
           correlation = corAR1(form = ~year|plot_pair))
-plot(z3) # examine residuals, look fine
+plot(z4) # examine residuals, look fine
 
 # Calculate the AIC for the two models and the AIC difference
 AIC(z2) # without AR(1): -544.665
-AIC(z3) # with AR(1): -598.0738
-myAIC <- c(AIC(z2), AIC(z3))
+AIC(z4) # with AR(1): -598.0738
+myAIC <- c(AIC(z2), AIC(z4))
 delta <- myAIC - min(myAIC)
 delta # 53.40872
 
@@ -108,13 +122,13 @@ delta # 53.40872
 
 ### Testing null hypothesis (ANOVA) ----
 ## of no difference in mean species richness over time or between treatments (or the interaction of year and treatment)
-Anova(z3, type = 3) #marginal, not sequential
+Anova(z4, type = 3) #marginal, not sequential
 
 # Sig: interaction b/t trt and yr
 # marginally sig: year and treatment
 
 ### Plot model fit onto year vs. B-C dissimilarity plot ----
-v <- visreg(z3, xvar = "year", by = "trt",
+v <- visreg(z4, xvar = "year", by = "trt",
        overlay = TRUE,
        legend = TRUE)
 

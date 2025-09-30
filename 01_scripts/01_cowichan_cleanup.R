@@ -201,12 +201,11 @@ weather <- read.csv("C:/Users/Robin/Dropbox/Williams' Lab/Cowichan IDE/LoggerDat
 ## Fix and add date columns
 weather$Date <- parse_date_time(weather$Date, "Y-m-d")
 weather$month <- format(as.Date(weather$Date), "%m") # add month column
+weather$day <- format(as.Date(weather$Date), "%d") # add day column
 weather$year <- format(as.Date(weather$Date), "%Y") # add year column
 
-## Filter to relevant dates and add season column
+## Filter to relevant dates and add season and growing season column
 weather_clean <- weather %>%
-  filter(Date >= as.Date("2013-01-01"),  #before 2013 has NA's and 2025 data only goes up to June
-         Date <= as.Date("2025-05-31")) %>%
   mutate(season = case_when(
     month == "01" ~ "wi",
     month == "02" ~ "wi",
@@ -220,6 +219,26 @@ weather_clean <- weather %>%
     month == "09" ~ "fa",
     month == "10" ~ "fa",
     month == "11" ~ "fa"
+  )) %>%
+  mutate(grow_season = case_when(
+    month == "04" ~ "Y",
+    month == "05" ~ "Y",
+    month == "06" & day == "01" ~ "Y",
+    month == "06" & day == "02" ~ "Y",
+    month == "06" & day == "03" ~ "Y",
+    month == "06" & day == "04" ~ "Y",
+    month == "06" & day == "05" ~ "Y",
+    month == "06" & day == "06" ~ "Y",
+    month == "06" & day == "07" ~ "Y",
+    month == "06" & day == "08" ~ "Y",
+    month == "06" & day == "09" ~ "Y",
+    month == "06" & day == "10" ~ "Y",
+    month == "06" & day == "11" ~ "Y",
+    month == "06" & day == "12" ~ "Y",
+    month == "06" & day == "13" ~ "Y",
+    month == "06" & day == "14" ~ "Y",
+    month == "06" & day == "15" ~ "Y",
+    TRUE ~ "N"
   ))
 
 ## summarize by year
@@ -236,13 +255,26 @@ year_weather <-  weather_clean %>%
 ## summarize by season
 season_weather <- weather_clean %>%
   filter(Date >= as.Date("2013-01-01"),  #before 2013 has NA's and 2025 data only goes up to June
-         Date <= as.Date("2024-12-31")) %>%
+         Date <= as.Date("2025-05-31")) %>%
   dplyr::group_by(year, season) %>%
   dplyr::summarize(tot.precip = sum(total_precip_mm), # total seasonal precip
                    mean.min.temp = round(mean(minTemp_C), 3), # average minimum daily temperature over the season
                    mean.max.temp = round(mean(maxTemp_C),3), # average maximum daily temperature over the season
                    mean.temp = round(mean(AveTemp_C),3), # average daily temperature over the season
                    mean.range.temp = round(mean(maxTemp_C-minTemp_C), 3)) # average daily range of temperature over the season
+
+# summarize for growing season (April 1-June 15 every year)
+weather_gs <- weather_clean %>%
+  filter(Date >= as.Date("2013-01-01"),  #before 2013 has NA's and 2025 data only goes up to June 9th
+         Date <= as.Date("2025-06-09")) %>%
+  filter(grow_season == "Y")%>%
+  dplyr::group_by(year) %>%
+  dplyr::summarize(gs.precip = sum(total_precip_mm), # total seasonal precip
+                   gs.mean.min.temp = round(mean(minTemp_C), 3), # average minimum daily temperature over the season
+                   gs.mean.max.temp = round(mean(maxTemp_C),3), # average maximum daily temperature over the season
+                   gs.mean.temp = round(mean(AveTemp_C),3), # average daily temperature over the season
+                   gs.mean.range.temp = round(mean(maxTemp_C-minTemp_C), 3)) # average daily range of temperature over the season
+
 
 ## make yearly stats table for analysis
 weather_fin <- season_weather %>%
