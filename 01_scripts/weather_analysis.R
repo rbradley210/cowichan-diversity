@@ -103,6 +103,96 @@ weather_gs <- weather_clean %>%
                    gs.mean.temp = round(mean(AveTemp_C),3), # average daily temperature over the season
                    gs.mean.range.temp = round(mean(maxTemp_C-minTemp_C), 3)) # average daily range of temperature over the season
 
+# summarize by previous year's weather
+weather.prev.gs <- weather_gs[, -c(3, 4, 6)]
+colnames(weather.prev.gs) <- paste("prev", colnames(weather.prev.gs), sep = ".")
+weather.prev.gs$year <- as.character(as.numeric(weather.prev.gs$prev.year) + 1)
+
+# summarize by 365 days prior to community sampling
+wea.2015 <- weather_clean %>%
+  filter(Date >= as.Date("2014-06-03"),  
+         Date <= as.Date("2015-06-03")) %>%
+  dplyr::summarize(year = 2015,
+                   tot.precip = sum(total_precip_mm),
+                   mean.temp = round(mean(AveTemp_C), 3)) 
+
+wea.2016 <- weather_clean %>%
+  filter(Date >= as.Date("2015-05-10"),  
+         Date <= as.Date("2016-05-10")) %>%
+  dplyr::summarize(year = 2016,
+                   tot.precip = sum(total_precip_mm),
+                   mean.temp = round(mean(AveTemp_C), 3))
+
+wea.2017 <- weather_clean %>%
+  filter(Date >= as.Date("2016-05-15"),  
+         Date <= as.Date("2017-05-15")) %>%
+  dplyr::summarize(year = 2017,
+                   tot.precip = sum(total_precip_mm),
+                   mean.temp = round(mean(AveTemp_C), 3))
+
+wea.2018 <- weather_clean %>%
+  filter(Date >= as.Date("2017-05-07"),  
+         Date <= as.Date("2018-05-07")) %>%
+  dplyr::summarize(year = 2018,
+                   tot.precip = sum(total_precip_mm),
+                   mean.temp = round(mean(AveTemp_C), 3))
+
+wea.2019 <- weather_clean %>%
+  filter(Date >= as.Date("2018-05-03"),  
+         Date <= as.Date("2019-05-03")) %>%
+  dplyr::summarize(year = 2019,
+                   tot.precip = sum(total_precip_mm),
+                   mean.temp = round(mean(AveTemp_C), 3))
+
+wea.2020 <- weather_clean %>%
+  filter(Date >= as.Date("2019-05-18"),  
+         Date <= as.Date("2020-05-18")) %>%
+  dplyr::summarize(year = 2020,
+                   tot.precip = sum(total_precip_mm),
+                   mean.temp = round(mean(AveTemp_C), 3))
+
+wea.2021 <- weather_clean %>%
+  filter(Date >= as.Date("2020-05-13"),  
+         Date <= as.Date("2021-05-13")) %>%
+  dplyr::summarize(year = 2021,
+                   tot.precip = sum(total_precip_mm),
+                   mean.temp = round(mean(AveTemp_C), 3))
+
+wea.2022 <- weather_clean %>%
+  filter(Date >= as.Date("2021-05-13"),  
+         Date <= as.Date("2022-05-13")) %>%
+  dplyr::summarize(year = 2022,
+                   tot.precip = sum(total_precip_mm),
+                   mean.temp = round(mean(AveTemp_C), 3))
+
+wea.2023 <- weather_clean %>%
+  filter(Date >= as.Date("2022-05-15"),  
+         Date <= as.Date("2023-05-15")) %>%
+  dplyr::summarize(year = 2023,
+                   tot.precip = sum(total_precip_mm),
+                   mean.temp = round(mean(AveTemp_C), 3))
+
+wea.2024 <- weather_clean %>%
+  filter(Date >= as.Date("2023-05-07"),  
+         Date <= as.Date("2024-05-07")) %>%
+  dplyr::summarize(year = 2024,
+                   tot.precip = sum(total_precip_mm),
+                   mean.temp = round(mean(AveTemp_C), 3))
+
+wea.2025 <- weather_clean %>%
+  filter(Date >= as.Date("2024-05-14"),  
+         Date <= as.Date("2025-05-14")) %>%
+  dplyr::summarize(year = 2025,
+                   tot.precip = sum(total_precip_mm),
+                   mean.temp = round(mean(AveTemp_C), 3))
+
+weather.prev.365 <- rbind(wea.2015, wea.2016, wea.2017, wea.2018,
+                          wea.2019, wea.2020, wea.2021, wea.2022,
+                          wea.2023, wea.2024, wea.2025)
+
+rm(wea.2015, wea.2016, wea.2017, wea.2018,
+   wea.2019, wea.2020, wea.2021, wea.2022,
+   wea.2023, wea.2024, wea.2025)
 
 # make yearly stats table for analysis
 fin_weather <- gs_weather %>%

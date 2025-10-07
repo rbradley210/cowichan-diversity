@@ -10,8 +10,10 @@ setwd("C:/Users/Robin/Dropbox/Williams' Lab/Cowichan IDE/Data & Plot info")
 
 ## Packages
 library(tidyverse)
-library(visreg)
 library(betapart)
+library(nlme)
+library(car)
+library(visreg)
 
 ## Source cowichan_cleanup script
 source("~/School/Williams Lab/cowichan-diversity/01_scripts/01_cowichan_cleanup.R")
@@ -120,7 +122,7 @@ bc.gra.init$plot <- as.factor(bc.gra.init$plot) # convert plots to factors
 bc.gra.init$plot <- factor(bc.gra.init$plot, levels = c("1", "2", "3", "4", "5", "6", 
                                                           "7", "8", "9", "10", "11", "12", 
                                                           "13", "14", "15"))
-#### Abundance gradient
+#### Balanced variation
 bc.bal.init <- filter(bc.part.bal, Var1_plot == Var2_plot & Var1_year == 2015)
 
 ### Clean up data frame for analysis
@@ -149,7 +151,6 @@ bc.bal.init$plot <- factor(bc.bal.init$plot, levels = c("1", "2", "3", "4", "5",
 
 ## Model pairwise dissimilarity of a plot and itself in 2015 as a function of year and treatment ----
 ### Scatterplot of pairwise dissimilarity vs. year
-
 #### Overall beta-div
 ggplot(bc.dist.init, aes(x = Var2_year, y = bc.dist, color = plot))+
   geom_point()+
@@ -180,7 +181,76 @@ ggplot(bc.gra.init, aes(x = Var2_year, y = bc.dist, color = plot))+
   facet_wrap(~trt)+
   theme_classic()
 
-### Not sure how to proceed with model - should I test multiple linear + non-linear models? incorporating cor(AR1)?
+### Linear Mixed Effects Models ----
+
+#### Overall beta-diversity
+
+### response variable: B-C dissimilarity between a plot and itself in 2015
+### treatment as between-plots fixed variable
+### plot as random variable
+
+z1 <- lme(bc.dist ~ trt*Var2_year, # base model
+          data = bc.dist.init,
+          random = ~1|plot) 
+plot(z1)
+
+z1.cor <- lme(bc.dist ~ trt*Var2_year, # base model with autocorrelation term
+          data = bc.dist.init,
+          random = ~1|plot,
+          correlation = corAR1(form = ~Var2_year|plot)) 
+plot(z1.cor)
+
+z1.precip <- lme(bc.dist ~ trt*Var2_year+gs.precip, # base model
+                 data = bc.dist.init,
+                 random = ~1|plot)  # model with precip
+z1.precip.cor
+z1.temp  # model with temp
+z1.temp.cor
+z1.precip.temp # model with precip and temp
+z1.precip.temp.cor
+
+#### Balanced Variation
+z2 <- lme(bc.dist ~ trt*Var2_year, # base model
+          data = bc.bal.init,
+          random = ~1|plot) 
+plot(z2) # hm that seems bad
+
+z2.cor <- lme(bc.dist ~ trt*Var2_year, # base model with autocorrelation term
+              data = bc.bal.init,
+              random = ~1|plot,
+              correlation = corAR1(form = ~Var2_year|plot)) 
+plot(z2.cor) 
+
+z2.precip  # model with precip
+z2.precip.cor
+z2.temp  # model with temp
+z2.temp.cor
+z2.precip.temp # model with precip and temp
+z2.precip.temp.cor
+
+
+#### Abundance Gradient
+z3 <- lme(bc.dist ~ trt*Var2_year, # base model
+          data = bc.gra.init,
+          random = ~1|plot) 
+plot(z3) # hmmmm
+
+z3.cor <- lme(bc.dist ~ trt*Var2_year, # base model with autocorrelation term
+              data = bc.gra.init,
+              random = ~1|plot,
+              correlation = corAR1(form = ~Var2_year|plot)) 
+plot(z3.cor) 
+
+z3.precip  # model with precip
+z3.precip.cor
+z3.temp  # model with temp
+z3.temp.cor
+z3.precip.temp # model with precip and temp
+z3.precip.temp.cor
+
+### Model Selection
+### Testing null hypothesis (ANOVA)
+### Plot model fit
 
 
 # 3. Does Bray-Curtis dissimilarity from the previous sampling year change over time? ----
@@ -280,6 +350,7 @@ bc.gra.prev$plot <- factor(bc.gra.prev$plot, levels = c("1", "2", "3", "4", "5",
 
 ## Model pairwise dissimilarity of a plot and itself in the previous year as a function of year and treatment ----
 ### Scatterplot of pairwise dissimilarity vs. year
+#### Overall beta-div
 ggplot(bc.dist.prev, aes(x = Var2_year, y = bc.dist, color = plot))+
   geom_point()+
   geom_line(aes(group = plot))+
@@ -289,5 +360,92 @@ ggplot(bc.dist.prev, aes(x = Var2_year, y = bc.dist, color = plot))+
   facet_wrap(~trt)+
   theme_classic()
 
-### Ask Jenn abt modeling - same as above
+#### Balanced variation
+ggplot(bc.bal.prev, aes(x = Var2_year, y = bc.dist, color = plot))+
+  geom_point()+
+  geom_line(aes(group = plot))+
+  #scale_color_manual(values=c("black", "coral", "deepskyblue3")) +
+  ylab("Bray-Curtis Dissimilarity")+
+  xlab("Year")+
+  facet_wrap(~trt)+
+  theme_classic()
+
+#### Abundance gradient
+ggplot(bc.gra.prev, aes(x = Var2_year, y = bc.dist, color = plot))+
+  geom_point()+
+  geom_line(aes(group = plot))+
+  #scale_color_manual(values=c("black", "coral", "deepskyblue3")) +
+  ylab("Bray-Curtis Dissimilarity")+
+  xlab("Year")+
+  facet_wrap(~trt)+
+  theme_classic()
+
+
+### Linear Mixed Effects Models ----
+#### Overall beta-diversity
+
+### response variable: B-C dissimilarity between a plot and itself in the previous year
+### treatment as between-plots fixed variable
+### plot as random variable
+
+z4 <- lme(bc.dist ~ trt*Var2_year, # base model
+          data = bc.dist.prev,
+          random = ~1|plot) 
+plot(z4) # bad
+
+z4.cor <- lme(bc.dist ~ trt*Var2_year, # base model with autocorrelation term
+              data = bc.dist.prev,
+              random = ~1|plot,
+              correlation = corAR1(form = ~Var2_year|plot)) 
+plot(z4.cor)
+
+z4.precip  # model with precip
+z4.precip.cor
+z4.temp  # model with temp
+z4.temp.cor
+z4.precip.temp # model with precip and temp
+z4.precip.temp.cor
+
+#### Balanced Variation
+z5 <- lme(bc.dist ~ trt*Var2_year, # base model
+          data = bc.bal.prev,
+          random = ~1|plot) 
+plot(z5) #bad
+
+z5.cor <- lme(bc.dist ~ trt*Var2_year, # base model with autocorrelation term
+              data = bc.bal.prev,
+              random = ~1|plot,
+              correlation = corAR1(form = ~Var2_year|plot)) 
+plot(z5.cor) 
+
+z5.precip  # model with precip
+z5.precip.cor
+z5.temp  # model with temp
+z5.temp.cor
+z5.precip.temp # model with precip and temp
+z5.precip.temp.cor
+
+
+#### Abundance Gradient
+z6 <- lme(bc.dist ~ trt*Var2_year, # base model
+          data = bc.gra.prev,
+          random = ~1|plot) 
+plot(z6) # hmmmm
+
+z6.cor <- lme(bc.dist ~ trt*Var2_year, # base model with autocorrelation term
+              data = bc.gra.prev,
+              random = ~1|plot,
+              correlation = corAR1(form = ~Var2_year|plot)) 
+plot(z6.cor) 
+
+z6.precip  # model with precip
+z6.precip.cor
+z6.temp  # model with temp
+z6.temp.cor
+z6.precip.temp # model with precip and temp
+z6.precip.temp.cor
+
+### Model Selection
+### Testing null hypothesis (ANOVA)
+### Plot model fit
 

@@ -10,6 +10,7 @@ setwd("C:/Users/Robin/Documents/School/Williams Lab")
 
 # packages
 library(LeafArea)
+library(readxl)
 #library(pliman)
 
 # 2. Package testing ----
@@ -34,4 +35,14 @@ library(LeafArea)
 ## LeafArea is much more user friendly + faster so going with that. Also using ImageJ, which is standard
 
 # 3. Extract leaf area from images ----
+EROR <- run.ij (set.directory = "C:/Users/Robin/Documents/School/Williams Lab/SLA scans/EROR",
+                 distance.pixel = 21,
+                 low.size = 0.1,
+                 known.distance = 0.09,
+                 save.image = TRUE)
+
+# 4. Export final leaf areas as .csv
+write.csv(EROR, "C:/Users/Robin/Documents/School/Williams Lab/cowichan-diversity/00_rawdata/EROR_leafarea.csv", 
+          row.names = FALSE)
+
 

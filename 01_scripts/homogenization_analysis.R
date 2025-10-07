@@ -42,12 +42,14 @@ ty.match <- filter(bc.dist, Var1_trt == Var2_trt & Var1_year == Var2_year)
 
 ### add weather data
 ty.match <- left_join(ty.match, 
-                       select(weather_gs, 
-                              year, gs.precip, gs.mean.temp), 
-                       by = c("Var1_year" = "year"))
+                      weather.prev.gs,
+                      by = c("Var1_year" = "year"))
+ty.match <- left_join(ty.match,
+            weather.prev.365,
+            by = c("Var1_year" = "year"))
 
 ### Clean up new dataframe for analysis
-ty.match <- ty.match[, -c(2, 6)] # remove extra year and treatment columns
+ty.match <- ty.match[, -c(2, 6, 8)] # remove extra year and treatment columns
 ty.match <- ty.match %>%
   mutate(plot_pair = paste(Var1_plot, Var2_plot, sep = "_")) %>% # combine plot-pairs into one column
   dplyr::rename(year = Var2_year, # rename columns
@@ -79,56 +81,90 @@ ggplot(ty.match, aes(x = year, y = bc.dist, color = plot_pair))+
 ### response variable: B-C dissimilarity
 ### treatment as between-plots fixed variable
 ### plot_pair as random variable
-# lme4 vers
-z1 <- lmer(bc.dist ~ trt*year + (1|plot_pair), ty.match)
+
+z1 <- lme(bc.dist ~ trt*year, # base
+          data = ty.match,
+          random = ~1|plot_pair)
 plot(z1) # examine residuals, look fine
 
-# nlme vers
-# no autocorrelation
-z2 <- lme(bc.dist ~ trt*year, 
+z2 <- lme(bc.dist ~ trt*year+gs.precip, # base + precip
           data = ty.match,
           random = ~1|plot_pair)
-plot(z2) # examine residuals, look fine
+plot(z2) # examine residuals,
 
-### LMER with mean growing season precipitation and temperature ----
-z3 <- lme(bc.dist ~ trt*year+gs.precip+gs.mean.temp, 
+z3 <- lme(bc.dist ~ trt*year+gs.mean.temp, # base + temp
           data = ty.match,
           random = ~1|plot_pair)
-plot(z3) # examine residuals, look fine
+plot(z3) # examine residuals,
 
-Anova(z3, type = 3) #marginal, not sequential
+z4 <- lme(bc.dist ~ trt*year+gs.mean.temp+gs.precip, # base + temp + precip
+          data = ty.match,
+          random = ~1|plot_pair)
+plot(z4) # examine residuals
 
 ### Investigate autocorrelation ----
 # Plot auto-correlation function 
-E <- residuals(z2, type = "normalized") 
+E <- residuals(z1, type = "normalized") 
 acf(E, main = "Auto-correlation plot for residuals") # appears to be autocorrelation present
 
+E <- residuals(z2, type = "normalized") 
+acf(E, main = "Auto-correlation plot for residuals")
+
+E <- residuals(z3, type = "normalized") 
+acf(E, main = "Auto-correlation plot for residuals")
+
+E <- residuals(z4, type = "normalized") 
+acf(E, main = "Auto-correlation plot for residuals")
+
 # Model with AR(1) temporal autocorrelation structure
-z4 <- lme(bc.dist ~ trt*year, 
+z5 <- lme(bc.dist ~ trt*year,  # base + cor
           data = ty.match,
           random = ~1|plot_pair,
           correlation = corAR1(form = ~year|plot_pair))
-plot(z4) # examine residuals, look fine
+plot(z5) # examine residuals
 
-# Calculate the AIC for the two models and the AIC difference
-AIC(z2) # without AR(1): -544.665
-AIC(z4) # with AR(1): -598.0738
-myAIC <- c(AIC(z2), AIC(z4))
+z6 <- lme(bc.dist ~ trt*year+gs.precip, # base + precip + core
+          data = ty.match,
+          random = ~1|plot_pair,
+          correlation = corAR1(form = ~year|plot_pair))
+plot(z6) # examine residuals
+
+z7 <- lme(bc.dist ~ trt*year+gs.mean.temp, # base + temp + core
+          data = ty.match,
+          random = ~1|plot_pair,
+          correlation = corAR1(form = ~year|plot_pair))
+plot(z7) # examine residuals
+
+z8 <- lme(bc.dist ~ trt*year+gs.precip+gs.mean.temp, # base + precip + temp + core
+          data = ty.match,
+          random = ~1|plot_pair,
+          correlation = corAR1(form = ~year|plot_pair))
+plot(z8) # examine residuals
+
+### Model selection ----
+#### Calculate AIC
+myAIC <- c(AIC(z1), AIC(z2), 
+           AIC(z3), AIC(z4),
+           AIC(z5), AIC(z6),
+           AIC(z7), AIC(z8))
 delta <- myAIC - min(myAIC)
-delta # 53.40872
-
-## So, adding AR(1) to model significantly improves model fit
-## proceeding with z3
+model <- c("Model 1", "Model 2", 
+           "Model 3", "Model 4",
+           "Model 5", "Model 6",
+           "Model 7", "Model 8")
+tab1 <- data.frame(model = model, aic = myAIC, delta = delta,
+                   stringsAsFactors = FALSE)
+# model five best fit
 
 ### Testing null hypothesis (ANOVA) ----
-## of no difference in mean species richness over time or between treatments (or the interaction of year and treatment)
-Anova(z4, type = 3) #marginal, not sequential
+## of no difference in mean dissimilarity within treatments over time or between treatments (or the interaction of year and treatment)
+Anova(z5, type = 3) #marginal, not sequential
 
 # Sig: interaction b/t trt and yr
 # marginally sig: year and treatment
 
 ### Plot model fit onto year vs. B-C dissimilarity plot ----
-v <- visreg(z4, xvar = "year", by = "trt",
+v <- visreg(z5, xvar = "year", by = "trt",
        overlay = TRUE,
        legend = TRUE)
 
