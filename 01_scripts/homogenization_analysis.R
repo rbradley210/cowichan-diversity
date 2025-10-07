@@ -82,79 +82,103 @@ ggplot(ty.match, aes(x = year, y = bc.dist, color = plot_pair))+
 ### treatment as between-plots fixed variable
 ### plot_pair as random variable
 
-z1 <- lme(bc.dist ~ trt*year, # base
+h.base <- lme(bc.dist ~ trt*year, # base
           data = ty.match,
           random = ~1|plot_pair)
-plot(z1) # examine residuals, look fine
+plot(h.base) # examine residuals, look fine
 
-z2 <- lme(bc.dist ~ trt*year+gs.precip, # base + precip
+h.pgs.p <- lme(bc.dist ~ trt*year+prev.gs.precip, # base + prev gs precip
           data = ty.match,
           random = ~1|plot_pair)
-plot(z2) # examine residuals,
+plot(h.pgs.p) # examine residuals
 
-z3 <- lme(bc.dist ~ trt*year+gs.mean.temp, # base + temp
+h.pgs.t <- lme(bc.dist ~ trt*year+prev.gs.mean.temp, # base + prev gs temp
           data = ty.match,
           random = ~1|plot_pair)
-plot(z3) # examine residuals,
+plot(h.pgs.t) # examine residuals,
 
-z4 <- lme(bc.dist ~ trt*year+gs.mean.temp+gs.precip, # base + temp + precip
+h.pgs.p.t <- lme(bc.dist ~ trt*year+prev.gs.mean.temp+prev.gs.precip, # base + prev gs temp + precip
           data = ty.match,
           random = ~1|plot_pair)
-plot(z4) # examine residuals
+plot(h.pgs.p.t) # examine residuals
 
-### Investigate autocorrelation ----
-# Plot auto-correlation function 
-E <- residuals(z1, type = "normalized") 
-acf(E, main = "Auto-correlation plot for residuals") # appears to be autocorrelation present
+h.365.p <- lme(bc.dist ~ trt*year+tot.precip.365, # base + prev 365 precip
+               data = ty.match,
+               random = ~1|plot_pair)
+plot(h.pgs.p) # examine residuals
 
-E <- residuals(z2, type = "normalized") 
-acf(E, main = "Auto-correlation plot for residuals")
+h.365.t <- lme(bc.dist ~ trt*year+mean.temp.365, # base + prev 365 temp
+               data = ty.match,
+               random = ~1|plot_pair)
+plot(h.365.t) # examine residuals,
 
-E <- residuals(z3, type = "normalized") 
-acf(E, main = "Auto-correlation plot for residuals")
+h.365.p.t <- lme(bc.dist ~ trt*year+tot.precip.365+mean.temp.365, # base + prev 365 temp + precip
+                 data = ty.match,
+                 random = ~1|plot_pair)
+plot(h.365.p.t) # examine residuals
 
-E <- residuals(z4, type = "normalized") 
-acf(E, main = "Auto-correlation plot for residuals")
 
 # Model with AR(1) temporal autocorrelation structure
-z5 <- lme(bc.dist ~ trt*year,  # base + cor
-          data = ty.match,
-          random = ~1|plot_pair,
-          correlation = corAR1(form = ~year|plot_pair))
-plot(z5) # examine residuals
 
-z6 <- lme(bc.dist ~ trt*year+gs.precip, # base + precip + core
+h.base.cor <- lme(bc.dist ~ trt*year,  # base + cor
           data = ty.match,
           random = ~1|plot_pair,
           correlation = corAR1(form = ~year|plot_pair))
-plot(z6) # examine residuals
+plot(h.base.cor) # examine residuals
 
-z7 <- lme(bc.dist ~ trt*year+gs.mean.temp, # base + temp + core
-          data = ty.match,
-          random = ~1|plot_pair,
-          correlation = corAR1(form = ~year|plot_pair))
-plot(z7) # examine residuals
+h.pgs.p.cor <- lme(bc.dist ~ trt*year+prev.gs.precip, # base + prev gs precip + cor
+               data = ty.match,
+               random = ~1|plot_pair,
+               correlation = corAR1(form = ~year|plot_pair))
+plot(h.pgs.p.cor) # examine residuals
 
-z8 <- lme(bc.dist ~ trt*year+gs.precip+gs.mean.temp, # base + precip + temp + core
-          data = ty.match,
-          random = ~1|plot_pair,
-          correlation = corAR1(form = ~year|plot_pair))
-plot(z8) # examine residuals
+h.pgs.t.cor <- lme(bc.dist ~ trt*year+prev.gs.mean.temp, # base + prev gs temp + cor
+               data = ty.match,
+               random = ~1|plot_pair,
+               correlation = corAR1(form = ~year|plot_pair))
+plot(h.pgs.t.cor) # examine residuals
+
+h.pgs.p.t.cor <- lme(bc.dist ~ trt*year+prev.gs.mean.temp+prev.gs.precip, # base + prev gs temp + precip + cor
+                 data = ty.match,
+                 random = ~1|plot_pair,
+                 correlation = corAR1(form = ~year|plot_pair))
+plot(h.pgs.p.t.cor) # examine residuals
+
+h.365.p.cor <- lme(bc.dist ~ trt*year+tot.precip.365, # base + prev 365 precip + cor
+               data = ty.match,
+               random = ~1|plot_pair,
+               correlation = corAR1(form = ~year|plot_pair))
+plot(h.pgs.p.cor) # examine residuals
+
+h.365.t.cor <- lme(bc.dist ~ trt*year+mean.temp.365, # base + prev 365 temp + cor
+               data = ty.match,
+               random = ~1|plot_pair,
+               correlation = corAR1(form = ~year|plot_pair))
+plot(h.365.t.cor) # examine residuals,
+
+h.365.p.t.cor <- lme(bc.dist ~ trt*year+tot.precip.365+mean.temp.365, # base + prev 365 temp + precip + cor
+                 data = ty.match,
+                 random = ~1|plot_pair,
+                 correlation = corAR1(form = ~year|plot_pair))
+plot(h.365.p.t.cor) # examine residuals
 
 ### Model selection ----
 #### Calculate AIC
-myAIC <- c(AIC(z1), AIC(z2), 
-           AIC(z3), AIC(z4),
-           AIC(z5), AIC(z6),
-           AIC(z7), AIC(z8))
+myAIC <- c(AIC(h.base), AIC(h.base.cor), 
+           AIC(h.pgs.p), AIC(h.pgs.t), AIC(h.pgs.p.t), 
+           AIC(h.pgs.p.cor), AIC(h.pgs.t.cor), AIC(h.pgs.p.t.cor),
+           AIC(h.365.p), AIC(h.365.t), AIC(h.365.p.t), 
+           AIC(h.365.p.cor), AIC(h.365.t.cor), AIC(h.365.p.t.cor)
+           )
 delta <- myAIC - min(myAIC)
-model <- c("Model 1", "Model 2", 
-           "Model 3", "Model 4",
-           "Model 5", "Model 6",
-           "Model 7", "Model 8")
+model <- c("base", "base.cor", 
+           "pgs.p", "pgs.t", "pgs.p.t", 
+           "pgs.p.cor", "pgs.t.cor", "pgs.p.t.cor",
+           "365.p", "365.t", "365.p.t", 
+           "365.p.cor", "365.t.cor", "365.p.t.cor")
 tab1 <- data.frame(model = model, aic = myAIC, delta = delta,
                    stringsAsFactors = FALSE)
-# model five best fit
+# base.cor model best fit
 
 ### Testing null hypothesis (ANOVA) ----
 ## of no difference in mean dissimilarity within treatments over time or between treatments (or the interaction of year and treatment)
