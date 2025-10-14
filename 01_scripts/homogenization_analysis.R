@@ -2,7 +2,7 @@
 # Robin Bradley
 # robin.bradley@ubc.ca
 # created: 28 Aug 2025
-# last updated: 3 Sept 2025
+# last updated: 7 Oct 2025
 
 # Set up ----
 ## set WD
@@ -45,8 +45,8 @@ ty.match <- left_join(ty.match,
                       weather.prev.gs,
                       by = c("Var1_year" = "year"))
 ty.match <- left_join(ty.match,
-            weather.prev.365,
-            by = c("Var1_year" = "year"))
+                      weather.prev.365,
+                      by = c("Var1_year" = "year"))
 
 ### Clean up new dataframe for analysis
 ty.match <- ty.match[, -c(2, 6, 8)] # remove extra year and treatment columns
@@ -55,13 +55,13 @@ ty.match <- ty.match %>%
   dplyr::rename(year = Var2_year, # rename columns
                 trt = Var2_trt,
                 bc.dist = Freq,
-                )
+  )
 ty.match$trt <- as.factor(ty.match$trt) #convert treatment to factor
 ty.match$trt <- factor(ty.match$trt, levels = c("control", "drought", "irrigated"))
 
 ty.match$year <- as.factor(ty.match$year) # convert year to factor
 ty.match$year <- factor(ty.match$year, levels = c("2015", "2016", "2017", "2018", "2019", 
-                                                    "2020", "2021", "2022", "2023", "2024", "2025"))
+                                                  "2020", "2021", "2022", "2023", "2024", "2025"))
 ty.match$year <- as.integer(ty.match$year) # then convert year to integer
 
 ty.match$plot_pair <- as.factor(ty.match$plot_pair) # convert plot-pairs to factors
@@ -83,23 +83,23 @@ ggplot(ty.match, aes(x = year, y = bc.dist, color = plot_pair))+
 ### plot_pair as random variable
 
 h.base <- lme(bc.dist ~ trt*year, # base
-          data = ty.match,
-          random = ~1|plot_pair)
+              data = ty.match,
+              random = ~1|plot_pair)
 plot(h.base) # examine residuals, look fine
 
 h.pgs.p <- lme(bc.dist ~ trt*year+prev.gs.precip, # base + prev gs precip
-          data = ty.match,
-          random = ~1|plot_pair)
+               data = ty.match,
+               random = ~1|plot_pair)
 plot(h.pgs.p) # examine residuals
 
 h.pgs.t <- lme(bc.dist ~ trt*year+prev.gs.mean.temp, # base + prev gs temp
-          data = ty.match,
-          random = ~1|plot_pair)
+               data = ty.match,
+               random = ~1|plot_pair)
 plot(h.pgs.t) # examine residuals,
 
 h.pgs.p.t <- lme(bc.dist ~ trt*year+prev.gs.mean.temp+prev.gs.precip, # base + prev gs temp + precip
-          data = ty.match,
-          random = ~1|plot_pair)
+                 data = ty.match,
+                 random = ~1|plot_pair)
 plot(h.pgs.p.t) # examine residuals
 
 h.365.p <- lme(bc.dist ~ trt*year+tot.precip.365, # base + prev 365 precip
@@ -121,46 +121,59 @@ plot(h.365.p.t) # examine residuals
 # Model with AR(1) temporal autocorrelation structure
 
 h.base.cor <- lme(bc.dist ~ trt*year,  # base + cor
-          data = ty.match,
-          random = ~1|plot_pair,
-          correlation = corAR1(form = ~year|plot_pair))
+                  data = ty.match,
+                  random = ~1|plot_pair,
+                  correlation = corAR1(form = ~year|plot_pair))
 plot(h.base.cor) # examine residuals
 
 h.pgs.p.cor <- lme(bc.dist ~ trt*year+prev.gs.precip, # base + prev gs precip + cor
-               data = ty.match,
-               random = ~1|plot_pair,
-               correlation = corAR1(form = ~year|plot_pair))
+                   data = ty.match,
+                   random = ~1|plot_pair,
+                   correlation = corAR1(form = ~year|plot_pair))
 plot(h.pgs.p.cor) # examine residuals
 
 h.pgs.t.cor <- lme(bc.dist ~ trt*year+prev.gs.mean.temp, # base + prev gs temp + cor
-               data = ty.match,
-               random = ~1|plot_pair,
-               correlation = corAR1(form = ~year|plot_pair))
+                   data = ty.match,
+                   random = ~1|plot_pair,
+                   correlation = corAR1(form = ~year|plot_pair))
 plot(h.pgs.t.cor) # examine residuals
 
 h.pgs.p.t.cor <- lme(bc.dist ~ trt*year+prev.gs.mean.temp+prev.gs.precip, # base + prev gs temp + precip + cor
-                 data = ty.match,
-                 random = ~1|plot_pair,
-                 correlation = corAR1(form = ~year|plot_pair))
+                     data = ty.match,
+                     random = ~1|plot_pair,
+                     correlation = corAR1(form = ~year|plot_pair))
 plot(h.pgs.p.t.cor) # examine residuals
 
 h.365.p.cor <- lme(bc.dist ~ trt*year+tot.precip.365, # base + prev 365 precip + cor
-               data = ty.match,
-               random = ~1|plot_pair,
-               correlation = corAR1(form = ~year|plot_pair))
+                   data = ty.match,
+                   random = ~1|plot_pair,
+                   correlation = corAR1(form = ~year|plot_pair))
 plot(h.pgs.p.cor) # examine residuals
 
 h.365.t.cor <- lme(bc.dist ~ trt*year+mean.temp.365, # base + prev 365 temp + cor
-               data = ty.match,
-               random = ~1|plot_pair,
-               correlation = corAR1(form = ~year|plot_pair))
+                   data = ty.match,
+                   random = ~1|plot_pair,
+                   correlation = corAR1(form = ~year|plot_pair))
 plot(h.365.t.cor) # examine residuals,
 
 h.365.p.t.cor <- lme(bc.dist ~ trt*year+tot.precip.365+mean.temp.365, # base + prev 365 temp + precip + cor
-                 data = ty.match,
-                 random = ~1|plot_pair,
-                 correlation = corAR1(form = ~year|plot_pair))
+                     data = ty.match,
+                     random = ~1|plot_pair,
+                     correlation = corAR1(form = ~year|plot_pair))
 plot(h.365.p.t.cor) # examine residuals
+
+h.pgs.t.cor.int <- lme(bc.dist ~ year*trt*prev.gs.mean.temp, # base + prev gs temp + cor + temp/trt interaction
+                       data = ty.match,
+                       random = ~1|plot_pair,
+                       correlation = corAR1(form = ~year|plot_pair))
+plot(h.pgs.t.cor.int) # examine residuals
+
+h.365.t.cor.int <- lme(bc.dist ~ year*trt*mean.temp.365, # base + prev gs temp + cor + temp/trt interaction
+                       data = ty.match,
+                       random = ~1|plot_pair,
+                       correlation = corAR1(form = ~year|plot_pair))
+plot(h.365.t.cor.int) # examine residuals
+
 
 ### Model selection ----
 #### Calculate AIC
@@ -168,29 +181,31 @@ myAIC <- c(AIC(h.base), AIC(h.base.cor),
            AIC(h.pgs.p), AIC(h.pgs.t), AIC(h.pgs.p.t), 
            AIC(h.pgs.p.cor), AIC(h.pgs.t.cor), AIC(h.pgs.p.t.cor),
            AIC(h.365.p), AIC(h.365.t), AIC(h.365.p.t), 
-           AIC(h.365.p.cor), AIC(h.365.t.cor), AIC(h.365.p.t.cor)
-           )
+           AIC(h.365.p.cor), AIC(h.365.t.cor), AIC(h.365.p.t.cor),
+           AIC(h.pgs.t.cor.int), AIC(h.365.t.cor.int)
+)
 delta <- myAIC - min(myAIC)
 model <- c("base", "base.cor", 
            "pgs.p", "pgs.t", "pgs.p.t", 
            "pgs.p.cor", "pgs.t.cor", "pgs.p.t.cor",
            "365.p", "365.t", "365.p.t", 
-           "365.p.cor", "365.t.cor", "365.p.t.cor")
+           "365.p.cor", "365.t.cor", "365.p.t.cor",
+           "h.pgs.t.cor.int", "h.365.t.cor.int")
 tab1 <- data.frame(model = model, aic = myAIC, delta = delta,
                    stringsAsFactors = FALSE)
 # base.cor model best fit
 
 ### Testing null hypothesis (ANOVA) ----
 ## of no difference in mean dissimilarity within treatments over time or between treatments (or the interaction of year and treatment)
-Anova(z5, type = 3) #marginal, not sequential
+Anova(h.base.cor, type = 3) #marginal, not sequential
 
 # Sig: interaction b/t trt and yr
 # marginally sig: year and treatment
 
 ### Plot model fit onto year vs. B-C dissimilarity plot ----
-v <- visreg(z5, xvar = "year", by = "trt",
-       overlay = TRUE,
-       legend = TRUE)
+v <- visreg(h.base.cor, xvar = "year", by = "trt",
+            overlay = TRUE,
+            legend = TRUE)
 
 par(mar = c(4.1, 4.4, 4.1, 1.9))
 plot(v, 
