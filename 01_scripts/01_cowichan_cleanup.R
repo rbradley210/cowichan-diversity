@@ -25,30 +25,35 @@ names(plots)[names(plots) == "treatment"] <- "trt"
 ### Read in cover data
 ## Mid-growing season surveys only
 ### 2015-2021
-cover_mids20152021 <- read.csv("Diversity/cowichan_community5_19_2021.csv", header = TRUE, na.strings = c("", " ")) %>% 
+cover_mids20152021 <- read.csv("Diversity/cowichan_community5_19_2021.csv", 
+                               header = TRUE, na.strings = c("", " "), strip.white=TRUE) %>% 
   dplyr::select(-quadID, -notes, -X, -X.1, -X.2, -X.3, -X.4, -X.5)
 
 ### 2022
-cover_mid2022 <- read.csv("Diversity/2022_cowichan_community.csv", header = TRUE, na.strings = c("", " ")) %>% 
+cover_mid2022 <- read.csv("Diversity/2022_cowichan_community.csv", 
+                          header = TRUE, na.strings = c("", " "), strip.white=TRUE) %>% 
   slice(1:802) %>% 
   dplyr::select(-quadID, -notes)
 
 ### 2023
-cover_mid2023 <- read.csv("Diversity/2023_cowichan_community.csv", header = TRUE, na.strings = c("", " ")) %>% 
+cover_mid2023 <- read.csv("Diversity/2023_cowichan_community.csv", 
+                          header = TRUE, na.strings = c("", " "), strip.white=TRUE) %>% 
   slice(1:808) %>% 
   dplyr::select(-quadID, -notes)
 
 ### 2024
-cover_mid2024 <- read.csv("Diversity/2024_cowichan_community.csv", header = TRUE, na.strings = c("", " ")) %>% 
+cover_mid2024 <- read.csv("Diversity/2024_cowichan_community.csv", 
+                          header = TRUE, na.strings = c("", " "), strip.white=TRUE) %>% 
   slice(1:813) %>% 
   dplyr::select(-quadID, -notes)
 
 ### 2025
-cover_mid2025 <- read.csv("Diversity/2025_cowichan_community.csv", header = TRUE, na.strings = c("", " ")) %>% 
+cover_mid2025 <- read.csv("Diversity/2025_cowichan_community.csv", 
+                          header = TRUE, na.strings = c("", " "), strip.white=TRUE) %>% 
   slice(1:799) %>% 
   dplyr::select(-quadID, -notes)
 
-## Cleaning cover data
+## Cleaning cover data ----
 ### bind all diversity surveys together
 cover_all <- rbind(cover_mids20152021,
                    cover_mid2022, 
@@ -169,13 +174,13 @@ plants <- plants %>%
 ## Create list of unique species names
 plant_species <- data.frame(unique(plants$species[plants$cover > 0]))
 
-## Species-Plot Matrix
+## Species-Plot Matrix ----
 spe.matrix <- cast(plants, plot + year ~ species, value = 'cover', fun.aggregate = sum) %>% # convert to matrix
   unite("ID", plot:year)
 spe.matrix[is.na(spe.matrix)] <- 0 # convert NAs to 0s
 spe.matrix <- data.frame(spe.matrix, row.names = 1) # convert plot-year ID to row names
 
-# make plot-year metadata file
+## Make plot-year metadata file ----
 plot_year <- data.frame(plot_year = row.names(spe.matrix)) %>% 
   separate(col = plot_year,
            into = c("plot", "year"),
