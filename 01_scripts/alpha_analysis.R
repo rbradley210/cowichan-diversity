@@ -36,7 +36,7 @@ boxplot(specnumber(spe.matrix) ~ plot_year$plot, ylab = "# of plant species", xl
 
 # compare species richness across treatments and years
 ggplot(spe.matrix,aes(x=plot_year$year, y=specnumber(spe.matrix), color = plot_year$trt))+
-  geom_boxplot()+
+  geom_point()+
   scale_color_manual(values=c("black", "coral", "deepskyblue3")) +
   ylab("# of plant species")+
   xlab("Year")+
@@ -251,6 +251,7 @@ visreg(a.pgs.p.t.cor, xvar = "trt",
 
 ### x = year, y = spp rich, split by trt
 plot(visreg(a.pgs.p.t.cor, xvar = "year", by = "trt", overlay = TRUE, plot = FALSE),
+     xaxp = c(1, 11, 10),
      legend = FALSE,
        points = list(col = c("black", "darkorange", "deepskyblue2"), cex = 1),
        line = list(col = c("black", "darkorange", "deepskyblue2")),
@@ -260,37 +261,37 @@ plot(visreg(a.pgs.p.t.cor, xvar = "year", by = "trt", overlay = TRUE, plot = FAL
        overlay = TRUE)
 legend(x = "bottomright", 
        legend = c("Control", "Drought", "Irrigated"),
-       col = c("black", "coral", "deepskyblue3"),
+       col = c("black", "darkorange", "deepskyblue3"),
        lwd = 3,
        pch = 1)
 
 ### x = temperature, y = spp rich, split by trt
 plot(visreg(a.pgs.p.t.cor, xvar = "prev.gs.mean.temp", by = "trt", overlay = TRUE, plot = FALSE),
      legend = FALSE,
-       points = list(col = c("black", "darkorange", "deepskyblue2"), cex = 0.75),
+       points = list(col = c("black", "darkorange", "deepskyblue2"), cex = 1),
        line = list(col = c("black", "darkorange", "deepskyblue2")),
      main = "Overall Species Richness",
-       xlab = "Previous Growing Season Mean Temperature",
+       xlab = "Mean Temperature (°C) in Previous Growing Season",
        ylab = "Species Richness",
        overlay = TRUE)
-legend(x = "topleft", 
+legend(x = "bottomright", 
        legend = c("Control", "Drought", "Irrigated"),
-       col = c("black", "coral", "deepskyblue3"),
+       col = c("black", "darkorange", "deepskyblue3"),
        lwd = 3,
        pch = 1)
 
 ## x = precip, y = spp rich, split by trt
 plot(visreg(a.pgs.p.t.cor, xvar = "prev.gs.precip", by = "trt", overlay = TRUE, plot = FALSE),
      legend = FALSE,
-     points = list(col = c("black", "darkorange", "deepskyblue2"), cex = 0.75),
+     points = list(col = c("black", "darkorange", "deepskyblue2"), cex = 1),
      line = list(col = c("black", "darkorange", "deepskyblue2")),
      main = "Overall Species Richness",
-     xlab = "Previous Growing Season Total Precipitation (mm)",
+     xlab = "Total Precipitation (mm) in Previous Growing Season",
      ylab = "Species Richness",
      overlay = TRUE)
 legend(x = "bottomright", 
        legend = c("Control", "Drought", "Irrigated"),
-       col = c("black", "coral", "deepskyblue3"),
+       col = c("black", "darkorange", "deepskyblue3"),
        lwd = 3,
        pch = 1)
 
@@ -519,8 +520,9 @@ visreg(an.pgs.t.cor, xvar = "trt",
 
 ### x = year, y = annual spp. rich, by trt
 plot(visreg(an.pgs.t.cor, xvar = "year", by = "trt", overlay = TRUE, plot = FALSE),
+     xaxp = c(1, 11, 10),
      legend = FALSE,
-     points = list(col = c("black", "darkorange", "deepskyblue2"), cex = 0.75),
+     points = list(col = c("black", "darkorange", "deepskyblue2"), cex = 1),
      line = list(col = c("black", "darkorange", "deepskyblue2")),
      main = "Species Richness (Annuals)",
      xlab = "Year",
@@ -528,22 +530,22 @@ plot(visreg(an.pgs.t.cor, xvar = "year", by = "trt", overlay = TRUE, plot = FALS
      overlay = TRUE)
 legend(x = "bottomright", 
        legend = c("Control", "Drought", "Irrigated"),
-       col = c("black", "coral", "deepskyblue3"),
+       col = c("black", "darkorange", "deepskyblue3"),
        lwd = 3,
        pch = 1)
 
 ### x = temp, y = annual spp rich, by trt
 plot(visreg(an.pgs.t.cor, xvar = "prev.gs.mean.temp", by = "trt", overlay = TRUE, plot = FALSE),
      legend = FALSE,
-       points = list(col = c("black", "darkorange", "deepskyblue2"), cex = 0.75),
+       points = list(col = c("black", "darkorange", "deepskyblue2"), cex = 1),
        line = list(col = c("black", "darkorange", "deepskyblue2")),
      main = "Species Richness (Annuals)",
-       xlab = "Previous Growing Season Mean Temperature",
+       xlab = "Mean Temperature (°C) in Previous Growing Season",
        ylab = "Species Richness (annuals)",
        overlay = TRUE)
-legend(x = "topleft", 
+legend(x = "bottomright", 
        legend = c("Control", "Drought", "Irrigated"),
-       col = c("black", "coral", "deepskyblue3"),
+       col = c("black", "darkorange", "deepskyblue3"),
        lwd = 3,
        pch = 1)
 
@@ -738,15 +740,17 @@ visreg(pe.base.cor, xvar = "trt",
 
 ### x = year, y = spp rich, by trt
 plot(visreg(pe.base.cor, xvar = "year", by = "trt", overlay = TRUE, plot = FALSE),
+     xaxp = c(1, 11, 10),
+     ylim = range(6, 15),
      legend = FALSE,
-       points = list(col = c("black", "darkorange", "deepskyblue2"), cex = 0.75),
+       points = list(col = c("black", "darkorange", "deepskyblue2"), cex = 1),
        line = list(col = c("black", "darkorange", "deepskyblue2")),
      main = "Species Richness (Perennials)",
        xlab = "Year",
        ylab = "Species Richness (perennials)",
        overlay = TRUE)
-legend(x = "topleft", 
+legend(x = "bottomright", 
        legend = c("Control", "Drought", "Irrigated"),
-       col = c("black", "coral", "deepskyblue3"),
+       col = c("black", "darkorange", "deepskyblue3"),
        lwd = 3,
        pch = 1)

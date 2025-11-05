@@ -14,8 +14,9 @@ library(vegan)
 #library(tidyverse)
 library(ggplot2)
 library(ggordiplots)
-library(ggvegan)
+#library(ggvegan)
 library(ggthemes)
+library(ggnewscale)
 library(paletteer)
 library(dplyr)
 library(eHOF)
@@ -23,7 +24,7 @@ library(tibble)
 library(vegan3d)
 
 ## Source cowichan_cleanup script
-source("~/School/Williams Lab/cowichan-diversity/01_scripts/cowichan_cleanup.R")
+source("~/School/Williams Lab/cowichan-diversity/01_scripts/01_cowichan_cleanup.R")
 
 # Explore data ----
 ## examine species matrix
@@ -34,28 +35,65 @@ head(colnames(spe.matrix))
 
 ## Does precipitation change cause significant changes in plant community composition over time? ----
 ### PERMANOVA
-set.seed(42) # set seed - RUN EVERY TIME
+
 trt <- plot_year$trt # convert treatment column to its own object
 year <- as.integer(plot_year$year) # convert year column to its own object
 plot <- plot_year$plot # convert plot column to it's own object
 plot_year$year <- as.integer(plot_year$year)
+plot_year$year_trt <- as.factor(paste(plot_year$year, plot_year$trt, sep = "_"))
+plot_year$year_trt <- factor(plot_year$year_trt, levels = c("1_control", "1_irrigated", "1_drought",
+                                                            "2_control", "2_irrigated", "2_drought",
+                                                            "3_control", "3_irrigated", "3_drought",
+                                                            "4_control", "4_irrigated", "4_drought",
+                                                            "5_control", "5_irrigated", "5_drought",
+                                                            "6_control", "6_irrigated", "6_drought",
+                                                            "7_control", "7_irrigated", "7_drought", 
+                                                            "8_control", "8_irrigated", "8_drought", 
+                                                            "9_control", "9_irrigated", "9_drought",
+                                                            "10_control", "10_irrigated", "10_drought",
+                                                            "11_control", "11_irrigated", "11_drought"
+                                                            ))
 
-adonis2(spe.matrix ~ trt*year, # effect of trt, year, and interaction term
-        method = "bray",
-        by = "terms") # NOT controlling permutations
+
+#adonis2(spe.matrix ~ year*trt, # effect of trt, year, and interaction term
+#        method = "bray",
+#        by = "terms") # NOT controlling permutations
 
 ### Limiting permutations
-### CTRL <- how() ### permutation scheme
-### check(spe.matrix, control = CTRL) # check how many permutations are possible
-### adonis2(spe.matrix~trt*year, method = "bray", permutations = CTRL, by = "terms") # PERMANOVA while controlling permutations
+
+# permute time WITHIN plots
+CTRL <- how(within = Within(type = "series", # time series, maintain time order of samples
+                            constant = TRUE, # all plots permuted in the same order because samples taken at the same time (plots experienced the same time)
+                            mirror = FALSE), # samples do not influence PREVIOUS samples in time
+            plots = Plots(strata = plot,
+                          type = "free"), # plots permuted freely  
+            nperm = 9999) 
+
+# permute plots WITHIN time points
+CTRL.b <- how(within = Within(type = "free"),
+              plots = Plots(strata = plot, 
+                         type = "series"),
+            nperm = 9999) 
+          
+# check(spe.matrix, control = CTRL) # check how many permutations are possible
+
+set.seed(49) # set seed - RUN EVERY TIME
+adonis2(spe.matrix~year*trt, 
+        method = "bray", 
+        permutations = CTRL, by = "terms") 
+
+set.seed(49) # set seed - RUN EVERY TIME
+adonis2(spe.matrix~year*trt, 
+        method = "bray", 
+        permutations = CTRL.b, by = "terms") 
 
 ### pairwise comparisons
-# follow instructions in appendix 4
+# pariwise_adonis package
 
 
 
 ## NMDS ----
-set.seed(42) # set seed - RUN EVERY TIME
+set.seed(49) # set seed - RUN EVERY TIME
 nmds.bc <- metaMDS(comm = spe.matrix,
                    autotransform = FALSE, # turn off autotransform
                    distance = "bray", 
@@ -112,20 +150,6 @@ mds.fig.yr <-  ordiplot(nmds.bc, type = "none")
 points(mds.fig.yr, "sites", pch = 19)
 ordiellipse(nmds.bc, plot, conf = 0.95, label = TRUE)
 
-# create a plot with plots connected by year
-## Control group
-mds.fig.yr <-  ordiplot(nmds.bc.rotate, type = "none")
-points(mds.fig.yr, "sites", pch = 19, col = "gray", select = plot_year$trt == "control")
-ordiarrows(mds.fig.yr,groups = plot,display = "sites", col = "black", show.group = c("2", "3", "8", "11", "13"))
-## Irrigated group
-mds.fig.yr <-  ordiplot(nmds.bc.rotate, type = "none")
-points(mds.fig.yr, "sites", pch = 19, col = "deepskyblue3", select = plot_year$trt == "irrigated")
-ordiarrows(mds.fig.yr, groups = plot, display = "sites", col = "black", show.group = c("1", "4", "6", "9", "12"))
-## Drought group
-mds.fig.yr <-  ordiplot(nmds.bc.rotate, type = "none")
-points(mds.fig.yr, "sites", pch = 19, col = "coral", select = plot_year$trt == "drought")
-ordiarrows(mds.fig.yr, groups = plot, display = "sites", col = "black", startmark = 1, show.group = c("5", "7", "10", "14", "15"))
-
 #### WITH ROTATION ----
 nmds.bc.rotate <- MDSrotate(nmds.bc, year) # rotate so NMDS1 and year are perfectly correlated (perpendicular)
 
@@ -151,9 +175,24 @@ points(mds.fig.trt, "sites", pch = 19, col = "black", select = plot_year$trt ==
          "control")
 points(mds.fig.trt, "sites", pch = 19, col = "coral", select = plot_year$trt == 
          "drought")
+
 points(mds.fig.trt, "sites", pch = 19, col = "deepskyblue3", select = plot_year$trt == 
          "irrigated")
 ordiellipse(nmds.bc.rotate, plot_year$trt, conf = 0.95, label = TRUE) # add confidence ellipses around treatments
+
+# create a plot with plots connected by year
+## Control group
+mds.fig.yr <-  ordiplot(nmds.bc.rotate, type = "none")
+points(mds.fig.yr, "sites", pch = 19, col = "gray", select = plot_year$trt == "control")
+ordiarrows(mds.fig.yr,groups = plot,display = "sites", col = "black", show.group = c("2", "3", "8", "11", "13"))
+## Irrigated group
+mds.fig.yr <-  ordiplot(nmds.bc.rotate, type = "none")
+points(mds.fig.yr, "sites", pch = 19, col = "deepskyblue3", select = plot_year$trt == "irrigated")
+ordiarrows(mds.fig.yr, groups = plot, display = "sites", col = "black", show.group = c("1", "4", "6", "9", "12"))
+## Drought group
+mds.fig.yr <-  ordiplot(nmds.bc.rotate, type = "none")
+points(mds.fig.yr, "sites", pch = 19, col = "coral", select = plot_year$trt == "drought")
+ordiarrows(mds.fig.yr, groups = plot, display = "sites", col = "black", startmark = 1, show.group = c("5", "7", "10", "14", "15"))
 
 ### USING GGPLOT ----
 trtcolor <- c("black", "coral", "deepskyblue3")
@@ -164,10 +203,11 @@ yr <- as.data.frame(plot_year$year)
 colnames(yr) <- "Year"
 
 gg.nmds.yr <- gg_ordiplot(nmds.bc.rotate, 
-                          kind = c("se"), conf = 0.95,
+                          #kind = c("se"), conf = 0.95,
                          groups = year)
 
-gg.en <- gg_envfit(nmds.bc.rotate, env = yr, groups = as.factor(year), arrow.col = "black", plot = FALSE)
+gg.en <- gg_envfit(nmds.bc.rotate, 
+                   env = yr, groups = as.factor(year), arrow.col = "black", plot = FALSE)
 
 gg.en$plot +
   geom_path(data = gg.nmds.yr$df_ellipse, aes(x=x, y=y, color=Group)) +
@@ -198,17 +238,15 @@ gg.nmds.plot +
 
 
 ## color by yr-trt
-trt.yr <- unite(plot_year, trt.yr, trt:year)
-trt.yr <- trt.yr[,3]
-gg.nmds.trt <- gg_ordiplot(nmds.bc.rotate, 
+gg.nmds.yr.trt <- gg_ordiplot(nmds.bc.rotate, 
                            kind = c("se"), conf = 0.95,
-                           groups = trt.yr)
-gg.nmds.trt <- gg.nmds.trt$plot
-gg.nmds.trt+
-  labs(color = "Treatment")+
-  #(values = trtcolor)+
-  theme_classic()
+                           groups = year_trt)
 
+gg.nmds.yr.trt <- gg.nmds.yr.trt$plot
+gg.nmds.yr.trt+
+  #labs(color = "Treatment")+
+  #scale_colour_manual(values = trtcolor)+
+  theme_classic()
 
 #### using ggvegan----
 gg.nmds <- fortify(nmds.bc.rotate) %>% filter(score == "sites")
@@ -241,10 +279,10 @@ points(nmds.3d, "sites", pch = 19, col = "deepskyblue3", select = plot_year$trt 
 nmds.3d.rot <- ordirgl(nmds.bc, display = "sites") # rotatable! cant figure out how to recolor points atm
 
 
-## 
-
 ## leftovers from Jill's code ----
 ## Plotting NMDS in GGPlot
+nmds_scores<-scores(nmds.bc.rotate)
+
 #Plot these scores into ggplot
 nmds_scores$sites%>%
   as_tibble(rownames="samples")%>%
@@ -274,6 +312,90 @@ nmds_scores$sites%>%
   ggplot(aes(x=NMDS1,y=NMDS2,color=year, pch = trt))+
   geom_point()+
   theme_classic()
+
+# Plot scores with trt-year color
+nmds_scores$sites%>%
+  as_tibble(rownames="plot_year")%>%
+  inner_join(.,plot_year, by="plot_year")%>%
+  ggplot(aes(x=NMDS1,y=NMDS2,color=trt, pch = trt))+
+  geom_point()+
+  theme_classic()
+
+# Overall Plot ----
+nmds_scores$sites%>%
+  as_tibble(rownames="plot_year")%>%
+  inner_join(.,plot_year, by="plot_year")%>%
+  ggplot(aes(x=NMDS1,y=NMDS2))+
+  ylim(-1.5,1.5)+
+  xlim(-1.5, 1.5)+
+  geom_point(aes(color = as.factor(year)), size = 3)+
+  stat_ellipse(type = "t", level = 0.90, aes(color = as.factor(year)))+
+  scale_colour_paletteer_d("ggsci::default_gsea", 
+                           name = "Year",
+                           labels = c("1", "2", "3", "4", 
+                                      "5", "6", "7", "8",
+                                      "9", "10", "11"))+
+  theme_classic()+
+  theme(plot.title = element_text(hjust = 0.5))
+  
+
+# Just plot one trt w/ ellipses ----
+# control
+nmds_scores$sites%>%
+  as_tibble(rownames="plot_year")%>%
+  inner_join(.,plot_year, by="plot_year")%>%
+  filter(trt == "control")%>%
+  ggplot(aes(x=NMDS1,y=NMDS2))+
+  labs(title = "Control")+
+  ylim(-2,2.25)+
+  xlim(-2.5, 2)+
+  geom_point(aes(color = year_trt), size = 3)+
+  stat_ellipse(type = "t", level = 0.90, aes(color = year_trt))+
+  scale_colour_paletteer_d("ggsci::default_gsea", 
+                           name = "Year",
+                           labels = c("1", "2", "3", "4", 
+                                      "5", "6", "7", "8",
+                                      "9", "10", "11"))+
+  theme_classic()+
+  theme(plot.title = element_text(hjust = 0.5))
+
+# irrigated
+nmds_scores$sites%>%
+  as_tibble(rownames="plot_year")%>%
+  inner_join(.,plot_year, by="plot_year")%>%
+  filter(trt == "irrigated")%>%
+  ggplot(aes(x=NMDS1,y=NMDS2))+
+  labs(title = "Irrigated")+
+  ylim(-2,2.25)+
+  xlim(-2.5, 2)+
+  geom_point(aes(color = year_trt), size = 3)+
+  stat_ellipse(type = "t", level = 0.90, aes(color = year_trt))+
+  scale_colour_paletteer_d("ggsci::default_gsea", 
+                           name = "Year",
+                           labels = c("1", "2", "3", "4", 
+                                      "5", "6", "7", "8",
+                                      "9", "10", "11"))+
+  theme_classic()+
+  theme(plot.title = element_text(hjust = 0.5))
+
+# drought
+nmds_scores$sites%>%
+  as_tibble(rownames="plot_year")%>%
+  inner_join(.,plot_year, by="plot_year")%>%
+  filter(trt == "drought")%>%
+  ggplot(aes(x=NMDS1,y=NMDS2))+
+  ylim(-2,2.25)+
+  xlim(-2.5, 2)+
+  geom_point(aes(color = year_trt), size = 3)+
+  labs(title = "Drought")+
+  stat_ellipse(type = "t", level = 0.90, aes(color = year_trt))+
+  scale_colour_paletteer_d("ggsci::default_gsea", 
+                           name = "Year",
+                           labels = c("1", "2", "3", "4", 
+                                      "5", "6", "7", "8",
+                                      "9", "10", "11"))+
+  theme_classic()+
+  theme(plot.title = element_text(hjust = 0.5))
 
 # create plot colored by year
 mds.fig <- ordiplot(comm.bc.mds, type = "none")
