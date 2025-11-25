@@ -12,7 +12,7 @@ setwd("C:/Users/Robin/Dropbox/Williams' Lab/Cowichan IDE/Data & Plot info")
 library(tidyverse)
 
 ## Source cowichan_cleanup script
-source("~/School/Williams Lab/cowichan-diversity/01_scripts/cowichan_cleanup.R")
+source("~/School/Williams Lab/cowichan-diversity/01_scripts/01_cowichan_cleanup.R")
 
 # 1. Species Richness ----
 ## Calculate total number of species in each year 

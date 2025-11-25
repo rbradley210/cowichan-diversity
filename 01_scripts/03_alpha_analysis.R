@@ -56,7 +56,6 @@ rich <- rich[, -6]
 rich$year <- as.integer(as.factor(rich$year))
 
 
-
 ## Scatterplot of richness vs. sampling year
 ggplot(rich, aes(x = year, y = richness, color = trt))+
   geom_jitter()+
@@ -720,17 +719,17 @@ tab1 <- data.frame(model = model, aic = myAIC, delta = delta,
                    stringsAsFactors = FALSE)
 
 # summary
-summary(pe.base.cor)$tTable %>%
+summary(pe.base)$tTable %>%
   as_tibble(rownames = "variable") %>%
   knitr::kable(digits = 3)
 
 # testing null hypothesis of no difference in mean species richness over time or between years
-Anova(pe.base.cor, type = 3) #marginal, not sequential
+Anova(pe.base, type = 3) #marginal, not sequential
 
 
 ## Plot model fit ----
 ### treatment
-visreg(pe.base.cor, xvar = "trt",
+visreg(pe.base, xvar = "trt",
        points = list(cex = 1),
        line = list(col = c("black")),
        main = "Species Richness (Perennials)",
@@ -739,7 +738,7 @@ visreg(pe.base.cor, xvar = "trt",
        overlay = TRUE)
 
 ### x = year, y = spp rich, by trt
-plot(visreg(pe.base.cor, xvar = "year", by = "trt", overlay = TRUE, plot = FALSE),
+plot(visreg(pe.base, xvar = "year", by = "trt", overlay = TRUE, plot = FALSE),
      xaxp = c(1, 11, 10),
      ylim = range(6, 15),
      legend = FALSE,
@@ -754,3 +753,22 @@ legend(x = "bottomright",
        col = c("black", "darkorange", "deepskyblue3"),
        lwd = 3,
        pch = 1)
+
+## Calculating species richness averages ----
+rich.annual <- rich.annual %>%
+  dplyr::rename(an.rich = richness)
+
+rich.perennial <- rich.perennial %>%
+  dplyr::rename(pe.rich = richness)
+
+rich.per <- rich %>%
+  left_join(rich.annual)%>%
+  select(-duration)%>%
+  left_join(rich.perennial)
+
+rich.per$an.per <- rich.per$an.rich/rich.per$richness
+rich.per$pe.per <- rich.per$pe.rich/rich.per$richness
+rich.per$tot <- rich.per$an.per + rich.per$pe.per 
+
+mean(rich.per$an.per)
+mean(rich.per$pe.per)

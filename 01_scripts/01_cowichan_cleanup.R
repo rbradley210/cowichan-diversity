@@ -2,7 +2,7 @@
 # Adapted from code by Lauren Smith (plants_cleanup.Rmd)
 # email: robinbradley210@gmail.com
 # created: June 2024
-# last updated: 23 September 2025
+# last updated: 25 November 2025
 
 
 # Set Up ----
@@ -72,6 +72,7 @@ rm(cover_mid2025)
 cover_all$cover <- as.numeric(as.character(cover_all$cover))  
 
 # get rid of NAs in the cover column
+cover_all$cover[cover_all$cover == 0] <- NA
 cover_all <- cover_all %>%
   filter(cover != "NA")
 
@@ -158,6 +159,11 @@ plants$species[plants$species == "Danthonia californica" & plants$plot == "4" & 
 # Pooling invasive annual bromes
 plants$species[plants$species == "Bromus hordeaceus"] <- "Annual Bromus"
 plants$species[plants$species == "Bromus sterilis"] <- "Annual Bromus"
+
+plants <- plants %>%
+  group_by(plot, treatment, year, species)%>%
+  dplyr::summarize(cover = sum(cover))
+
 
 # Removing species
 plants <- plants %>%

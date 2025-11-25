@@ -71,7 +71,7 @@ ty.match$plot_pair <- as.factor(ty.match$plot_pair) # convert plot-pairs to fact
 ggplot(ty.match, aes(x = year, y = bc.dist, color = plot_pair))+
   geom_point()+
   geom_line(aes(group = plot_pair))+
-  #scale_color_manual(values=c("black", "coral", "deepskyblue3")) +
+  scale_color_manual(values=c("black", "coral", "deepskyblue3")) +
   ylab("Bray-Curtis Dissimilarity")+
   xlab("Year")+
   facet_wrap(~trt)+
