@@ -2,13 +2,13 @@
 # Robin Bradley
 # robin.bradley@ubc.ca
 # created: 27 Jan 2025
-# last updated: 16 July 2025
+# last updated: 24 February 2026
 
-# Set up ----
+# 1. Set up ----
 ## set WD
 setwd("C:/Users/Robin/Dropbox/Williams' Lab/Cowichan IDE/Data & Plot info")
 
-## packages ----
+## packages
 library(picante)
 library(vegan)
 #library(tidyverse)
@@ -22,6 +22,7 @@ library(dplyr)
 library(eHOF)
 library(tibble)
 library(vegan3d)
+library(indicspecies)
 
 ## Source cowichan_cleanup script
 source("~/School/Williams Lab/cowichan-diversity/01_scripts/01_cowichan_cleanup.R")
@@ -33,8 +34,8 @@ head(rownames(spe.matrix))
 head(colnames(spe.matrix))
 
 
-## Does precipitation change cause significant changes in plant community composition over time? ----
-### PERMANOVA
+# 2. Does precipitation change cause significant changes in plant community composition over time? ----
+### PERMANOVA ----
 
 trt <- plot_year$trt # convert treatment column to its own object
 year <- as.integer(plot_year$year) # convert year column to its own object
@@ -87,9 +88,28 @@ adonis2(spe.matrix~year*trt,
         method = "bray", 
         permutations = CTRL.b, by = "terms") 
 
-### pairwise comparisons
+### pairwise comparisons ----
 # pariwise_adonis package
 
+
+### ISA ----
+# ISA w/ combinations of groups
+# this is really hard on your computer!! proceed with caution
+
+set.seed(42) # set seed - RUN EVERY TIME
+ISA.yr <- multipatt(x = spe.matrix,
+                    cluster = plot_year$year)
+summary(ISA.yr)
+
+set.seed(42) # set seed - RUN EVERY TIME
+ISA.trt <- multipatt(x = spe.matrix,
+                     cluster = plot_year$trt)
+summary(ISA.trt)
+
+set.seed(42) # set seed - RUN EVERY TIME
+ISA.yr.trt <- multipatt(x = spe.matrix,
+                        cluster = plot_year$year_trt) 
+summary(ISA.yr.trt) 
 
 
 ## NMDS ----
@@ -217,7 +237,7 @@ gg.en$plot +
 
 ## color by trt
 gg.nmds.trt <- gg_ordiplot(nmds.bc.rotate, 
-                           kind = c("se"), conf = 0.95,
+                           #kind = c("se"), conf = 0.95,
                            groups = trt)
 gg.nmds.trt <- gg.nmds.trt$plot
 gg.nmds.trt+
@@ -228,7 +248,7 @@ gg.nmds.trt+
 ## color by plot
 gg.nmds.plot <- gg_ordiplot(nmds.bc.rotate, 
                             label = TRUE,
-                          kind = c("se"), conf = 0.95,
+                          #kind = c("se"), conf = 0.95,
                           groups = plot)
 gg.nmds.plot <- gg.nmds.plot$plot
 gg.nmds.plot +

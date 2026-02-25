@@ -1,327 +1,327 @@
-"Plant Species","plot","Plant ID","leaf_ids","tot.weight","trt","sampleID"
-"ALAM",6,"A","""A"", ""B"", ""C""",137.12,"irrigated","ALAM_6_A"
-"ALAM",6,"B","""A"", ""B"", ""C""",67.86,"irrigated","ALAM_6_B"
-"ALAM",6,"C","""A"", ""B"", ""C""",111.42,"irrigated","ALAM_6_C"
-"ALAM",7,"A","""A"", ""B"", ""C""",51.43,"drought","ALAM_7_A"
-"ALAM",7,"B","""A"", ""B"", ""C""",58.27,"drought","ALAM_7_B"
-"ALAM",7,"C","""A"", ""B"", ""C""",95.97,"drought","ALAM_7_C"
-"ALAM",8,"A","""A"", ""B"", ""C""",142.34,"control","ALAM_8_A"
-"ALAM",8,"B","""A"", ""B"", ""C""",136.07,"control","ALAM_8_B"
-"ALAM",8,"C","""A"", ""B"", ""C""",142.92,"control","ALAM_8_C"
-"ANOD",1,"A","""A"", ""B"", ""C""",68.84,"irrigated","ANOD_1_A"
-"ANOD",2,"A","""A"", ""B"", ""C""",30.67,"control","ANOD_2_A"
-"ANOD",3,"A","""A"", ""B"", ""C""",61.76,"control","ANOD_3_A"
-"ANOD",6,"A","""A"", ""B"", ""C""",32.53,"irrigated","ANOD_6_A"
-"ANOD",7,"A","""A"", ""B"", ""C""",14.52,"drought","ANOD_7_A"
-"ANOD",10,"A","""A"", ""B"", ""C""",56.95,"drought","ANOD_10_A"
-"ANOD",11,"A","""A"", ""B"", ""C""",39.18,"control","ANOD_11_A"
-"ANOD",12,"A","""A"", ""B"", ""C""",18.47,"irrigated","ANOD_12_A"
-"ANOD",14,"A","""A"", ""B""",20.35,"drought","ANOD_14_A"
-"ANOD",14,"B","""A"", ""B""",20.44,"drought","ANOD_14_B"
-"BEAQ",3,"A","""A"", ""B"", ""C""",233.92,"control","BEAQ_3_A"
-"BEAQ",4,"A","""A"", ""B"", ""C""",356.98,"irrigated","BEAQ_4_A"
-"BEAQ",4,"B","""A"", ""B"", ""C""",365.83,"irrigated","BEAQ_4_B"
-"BEAQ",9,"A","""A"", ""B"", ""C""",315.25,"irrigated","BEAQ_9_A"
-"BEAQ",11,"A","""A"", ""B"", ""C""",276.83,"control","BEAQ_11_A"
-"BEAQ",13,"A","""A"", ""B"", ""C""",239.82,"control","BEAQ_13_A"
-"BEAQ",15,"A","""A"", ""B"", ""C""",241.05,"drought","BEAQ_15_A"
-"BEAQ",15,"B","""A"", ""B"", ""C""",393.82,"drought","BEAQ_15_B"
-"BEAQ",15,"C","""A"", ""B"", ""C""",391.59,"drought","BEAQ_15_C"
-"BRCA",2,"A","""A"", ""B"", ""C""",89.02,"control","BRCA_2_A"
-"BRCA",2,"B","""A"", ""B"", ""C""",197.87,"control","BRCA_2_B"
-"BRCA",4,"A","""A"", ""B"", ""C""",197.11,"irrigated","BRCA_4_A"
-"BRCA",4,"B","""A"", ""B"", ""C""",171.31,"irrigated","BRCA_4_B"
-"BRCA",8,"A","""A"", ""B"", ""C""",275.76,"control","BRCA_8_A"
-"BRCA",9,"A","""A"", ""B"", ""C""",361.03,"irrigated","BRCA_9_A"
-"BRCA",10,"A","""A"", ""B"", ""C""",145.68,"drought","BRCA_10_A"
-"BRCA",14,"A","""A"", ""B"", ""C""",119.39,"drought","BRCA_14_A"
-"BRCA",14,"B","""A"", ""B"", ""C""",173.21,"drought","BRCA_14_B"
-"BRHO",1,"A","""A"", ""B"", ""C""",39.63,"irrigated","BRHO_1_A"
-"BRHO",1,"B","""A"", ""B"", ""C""",27.11,"irrigated","BRHO_1_B"
-"BRHO",1,"C","""A"", ""B"", ""C""",43.94,"irrigated","BRHO_1_C"
-"BRHO",2,"A","""A"", ""B"", ""C""",9.4,"control","BRHO_2_A"
-"BRHO",2,"B","""A"", ""B"", ""C""",15.79,"control","BRHO_2_B"
-"BRHO",2,"C","""A"", ""B"", ""C""",10.13,"control","BRHO_2_C"
-"BRHO",7,"A","""A"", ""B"", ""C""",15.99,"drought","BRHO_7_A"
-"BRHO",7,"B","""A"", ""B"", ""C""",13.2,"drought","BRHO_7_B"
-"BRHO",7,"C","""A"", ""B"", ""C""",26.72,"drought","BRHO_7_C"
-"BRST",1,"A","""A"", ""B"", ""C""",15.84,"irrigated","BRST_1_A"
-"BRST",2,"A","""A"", ""B"", ""C""",33.12,"control","BRST_2_A"
-"BRST",3,"A","""A"", ""B""",32.25,"control","BRST_3_A"
-"BRST",6,"A","""A"", ""B"", ""C""",30.12,"irrigated","BRST_6_A"
-"BRST",7,"A","""A"", ""B"", ""C""",52.74,"drought","BRST_7_A"
-"BRST",9,"A","""A"", ""B"", ""C""",41.44,"irrigated","BRST_9_A"
-"BRST",10,"A","""A"", ""B"", ""C""",47.02,"drought","BRST_10_A"
-"BRST",13,"A","""A"", ""B"", ""C"", ""D""",22.02,"control","BRST_13_A"
-"BRST",14,"A","""A"", ""B"", ""C""",21.37,"drought","BRST_14_A"
-"CAIN",5,"A","A",41.36,"drought","CAIN_5_A"
-"CAIN",11,"A","""A"", ""B"", ""C""",49.87,"control","CAIN_11_A"
-"CAIN",11,"B","""A"", ""B"", ""C""",63.3,"control","CAIN_11_B"
-"CAIN",11,"C","A",50.78,"control","CAIN_11_C"
-"CAIN",12,"A","""A"", ""B"", ""C""",108.83,"irrigated","CAIN_12_A"
-"CAIN",12,"B","""A"", ""B"", ""C""",116,"irrigated","CAIN_12_B"
-"CAIN",12,"C","""A"", ""B"", ""C""",64.36,"irrigated","CAIN_12_C"
-"CAIN",13,"A","""A"", ""B"", ""C""",64.34,"control","CAIN_13_A"
-"CAIN",14,"A","""A"", ""B"", ""C""",94.58,"drought","CAIN_14_A"
-"CAIN",14,"B","""A"", ""B"", ""C""",55.12,"drought","CAIN_14_B"
-"CAIN",14,"C","""A"", ""B"", ""C""",100.87,"drought","CAIN_14_C"
-"CAQU",1,"A","""A"", ""B"", ""C""",209.45,"irrigated","CAQU_1_A"
-"CAQU",1,"B","""A"", ""B"", ""C""",360.25,"irrigated","CAQU_1_B"
-"CAQU",2,"A","""A"", ""B"", ""C""",259.5,"control","CAQU_2_A"
-"CAQU",2,"B","""A"", ""B"", ""C""",226.64,"control","CAQU_2_B"
-"CAQU",5,"A","""A"", ""B"", ""C""",309.93,"drought","CAQU_5_A"
-"CAQU",7,"A","""A"", ""B"", ""C""",585.73,"drought","CAQU_7_A"
-"CAQU",7,"B","""A"", ""B"", ""C""",363.94,"drought","CAQU_7_B"
-"CAQU",9,"A","""A"", ""B"", ""C""",759.03,"irrigated","CAQU_9_A"
-"CAQU",13,"A","""A"", ""B"", ""C""",758.39,"control","CAQU_13_A"
-"CEGL",2,"A","""A"", ""B"", ""C""",7.07,"control","CEGL_2_A"
-"CEGL",7,"A","""A"", ""B"", ""C""",17.42,"drought","CEGL_7_A"
-"CEGL",9,"A","""A"", ""B"", ""C""",5.28,"irrigated","CEGL_9_A"
-"CEGL",13,"A","""A"", ""B"", ""C""",3.39,"control","CEGL_13_A"
-"CLPE",6,"A","""A"", ""B"", ""C""",30.98,"irrigated","CLPE_6_A"
-"CLPE",6,"B","""A"", ""B"", ""C""",34.31,"irrigated","CLPE_6_B"
-"CLPE",6,"C","""A"", ""B"", ""C""",101.13,"irrigated","CLPE_6_C"
-"CLPE",7,"A","""A"", ""B"", ""C""",46.69,"drought","CLPE_7_A"
-"CLPE",7,"B","""A"", ""B"", ""C""",47.8,"drought","CLPE_7_B"
-"CLPE",7,"C","""A"", ""B"", ""C""",38.81,"drought","CLPE_7_C"
-"CLPE",8,"A","""A"", ""B"", ""C""",34.81,"control","CLPE_8_A"
-"CLPE",8,"B","""A"", ""B"", ""C""",54.9,"control","CLPE_8_B"
-"CLPE",8,"C","""A"", ""B"", ""C""",32.48,"control","CLPE_8_C"
-"DAGL",1,"A","""A"", ""B"", ""C""",296.19,"irrigated","DAGL_1_A"
-"DAGL",2,"A","""A"", ""B"", ""C""",206.45,"control","DAGL_2_A"
-"DAGL",3,"A","""A"", ""B"", ""C""",320.59,"control","DAGL_3_A"
-"DAGL",6,"A","""B"", ""C""",196.28,"irrigated","DAGL_6_A"
-"DAGL",7,"A","""A"", ""B"", ""C""",191.43,"drought","DAGL_7_A"
-"DAGL",10,"A","""A"", ""B"", ""C""",216.2,"drought","DAGL_10_A"
-"DAGL",11,"A","""A"", ""B"", ""C""",316.13,"control","DAGL_11_A"
-"DAGL",12,"A","""A"", ""B"", ""C""",303.11,"irrigated","DAGL_12_A"
-"DAGL",14,"A","""A"", ""B"", ""C""",248.65,"drought","DAGL_14_A"
-"DEME",1,"A","""A"", ""B"", ""C""",111.53,"irrigated","DEME_1_A"
-"DEME",2,"A","""A"", ""B"", ""C""",78.31,"control","DEME_2_A"
-"DEME",3,"A","""A"", ""B"", ""C""",116.82,"control","DEME_3_A"
-"DEME",5,"A","""A"", ""B"", ""C""",174.87,"drought","DEME_5_A"
-"DEME",6,"A","""A"", ""B"", ""C""",93.37,"irrigated","DEME_6_A"
-"DEME",7,"A","""A"", ""B"", ""C""",142.41,"drought","DEME_7_A"
-"DEME",9,"A","""A"", ""B"", ""C""",57.74,"irrigated","DEME_9_A"
-"DEME",10,"A","""A"", ""B"", ""C""",122.43,"drought","DEME_10_A"
-"DEME",13,"A","""A"", ""B"", ""C""",115.52,"control","DEME_13_A"
-"ELGL",3,"A","""A"", ""B"", ""C""",242,"control","ELGL_3_A"
-"ELGL",3,"B","""A"", ""B"", ""C""",141.91,"control","ELGL_3_B"
-"ELGL",3,"C","""A"", ""B"", ""C""",192.02,"control","ELGL_3_C"
-"ELGL",5,"A","""A"", ""B"", ""C""",186.67,"drought","ELGL_5_A"
-"ELGL",9,"A","""A"", ""B"", ""C""",190.22,"irrigated","ELGL_9_A"
-"ELGL",9,"B","""A"", ""B"", ""C""",179.89,"irrigated","ELGL_9_B"
-"ELGL",9,"C","""A"", ""B"", ""C""",236.16,"irrigated","ELGL_9_C"
-"ELGL",14,"A","""A"", ""B"", ""C""",126.16,"drought","ELGL_14_A"
-"ELGL",14,"B","""A"", ""B"", ""C""",194.32,"drought","ELGL_14_B"
-"EROR",3,"A","A",56.66,"control","EROR_3_A"
-"EROR",3,"B","A",227.32,"control","EROR_3_B"
-"EROR",3,"C","A",99.48,"control","EROR_3_C"
-"EROR",4,"A","A",123.06,"irrigated","EROR_4_A"
-"EROR",4,"B","A",125.31,"irrigated","EROR_4_B"
-"EROR",4,"C","A",111.58,"irrigated","EROR_4_C"
-"EROR",5,"A","A",71.29,"drought","EROR_5_A"
-"EROR",5,"B","A",140.81,"drought","EROR_5_B"
-"EROR",5,"C","A",174.99,"drought","EROR_5_C"
-"EROR",8,"A","A",87.93,"control","EROR_8_A"
-"EROR",8,"B","A",119.79,"control","EROR_8_B"
-"EROR",8,"C","A",162.69,"control","EROR_8_C"
-"EROR",9,"A","A",119.4,"irrigated","EROR_9_A"
-"EROR",9,"B","A",137.52,"irrigated","EROR_9_B"
-"EROR",9,"C","A",103.73,"irrigated","EROR_9_C"
-"EROR",10,"A","A",99.89,"drought","EROR_10_A"
-"EROR",10,"B","A",235.8,"drought","EROR_10_B"
-"EROR",10,"C","A",172.09,"drought","EROR_10_C"
-"EROR",12,"A","A",72.08,"irrigated","EROR_12_A"
-"EROR",12,"B","A",162.15,"irrigated","EROR_12_B"
-"EROR",12,"C","A",178.16,"irrigated","EROR_12_C"
-"EROR",13,"A","A",170.11,"control","EROR_13_A"
-"EROR",13,"B","A",147.41,"control","EROR_13_B"
-"EROR",13,"C","A",116.58,"control","EROR_13_C"
-"EROR",15,"A","A",103.6,"drought","EROR_15_A"
-"EROR",15,"B","A",133.08,"drought","EROR_15_B"
-"EROR",15,"C","A",217.56,"drought","EROR_15_C"
-"GAAP",4,"A","""A"", ""B"", ""C""",13.49,"irrigated","GAAP_4_A"
-"GAAP",6,"A","""A"", ""B"", ""C""",27.47,"irrigated","GAAP_6_A"
-"GAAP",7,"A","""A"", ""B"", ""C""",31.71,"drought","GAAP_7_A"
-"GAAP",8,"A","""A"", ""B"", ""C""",25.06,"control","GAAP_8_A"
-"GAAP",9,"A","""A"", ""B"", ""C""",75.8,"irrigated","GAAP_9_A"
-"GAAP",11,"A","""A"", ""B"", ""C""",5.49,"control","GAAP_11_A"
-"GAAP",13,"A","""A"", ""B"", ""C""",12.06,"control","GAAP_13_A"
-"GAAP",15,"A","""A"", ""B"", ""C""",3.67,"drought","GAAP_15_A"
-"GEMO",1,"A","""A"", ""B"", ""C""",19.02,"irrigated","GEMO_1_A"
-"GEMO",2,"A","""A"", ""B"", ""C""",11.19,"control","GEMO_2_A"
-"GEMO",5,"A","""A"", ""B"", ""C""",19.14,"drought","GEMO_5_A"
-"GEMO",6,"A","""A"", ""B"", ""C""",9.27,"irrigated","GEMO_6_A"
-"GEMO",7,"A","""A"", ""B"", ""C""",31.85,"drought","GEMO_7_A"
-"GEMO",9,"A","""A"", ""B"", ""C""",25.74,"irrigated","GEMO_9_A"
-"GEMO",11,"A","""A"", ""B"", ""C""",21.45,"control","GEMO_11_A"
-"GEMO",13,"A","""A"", ""B"", ""C""",18.87,"control","GEMO_13_A"
-"GEMO",14,"A","""A"", ""B"", ""C""",26.04,"drought","GEMO_14_A"
-"LASP",10,"A","""A"", ""B"", ""C""",6.93,"drought","LASP_10_A"
-"LASP",10,"B","""A"", ""B"", ""C""",8.83,"drought","LASP_10_B"
-"LASP",10,"C","""A"", ""B"", ""C""",4.39,"drought","LASP_10_C"
-"LASP",11,"A","""A"", ""B"", ""C""",15.54,"control","LASP_11_A"
-"LASP",11,"B","""A"", ""B"", ""C""",4.59,"control","LASP_11_B"
-"LASP",11,"C","""A"", ""B"", ""C""",11.43,"control","LASP_11_C"
-"LASP",12,"A","""A"", ""B"", ""C""",11.6,"irrigated","LASP_12_A"
-"LASP",12,"B","""A"", ""B"", ""C""",22.76,"irrigated","LASP_12_B"
-"LASP",12,"C","""A"", ""B"", ""C""",18.24,"irrigated","LASP_12_C"
-"LOUT",1,"A","A",76.67,"irrigated","LOUT_1_A"
-"LOUT",1,"B","""A"", ""B""",133.78,"irrigated","LOUT_1_B"
-"LOUT",1,"C","A",29.33,"irrigated","LOUT_1_C"
-"LOUT",2,"A","A",37.95,"control","LOUT_2_A"
-"LOUT",2,"B","""A"", ""B""",122.27,"control","LOUT_2_B"
-"LOUT",3,"A","A",93.51,"control","LOUT_3_A"
-"LOUT",3,"B","A",21.2,"control","LOUT_3_B"
-"LOUT",3,"C","A",110.25,"control","LOUT_3_C"
-"LOUT",5,"A","A",15.04,"drought","LOUT_5_A"
-"LOUT",6,"A","A",39.08,"irrigated","LOUT_6_A"
-"LOUT",6,"B","A",17.58,"irrigated","LOUT_6_B"
-"LOUT",6,"C","A",4.13,"irrigated","LOUT_6_C"
-"LOUT",7,"A","A",27.12,"drought","LOUT_7_A"
-"LOUT",7,"B","""A"", ""B""",156.65,"drought","LOUT_7_B"
-"LOUT",7,"C","A",50.13,"drought","LOUT_7_C"
-"LOUT",9,"A","A",34.46,"irrigated","LOUT_9_A"
-"LOUT",10,"A","A",29.15,"drought","LOUT_10_A"
-"LOUT",11,"A","A",34.32,"control","LOUT_11_A"
-"LOUT",12,"A","A",72.47,"irrigated","LOUT_12_A"
-"LOUT",13,"A","A",63.29,"control","LOUT_13_A"
-"LOUT",13,"B","A",19.16,"control","LOUT_13_B"
-"LOUT",14,"A","A",27.08,"drought","LOUT_14_A"
-"LOUT",14,"B","A",57.1,"drought","LOUT_14_B"
-"LOUT",15,"A","A",18.93,"drought","LOUT_15_A"
-"LUSP",11,"A","""A"", ""B"", ""C""",8.02,"control","LUSP_11_A"
-"LUSP",11,"B","""A"", ""B"", ""C""",7.01,"control","LUSP_11_B"
-"LUSP",11,"C","""A"", ""B"", ""C""",10.94,"control","LUSP_11_C"
-"LUSP",11,"D","A",7.43,"control","LUSP_11_D"
-"LUSP",11,"E","""A"", ""B""",16.05,"control","LUSP_11_E"
-"LUSP",12,"A","""A"", ""B"", ""C""",9.3,"irrigated","LUSP_12_A"
-"LUSP",12,"B","""A"", ""B"", ""C""",15.39,"irrigated","LUSP_12_B"
-"LUSP",12,"C","""A"", ""B"", ""C""",25.68,"irrigated","LUSP_12_C"
-"LUSP",14,"A","""A"", ""B"", ""C""",41.48,"drought","LUSP_14_A"
-"MESU",3,"A","""A"", ""B"", ""C""",83.46,"control","MESU_3_A"
-"MESU",4,"A","""A"", ""B"", ""C""",70.83,"irrigated","MESU_4_A"
-"MESU",7,"A","""A"", ""B"", ""C""",70.28,"drought","MESU_7_A"
-"MESU",9,"A","""A"", ""B"", ""C""",58.42,"irrigated","MESU_9_A"
-"MESU",10,"A","""A"", ""B"", ""C""",48.46,"drought","MESU_10_A"
-"MESU",11,"A","""A"", ""B"", ""C""",81.4,"control","MESU_11_A"
-"MESU",12,"A","""A"", ""B""",34.8,"irrigated","MESU_12_A"
-"MESU",12,"B","""A"", ""B""",45.57,"irrigated","MESU_12_B"
-"MESU",13,"A","""A"", ""B"", ""C""",72.22,"control","MESU_13_A"
-"MESU",14,"A","""A"", ""B"", ""C""",62.58,"drought","MESU_14_A"
-"NEPA",3,"A","""A"", ""B"", ""C""",14.56,"control","NEPA_3_A"
-"NEPA",6,"A","""A"", ""B"", ""C""",20.14,"irrigated","NEPA_6_A"
-"NEPA",6,"B","""A"", ""B"", ""C""",25.41,"irrigated","NEPA_6_B"
-"NEPA",6,"C","""A"", ""B"", ""C""",18.1,"irrigated","NEPA_6_C"
-"NEPA",7,"A","""A"", ""B"", ""C""",18.13,"drought","NEPA_7_A"
-"NEPA",8,"A","""A"", ""B"", ""C""",7.95,"control","NEPA_8_A"
-"NEPA",10,"A","""A"", ""B"", ""C""",9.87,"drought","NEPA_10_A"
-"NEPA",11,"A","""A"", ""B"", ""C""",19.24,"control","NEPA_11_A"
-"NEPA",15,"A","""A"", ""B"", ""C""",25.22,"drought","NEPA_15_A"
-"PLCO",3,"A","""A"", ""B"", ""C""",6.95,"control","PLCO_3_A"
-"PLCO",4,"A","""A"", ""B"", ""C""",21.86,"irrigated","PLCO_4_A"
-"PLCO",5,"A","""A"", ""B"", ""C""",4.24,"drought","PLCO_5_A"
-"PLCO",6,"A","""A"", ""B"", ""C""",26.48,"irrigated","PLCO_6_A"
-"PLCO",7,"A","""A"", ""B"", ""C""",8.54,"drought","PLCO_7_A"
-"PLCO",8,"A","""A"", ""B"", ""C""",40.1,"control","PLCO_8_A"
-"PLCO",9,"A","""A"", ""B"", ""C""",13.96,"irrigated","PLCO_9_A"
-"PLCO",14,"A","""A"", ""B"", ""C""",6.96,"drought","PLCO_14_A"
-"POPR",1,"A","""A"", ""B"", ""C""",26.54,"irrigated","POPR_1_A"
-"POPR",2,"A","""A"", ""B"", ""C""",33.17,"control","POPR_2_A"
-"POPR",3,"A","""A"", ""B""",29.61,"control","POPR_3_A"
-"POPR",6,"A","""A"", ""B"", ""C""",44.11,"irrigated","POPR_6_A"
-"POPR",7,"A","""A"", ""B"", ""C""",11.86,"drought","POPR_7_A"
-"POPR",7,"B","""A"", ""B""",21.07,"drought","POPR_7_B"
-"POPR",8,"A","""A"", ""B"", ""C""",19.43,"control","POPR_8_A"
-"POPR",9,"A","""A"", ""B"", ""C""",28,"irrigated","POPR_9_A"
-"POPR",9,"B","""A"", ""B""",80.49,"irrigated","POPR_9_B"
-"POPR",10,"A","""A"", ""B"", ""C""",22.29,"drought","POPR_10_A"
-"POPR",13,"A","""A"", ""B"", ""C""",59.14,"control","POPR_13_A"
-"POPR",15,"A","""A"", ""B"", ""C""",25.64,"drought","POPR_15_A"
-"PRHE",2,"A","""A"", ""B"", ""C""",111.51,"control","PRHE_2_A"
-"PRHE",5,"A","""A"", ""B"", ""C""",119.72,"drought","PRHE_5_A"
-"PRHE",6,"A","""A"", ""B"", ""C""",136.68,"irrigated","PRHE_6_A"
-"PRHE",7,"A","""A"", ""B"", ""C""",97.53,"drought","PRHE_7_A"
-"PRHE",8,"A","""A"", ""B"", ""C""",222,"control","PRHE_8_A"
-"PRHE",9,"A","""A"", ""B"", ""C""",145.14,"irrigated","PRHE_9_A"
-"PRHE",12,"A","""A"", ""B"", ""C""",164.54,"irrigated","PRHE_12_A"
-"PRHE",13,"A","""A"", ""B"", ""C""",145.29,"control","PRHE_13_A"
-"PRHE",14,"A","""A"", ""B"", ""C""",105.23,"drought","PRHE_14_A"
-"RAOC",2,"A","""A"", ""B""",20.98,"control","RAOC_2_A"
-"RAOC",2,"B","""A"", ""B""",16.19,"control","RAOC_2_B"
-"RAOC",2,"C","""A"", ""B"", ""C""",29.12,"control","RAOC_2_C"
-"RAOC",4,"A","""A"", ""B"", ""C""",53.66,"irrigated","RAOC_4_A"
-"RAOC",6,"A","A",20.66,"irrigated","RAOC_6_A"
-"RAOC",6,"B","A",20.12,"irrigated","RAOC_6_B"
-"RAOC",6,"C","A",23.94,"irrigated","RAOC_6_C"
-"RAOC",11,"A","""A"", ""B"", ""C""",53.86,"control","RAOC_11_A"
-"RAOC",12,"A","""A"", ""B""",27.97,"irrigated","RAOC_12_A"
-"RAOC",12,"B","A",10.87,"irrigated","RAOC_12_B"
-"RAOC",14,"A","A",16.77,"drought","RAOC_14_A"
-"RAOC",14,"B","A",15.53,"drought","RAOC_14_B"
-"RAOC",14,"C","A",16.84,"drought","RAOC_14_C"
-"RAOC",14,"D","A",9.32,"drought","RAOC_14_D"
-"RAOC",14,"E","A",16.74,"drought","RAOC_14_E"
-"RAOC",14,"F","A",8.37,"drought","RAOC_14_F"
-"RAOC",14,"G","""A"", ""B"", ""C""",37.86,"drought","RAOC_14_G"
-"SACR",4,"A","""A"", ""B"", ""C""",167.37,"irrigated","SACR_4_A"
-"SACR",6,"A","""A"", ""B"", ""C""",331.48,"irrigated","SACR_6_A"
-"SACR",7,"A","""A"", ""B"", ""C""",309.89,"drought","SACR_7_A"
-"SACR",8,"A","""A"", ""B"", ""C""",190.78,"control","SACR_8_A"
-"SACR",9,"A","""A"", ""B"", ""C""",219.02,"irrigated","SACR_9_A"
-"SACR",11,"A","""A"", ""B"", ""C""",196.62,"control","SACR_11_A"
-"SACR",11,"B","""A"", ""B"", ""C""",374.68,"control","SACR_11_B"
-"SACR",14,"A","""A"", ""B"", ""C""",244.72,"drought","SACR_14_A"
-"SACR",15,"A","""A"", ""B"", ""C""",174.48,"drought","SACR_15_A"
-"SYAL",3,"A","""A"", ""B"", ""C""",30.59,"control","SYAL_3_A"
-"SYAL",4,"A","""A"", ""B"", ""C""",125.7,"irrigated","SYAL_4_A"
-"SYAL",5,"A","""A"", ""B"", ""C""",49.7,"drought","SYAL_5_A"
-"SYAL",6,"A","""A"", ""B"", ""C""",72.99,"irrigated","SYAL_6_A"
-"SYAL",7,"A","""A"", ""B"", ""C""",63.58,"drought","SYAL_7_A"
-"SYAL",8,"A","""A"", ""B"", ""C""",69.76,"control","SYAL_8_A"
-"SYAL",9,"A","""A"", ""B"", ""C""",44.28,"irrigated","SYAL_9_A"
-"SYAL",13,"A","""A"", ""B"", ""C""",84.51,"control","SYAL_13_A"
-"SYAL",15,"A","""A"", ""B"", ""C""",42.18,"drought","SYAL_15_A"
-"VALO",2,"A","""A"", ""B"", ""C""",4.93,"control","VALO_2_A"
-"VALO",3,"A","""A"", ""B"", ""C""",10.93,"control","VALO_3_A"
-"VALO",3,"B","""A"", ""B"", ""C""",5.78,"control","VALO_3_B"
-"VALO",5,"A","""A"", ""B"", ""C""",8.65,"drought","VALO_5_A"
-"VALO",5,"B","""A"", ""B"", ""C""",24.97,"drought","VALO_5_B"
-"VALO",5,"C","""A"", ""B"", ""C""",5.14,"drought","VALO_5_C"
-"VALO",9,"A","""A"", ""B"", ""C""",6.4,"irrigated","VALO_9_A"
-"VALO",9,"B","""A"", ""B"", ""C""",7.64,"irrigated","VALO_9_B"
-"VALO",9,"C","""A"", ""B"", ""C""",5.63,"irrigated","VALO_9_C"
-"VEAR",3,"A","""A"", ""B"", ""C""",4.07,"control","VEAR_3_A"
+Plant Species,plot,Plant ID,leaf_ids,tot.weight,trt,sampleID
+ALAM,6,A,"""A"", ""B"", ""C""",137.12,irrigated,ALAM_6_A
+ALAM,6,B,"""A"", ""B"", ""C""",67.86,irrigated,ALAM_6_B
+ALAM,6,C,"""A"", ""B"", ""C""",111.42,irrigated,ALAM_6_C
+ALAM,7,A,"""A"", ""B"", ""C""",51.43,drought,ALAM_7_A
+ALAM,7,B,"""A"", ""B"", ""C""",58.27,drought,ALAM_7_B
+ALAM,7,C,"""A"", ""B"", ""C""",95.97,drought,ALAM_7_C
+ALAM,8,A,"""A"", ""B"", ""C""",142.34,control,ALAM_8_A
+ALAM,8,B,"""A"", ""B"", ""C""",136.07,control,ALAM_8_B
+ALAM,8,C,"""A"", ""B"", ""C""",142.92,control,ALAM_8_C
+ANOD,1,A,"""A"", ""B"", ""C""",68.84,irrigated,ANOD_1_A
+ANOD,2,A,"""A"", ""B"", ""C""",30.67,control,ANOD_2_A
+ANOD,3,A,"""A"", ""B"", ""C""",61.76,control,ANOD_3_A
+ANOD,6,A,"""A"", ""B"", ""C""",32.53,irrigated,ANOD_6_A
+ANOD,7,A,"""A"", ""B"", ""C""",14.52,drought,ANOD_7_A
+ANOD,10,A,"""A"", ""B"", ""C""",56.95,drought,ANOD_10_A
+ANOD,11,A,"""A"", ""B"", ""C""",39.18,control,ANOD_11_A
+ANOD,12,A,"""A"", ""B"", ""C""",18.47,irrigated,ANOD_12_A
+ANOD,14,A,"""A"", ""B""",20.35,drought,ANOD_14_A
+ANOD,14,B,"""A"", ""B""",20.44,drought,ANOD_14_B
+BEAQ,3,A,"""A"", ""B"", ""C""",233.92,control,BEAQ_3_A
+BEAQ,4,A,"""A"", ""B"", ""C""",356.98,irrigated,BEAQ_4_A
+BEAQ,4,B,"""A"", ""B"", ""C""",365.83,irrigated,BEAQ_4_B
+BEAQ,9,A,"""A"", ""B"", ""C""",315.25,irrigated,BEAQ_9_A
+BEAQ,11,A,"""A"", ""B"", ""C""",276.83,control,BEAQ_11_A
+BEAQ,13,A,"""A"", ""B"", ""C""",239.82,control,BEAQ_13_A
+BEAQ,15,A,"""A"", ""B"", ""C""",241.05,drought,BEAQ_15_A
+BEAQ,15,B,"""A"", ""B"", ""C""",393.82,drought,BEAQ_15_B
+BEAQ,15,C,"""A"", ""B"", ""C""",391.59,drought,BEAQ_15_C
+BRCA,2,A,"""A"", ""B"", ""C""",89.02,control,BRCA_2_A
+BRCA,2,B,"""A"", ""B"", ""C""",197.87,control,BRCA_2_B
+BRCA,4,A,"""A"", ""B"", ""C""",197.11,irrigated,BRCA_4_A
+BRCA,4,B,"""A"", ""B"", ""C""",171.31,irrigated,BRCA_4_B
+BRCA,8,A,"""A"", ""B"", ""C""",275.76,control,BRCA_8_A
+BRCA,9,A,"""A"", ""B"", ""C""",361.03,irrigated,BRCA_9_A
+BRCA,10,A,"""A"", ""B"", ""C""",145.68,drought,BRCA_10_A
+BRCA,14,A,"""A"", ""B"", ""C""",119.39,drought,BRCA_14_A
+BRCA,14,B,"""A"", ""B"", ""C""",173.21,drought,BRCA_14_B
+BRHO,1,A,"""A"", ""B"", ""C""",39.63,irrigated,BRHO_1_A
+BRHO,1,B,"""A"", ""B"", ""C""",27.11,irrigated,BRHO_1_B
+BRHO,1,C,"""A"", ""B"", ""C""",43.94,irrigated,BRHO_1_C
+BRHO,2,A,"""A"", ""B"", ""C""",9.4,control,BRHO_2_A
+BRHO,2,B,"""A"", ""B"", ""C""",15.79,control,BRHO_2_B
+BRHO,2,C,"""A"", ""B"", ""C""",10.13,control,BRHO_2_C
+BRHO,7,A,"""A"", ""B"", ""C""",15.99,drought,BRHO_7_A
+BRHO,7,B,"""A"", ""B"", ""C""",13.2,drought,BRHO_7_B
+BRHO,7,C,"""A"", ""B"", ""C""",26.72,drought,BRHO_7_C
+BRST,1,A,"""A"", ""B"", ""C""",15.84,irrigated,BRST_1_A
+BRST,2,A,"""A"", ""B"", ""C""",33.12,control,BRST_2_A
+BRST,3,A,"""A"", ""B""",32.25,control,BRST_3_A
+BRST,6,A,"""A"", ""B"", ""C""",30.12,irrigated,BRST_6_A
+BRST,7,A,"""A"", ""B"", ""C""",52.74,drought,BRST_7_A
+BRST,9,A,"""A"", ""B"", ""C""",41.44,irrigated,BRST_9_A
+BRST,10,A,"""A"", ""B"", ""C""",47.02,drought,BRST_10_A
+BRST,13,A,"""A"", ""B"", ""C"", ""D""",22.02,control,BRST_13_A
+BRST,14,A,"""A"", ""B"", ""C""",21.37,drought,BRST_14_A
+CAIN,5,A,A,41.36,drought,CAIN_5_A
+CAIN,11,A,"""A"", ""B"", ""C""",49.87,control,CAIN_11_A
+CAIN,11,B,"""A"", ""B"", ""C""",63.3,control,CAIN_11_B
+CAIN,11,C,A,50.78,control,CAIN_11_C
+CAIN,12,A,"""A"", ""B"", ""C""",108.83,irrigated,CAIN_12_A
+CAIN,12,B,"""A"", ""B"", ""C""",116,irrigated,CAIN_12_B
+CAIN,12,C,"""A"", ""B"", ""C""",64.36,irrigated,CAIN_12_C
+CAIN,13,A,"""A"", ""B"", ""C""",64.34,control,CAIN_13_A
+CAIN,14,A,"""A"", ""B"", ""C""",94.58,drought,CAIN_14_A
+CAIN,14,B,"""A"", ""B"", ""C""",55.12,drought,CAIN_14_B
+CAIN,14,C,"""A"", ""B"", ""C""",100.87,drought,CAIN_14_C
+CAQU,1,A,"""A"", ""B"", ""C""",209.45,irrigated,CAQU_1_A
+CAQU,1,B,"""A"", ""B"", ""C""",360.25,irrigated,CAQU_1_B
+CAQU,2,A,"""A"", ""B"", ""C""",259.5,control,CAQU_2_A
+CAQU,2,B,"""A"", ""B"", ""C""",226.64,control,CAQU_2_B
+CAQU,5,A,"""A"", ""B"", ""C""",309.93,drought,CAQU_5_A
+CAQU,7,A,"""A"", ""B"", ""C""",585.73,drought,CAQU_7_A
+CAQU,7,B,"""A"", ""B"", ""C""",363.94,drought,CAQU_7_B
+CAQU,9,A,"""A"", ""B"", ""C""",759.03,irrigated,CAQU_9_A
+CAQU,13,A,"""A"", ""B"", ""C""",758.39,control,CAQU_13_A
+CEGL,2,A,"""A"", ""B"", ""C""",7.07,control,CEGL_2_A
+CEGL,7,A,"""A"", ""B"", ""C""",17.42,drought,CEGL_7_A
+CEGL,9,A,"""A"", ""B"", ""C""",5.28,irrigated,CEGL_9_A
+CEGL,13,A,"""A"", ""B"", ""C""",3.39,control,CEGL_13_A
+CLPE,6,A,"""A"", ""B"", ""C""",30.98,irrigated,CLPE_6_A
+CLPE,6,B,"""A"", ""B"", ""C""",34.31,irrigated,CLPE_6_B
+CLPE,6,C,"""A"", ""B"", ""C""",101.13,irrigated,CLPE_6_C
+CLPE,7,A,"""A"", ""B"", ""C""",46.69,drought,CLPE_7_A
+CLPE,7,B,"""A"", ""B"", ""C""",47.8,drought,CLPE_7_B
+CLPE,7,C,"""A"", ""B"", ""C""",38.81,drought,CLPE_7_C
+CLPE,8,A,"""A"", ""B"", ""C""",34.81,control,CLPE_8_A
+CLPE,8,B,"""A"", ""B"", ""C""",54.9,control,CLPE_8_B
+CLPE,8,C,"""A"", ""B"", ""C""",32.48,control,CLPE_8_C
+DAGL,1,A,"""A"", ""B"", ""C""",296.19,irrigated,DAGL_1_A
+DAGL,2,A,"""A"", ""B"", ""C""",206.45,control,DAGL_2_A
+DAGL,3,A,"""A"", ""B"", ""C""",320.59,control,DAGL_3_A
+DAGL,6,A,"""B"", ""C""",196.28,irrigated,DAGL_6_A
+DAGL,7,A,"""A"", ""B"", ""C""",191.43,drought,DAGL_7_A
+DAGL,10,A,"""A"", ""B"", ""C""",216.2,drought,DAGL_10_A
+DAGL,11,A,"""A"", ""B"", ""C""",316.13,control,DAGL_11_A
+DAGL,12,A,"""A"", ""B"", ""C""",303.11,irrigated,DAGL_12_A
+DAGL,14,A,"""A"", ""B"", ""C""",248.65,drought,DAGL_14_A
+DEME,1,A,"""A"", ""B"", ""C""",111.53,irrigated,DEME_1_A
+DEME,2,A,"""A"", ""B"", ""C""",78.31,control,DEME_2_A
+DEME,3,A,"""A"", ""B"", ""C""",116.82,control,DEME_3_A
+DEME,5,A,"""A"", ""B"", ""C""",174.87,drought,DEME_5_A
+DEME,6,A,"""A"", ""B"", ""C""",93.37,irrigated,DEME_6_A
+DEME,7,A,"""A"", ""B"", ""C""",142.41,drought,DEME_7_A
+DEME,9,A,"""A"", ""B"", ""C""",57.74,irrigated,DEME_9_A
+DEME,10,A,"""A"", ""B"", ""C""",122.43,drought,DEME_10_A
+DEME,13,A,"""A"", ""B"", ""C""",115.52,control,DEME_13_A
+ELGL,3,A,"""A"", ""B"", ""C""",242,control,ELGL_3_A
+ELGL,3,B,"""A"", ""B"", ""C""",141.91,control,ELGL_3_B
+ELGL,3,C,"""A"", ""B"", ""C""",192.02,control,ELGL_3_C
+ELGL,5,A,"""A"", ""B"", ""C""",186.67,drought,ELGL_5_A
+ELGL,9,A,"""A"", ""B"", ""C""",190.22,irrigated,ELGL_9_A
+ELGL,9,B,"""A"", ""B"", ""C""",179.89,irrigated,ELGL_9_B
+ELGL,9,C,"""A"", ""B"", ""C""",236.16,irrigated,ELGL_9_C
+ELGL,14,A,"""A"", ""B"", ""C""",126.16,drought,ELGL_14_A
+ELGL,14,B,"""A"", ""B"", ""C""",194.32,drought,ELGL_14_B
+EROR,3,A,A,56.66,control,EROR_3_A
+EROR,3,B,A,227.32,control,EROR_3_B
+EROR,3,C,A,99.48,control,EROR_3_C
+EROR,4,A,A,123.06,irrigated,EROR_4_A
+EROR,4,B,A,125.31,irrigated,EROR_4_B
+EROR,4,C,A,111.58,irrigated,EROR_4_C
+EROR,5,A,A,71.29,drought,EROR_5_A
+EROR,5,B,A,140.81,drought,EROR_5_B
+EROR,5,C,A,174.99,drought,EROR_5_C
+EROR,8,A,A,87.93,control,EROR_8_A
+EROR,8,B,A,119.79,control,EROR_8_B
+EROR,8,C,A,162.69,control,EROR_8_C
+EROR,9,A,A,119.4,irrigated,EROR_9_A
+EROR,9,B,A,137.52,irrigated,EROR_9_B
+EROR,9,C,A,103.73,irrigated,EROR_9_C
+EROR,10,A,A,99.89,drought,EROR_10_A
+EROR,10,B,A,235.8,drought,EROR_10_B
+EROR,10,C,A,172.09,drought,EROR_10_C
+EROR,12,A,A,72.08,irrigated,EROR_12_A
+EROR,12,B,A,162.15,irrigated,EROR_12_B
+EROR,12,C,A,178.16,irrigated,EROR_12_C
+EROR,13,A,A,170.11,control,EROR_13_A
+EROR,13,B,A,147.41,control,EROR_13_B
+EROR,13,C,A,116.58,control,EROR_13_C
+EROR,15,A,A,103.6,drought,EROR_15_A
+EROR,15,B,A,133.08,drought,EROR_15_B
+EROR,15,C,A,217.56,drought,EROR_15_C
+GAAP,4,A,"""A"", ""B"", ""C""",13.49,irrigated,GAAP_4_A
+GAAP,6,A,"""A"", ""B"", ""C""",27.47,irrigated,GAAP_6_A
+GAAP,7,A,"""A"", ""B"", ""C""",31.71,drought,GAAP_7_A
+GAAP,8,A,"""A"", ""B"", ""C""",25.06,control,GAAP_8_A
+GAAP,9,A,"""A"", ""B"", ""C""",75.8,irrigated,GAAP_9_A
+GAAP,11,A,"""A"", ""B"", ""C""",5.49,control,GAAP_11_A
+GAAP,13,A,"""A"", ""B"", ""C""",12.06,control,GAAP_13_A
+GAAP,15,A,"""A"", ""B"", ""C""",3.67,drought,GAAP_15_A
+GEMO,1,A,"""A"", ""B"", ""C""",19.02,irrigated,GEMO_1_A
+GEMO,2,A,"""A"", ""B"", ""C""",11.19,control,GEMO_2_A
+GEMO,5,A,"""A"", ""B"", ""C""",19.14,drought,GEMO_5_A
+GEMO,6,A,"""A"", ""B"", ""C""",9.27,irrigated,GEMO_6_A
+GEMO,7,A,"""A"", ""B"", ""C""",31.85,drought,GEMO_7_A
+GEMO,9,A,"""A"", ""B"", ""C""",25.74,irrigated,GEMO_9_A
+GEMO,11,A,"""A"", ""B"", ""C""",21.45,control,GEMO_11_A
+GEMO,13,A,"""A"", ""B"", ""C""",18.87,control,GEMO_13_A
+GEMO,14,A,"""A"", ""B"", ""C""",26.04,drought,GEMO_14_A
+LASP,10,A,"""A"", ""B"", ""C""",6.93,drought,LASP_10_A
+LASP,10,B,"""A"", ""B"", ""C""",8.83,drought,LASP_10_B
+LASP,10,C,"""A"", ""B"", ""C""",4.39,drought,LASP_10_C
+LASP,11,A,"""A"", ""B"", ""C""",15.54,control,LASP_11_A
+LASP,11,B,"""A"", ""B"", ""C""",4.59,control,LASP_11_B
+LASP,11,C,"""A"", ""B"", ""C""",11.43,control,LASP_11_C
+LASP,12,A,"""A"", ""B"", ""C""",11.6,irrigated,LASP_12_A
+LASP,12,B,"""A"", ""B"", ""C""",22.76,irrigated,LASP_12_B
+LASP,12,C,"""A"", ""B"", ""C""",18.24,irrigated,LASP_12_C
+LOUT,1,A,A,76.67,irrigated,LOUT_1_A
+LOUT,1,B,"""A"", ""B""",133.78,irrigated,LOUT_1_B
+LOUT,1,C,A,29.33,irrigated,LOUT_1_C
+LOUT,2,A,A,37.95,control,LOUT_2_A
+LOUT,2,B,"""A"", ""B""",122.27,control,LOUT_2_B
+LOUT,3,A,A,93.51,control,LOUT_3_A
+LOUT,3,B,A,21.2,control,LOUT_3_B
+LOUT,3,C,A,110.25,control,LOUT_3_C
+LOUT,5,A,A,15.04,drought,LOUT_5_A
+LOUT,6,A,A,39.08,irrigated,LOUT_6_A
+LOUT,6,B,A,17.58,irrigated,LOUT_6_B
+LOUT,6,C,A,4.13,irrigated,LOUT_6_C
+LOUT,7,A,A,27.12,drought,LOUT_7_A
+LOUT,7,B,"""A"", ""B""",156.65,drought,LOUT_7_B
+LOUT,7,C,A,50.13,drought,LOUT_7_C
+LOUT,9,A,A,34.46,irrigated,LOUT_9_A
+LOUT,10,A,A,29.15,drought,LOUT_10_A
+LOUT,11,A,A,34.32,control,LOUT_11_A
+LOUT,12,A,A,72.47,irrigated,LOUT_12_A
+LOUT,13,A,A,63.29,control,LOUT_13_A
+LOUT,13,B,A,19.16,control,LOUT_13_B
+LOUT,14,A,A,27.08,drought,LOUT_14_A
+LOUT,14,B,A,57.1,drought,LOUT_14_B
+LOUT,15,A,A,18.93,drought,LOUT_15_A
+LUSP,11,A,"""A"", ""B"", ""C""",8.02,control,LUSP_11_A
+LUSP,11,B,"""A"", ""B"", ""C""",7.01,control,LUSP_11_B
+LUSP,11,C,"""A"", ""B"", ""C""",10.94,control,LUSP_11_C
+LUSP,11,D,A,7.43,control,LUSP_11_D
+LUSP,11,E,"""A"", ""B""",16.05,control,LUSP_11_E
+LUSP,12,A,"""A"", ""B"", ""C""",9.3,irrigated,LUSP_12_A
+LUSP,12,B,"""A"", ""B"", ""C""",15.39,irrigated,LUSP_12_B
+LUSP,12,C,"""A"", ""B"", ""C""",25.68,irrigated,LUSP_12_C
+LUSP,14,A,"""A"", ""B"", ""C""",41.48,drought,LUSP_14_A
+MESU,3,A,"""A"", ""B"", ""C""",83.46,control,MESU_3_A
+MESU,4,A,"""A"", ""B"", ""C""",70.83,irrigated,MESU_4_A
+MESU,7,A,"""A"", ""B"", ""C""",70.28,drought,MESU_7_A
+MESU,9,A,"""A"", ""B"", ""C""",58.42,irrigated,MESU_9_A
+MESU,10,A,"""A"", ""B"", ""C""",48.46,drought,MESU_10_A
+MESU,11,A,"""A"", ""B"", ""C""",81.4,control,MESU_11_A
+MESU,12,A,"""A"", ""B""",34.8,irrigated,MESU_12_A
+MESU,12,B,"""A"", ""B""",45.57,irrigated,MESU_12_B
+MESU,13,A,"""A"", ""B"", ""C""",72.22,control,MESU_13_A
+MESU,14,A,"""A"", ""B"", ""C""",62.58,drought,MESU_14_A
+NEPA,3,A,"""A"", ""B"", ""C""",14.56,control,NEPA_3_A
+NEPA,6,A,"""A"", ""B"", ""C""",20.14,irrigated,NEPA_6_A
+NEPA,6,B,"""A"", ""B"", ""C""",25.41,irrigated,NEPA_6_B
+NEPA,6,C,"""A"", ""B"", ""C""",18.1,irrigated,NEPA_6_C
+NEPA,7,A,"""A"", ""B"", ""C""",18.13,drought,NEPA_7_A
+NEPA,8,A,"""A"", ""B"", ""C""",7.95,control,NEPA_8_A
+NEPA,10,A,"""A"", ""B"", ""C""",9.87,drought,NEPA_10_A
+NEPA,11,A,"""A"", ""B"", ""C""",19.24,control,NEPA_11_A
+NEPA,15,A,"""A"", ""B"", ""C""",25.22,drought,NEPA_15_A
+PLCO,3,A,"""A"", ""B"", ""C""",6.95,control,PLCO_3_A
+PLCO,4,A,"""A"", ""B"", ""C""",21.86,irrigated,PLCO_4_A
+PLCO,5,A,"""A"", ""B"", ""C""",4.24,drought,PLCO_5_A
+PLCO,6,A,"""A"", ""B"", ""C""",26.48,irrigated,PLCO_6_A
+PLCO,7,A,"""A"", ""B"", ""C""",8.54,drought,PLCO_7_A
+PLCO,8,A,"""A"", ""B"", ""C""",40.1,control,PLCO_8_A
+PLCO,9,A,"""A"", ""B"", ""C""",13.96,irrigated,PLCO_9_A
+PLCO,14,A,"""A"", ""B"", ""C""",6.96,drought,PLCO_14_A
+POPR,1,A,"""A"", ""B"", ""C""",26.54,irrigated,POPR_1_A
+POPR,2,A,"""A"", ""B"", ""C""",33.17,control,POPR_2_A
+POPR,3,A,"""A"", ""B""",29.61,control,POPR_3_A
+POPR,6,A,"""A"", ""B"", ""C""",44.11,irrigated,POPR_6_A
+POPR,7,A,"""A"", ""B"", ""C""",11.86,drought,POPR_7_A
+POPR,7,B,"""A"", ""B""",21.07,drought,POPR_7_B
+POPR,8,A,"""A"", ""B"", ""C""",19.43,control,POPR_8_A
+POPR,9,A,"""A"", ""B"", ""C""",28,irrigated,POPR_9_A
+POPR,9,B,"""A"", ""B""",80.49,irrigated,POPR_9_B
+POPR,10,A,"""A"", ""B"", ""C""",22.29,drought,POPR_10_A
+POPR,13,A,"""A"", ""B"", ""C""",59.14,control,POPR_13_A
+POPR,15,A,"""A"", ""B"", ""C""",25.64,drought,POPR_15_A
+PRHE,2,A,"""A"", ""B"", ""C""",111.51,control,PRHE_2_A
+PRHE,5,A,"""A"", ""B"", ""C""",119.72,drought,PRHE_5_A
+PRHE,6,A,"""A"", ""B"", ""C""",136.68,irrigated,PRHE_6_A
+PRHE,7,A,"""A"", ""B"", ""C""",97.53,drought,PRHE_7_A
+PRHE,8,A,"""A"", ""B"", ""C""",222,control,PRHE_8_A
+PRHE,9,A,"""A"", ""B"", ""C""",145.14,irrigated,PRHE_9_A
+PRHE,12,A,"""A"", ""B"", ""C""",164.54,irrigated,PRHE_12_A
+PRHE,13,A,"""A"", ""B"", ""C""",145.29,control,PRHE_13_A
+PRHE,14,A,"""A"", ""B"", ""C""",105.23,drought,PRHE_14_A
+RAOC,2,A,"""A"", ""B""",20.98,control,RAOC_2_A
+RAOC,2,B,"""A"", ""B""",16.19,control,RAOC_2_B
+RAOC,2,C,"""A"", ""B"", ""C""",29.12,control,RAOC_2_C
+RAOC,4,A,"""A"", ""B"", ""C""",53.66,irrigated,RAOC_4_A
+RAOC,6,A,A,20.66,irrigated,RAOC_6_A
+RAOC,6,B,A,20.12,irrigated,RAOC_6_B
+RAOC,6,C,A,23.94,irrigated,RAOC_6_C
+RAOC,11,A,"""A"", ""B"", ""C""",53.86,control,RAOC_11_A
+RAOC,12,A,"""A"", ""B""",27.97,irrigated,RAOC_12_A
+RAOC,12,B,A,10.87,irrigated,RAOC_12_B
+RAOC,14,A,A,16.77,drought,RAOC_14_A
+RAOC,14,B,A,15.53,drought,RAOC_14_B
+RAOC,14,C,A,16.84,drought,RAOC_14_C
+RAOC,14,D,A,9.32,drought,RAOC_14_D
+RAOC,14,E,A,16.74,drought,RAOC_14_E
+RAOC,14,F,A,8.37,drought,RAOC_14_F
+RAOC,14,G,"""A"", ""B"", ""C""",37.86,drought,RAOC_14_G
+SACR,4,A,"""A"", ""B"", ""C""",167.37,irrigated,SACR_4_A
+SACR,6,A,"""A"", ""B"", ""C""",331.48,irrigated,SACR_6_A
+SACR,7,A,"""A"", ""B"", ""C""",309.89,drought,SACR_7_A
+SACR,8,A,"""A"", ""B"", ""C""",190.78,control,SACR_8_A
+SACR,9,A,"""A"", ""B"", ""C""",219.02,irrigated,SACR_9_A
+SACR,11,A,"""A"", ""B"", ""C""",196.62,control,SACR_11_A
+SACR,11,B,"""A"", ""B"", ""C""",374.68,control,SACR_11_B
+SACR,14,A,"""A"", ""B"", ""C""",244.72,drought,SACR_14_A
+SACR,15,A,"""A"", ""B"", ""C""",174.48,drought,SACR_15_A
+SYAL,3,A,"""A"", ""B"", ""C""",30.59,control,SYAL_3_A
+SYAL,4,A,"""A"", ""B"", ""C""",125.7,irrigated,SYAL_4_A
+SYAL,5,A,"""A"", ""B"", ""C""",49.7,drought,SYAL_5_A
+SYAL,6,A,"""A"", ""B"", ""C""",72.99,irrigated,SYAL_6_A
+SYAL,7,A,"""A"", ""B"", ""C""",63.58,drought,SYAL_7_A
+SYAL,8,A,"""A"", ""B"", ""C""",69.76,control,SYAL_8_A
+SYAL,9,A,"""A"", ""B"", ""C""",44.28,irrigated,SYAL_9_A
+SYAL,13,A,"""A"", ""B"", ""C""",84.51,control,SYAL_13_A
+SYAL,15,A,"""A"", ""B"", ""C""",42.18,drought,SYAL_15_A
+VALO,2,A,"""A"", ""B"", ""C""",4.93,control,VALO_2_A
+VALO,3,A,"""A"", ""B"", ""C""",10.93,control,VALO_3_A
+VALO,3,B,"""A"", ""B"", ""C""",5.78,control,VALO_3_B
+VALO,5,A,"""A"", ""B"", ""C""",8.65,drought,VALO_5_A
+VALO,5,B,"""A"", ""B"", ""C""",24.97,drought,VALO_5_B
+VALO,5,C,"""A"", ""B"", ""C""",5.14,drought,VALO_5_C
+VALO,9,A,"""A"", ""B"", ""C""",6.4,irrigated,VALO_9_A
+VALO,9,B,"""A"", ""B"", ""C""",7.64,irrigated,VALO_9_B
+VALO,9,C,"""A"", ""B"", ""C""",5.63,irrigated,VALO_9_C
+VEAR,3,A,"""A"", ""B"", ""C""",4.07,control,VEAR_3_A
 NA,NA,NA,NA,NA,NA,NA
-"VEAR",7,"A","""A"", ""B"", ""C""",5.46,"drought","VEAR_7_A"
-"VEAR",15,"A","""A"", ""B"", ""C""",3.55,"drought","VEAR_15_A"
-"VIHI",1,"A","""A"", ""B"", ""C""",3.17,"irrigated","VIHI_1_A"
-"VIHI",3,"A","""A"", ""B"", ""C""",15.72,"control","VIHI_3_A"
-"VIHI",5,"A","""B"", ""C""",5.44,"drought","VIHI_5_A"
-"VIHI",7,"A","""A"", ""B"", ""C""",13.39,"drought","VIHI_7_A"
-"VIHI",9,"A","""A"", ""B"", ""C""",15.45,"irrigated","VIHI_9_A"
-"VIHI",9,"B","""A"", ""B"", ""C""",24.74,"irrigated","VIHI_9_B"
-"VIHI",10,"A","""A"", ""B"", ""C""",22.33,"drought","VIHI_10_A"
-"VIHI",11,"A","A",9.28,"control","VIHI_11_A"
-"VIHI",13,"A","""A"", ""B"", ""C""",26.88,"control","VIHI_13_A"
-"VIHI",13,"B","""A"", ""B"", ""C""",14.29,"control","VIHI_13_B"
-"VISA",1,"A","""A"", ""B"", ""C""",4.6,"irrigated","VISA_1_A"
-"VISA",3,"A","""A"", ""B"", ""C""",31.69,"control","VISA_3_A"
-"VISA",4,"A","A",3.25,"irrigated","VISA_4_A"
-"VISA",5,"A","""A"", ""B"", ""C""",32.01,"drought","VISA_5_A"
-"VISA",6,"A","""A"", ""B"", ""C""",27.21,"irrigated","VISA_6_A"
-"VISA",7,"A","""A"", ""B"", ""C""",11.14,"drought","VISA_7_A"
-"VISA",9,"A","""A"", ""B"", ""C""",11.6,"irrigated","VISA_9_A"
-"VISA",9,"B","""A"", ""B""",9.97,"irrigated","VISA_9_B"
-"VISA",10,"A","""A"", ""B"", ""C""",26.39,"drought","VISA_10_A"
-"VISA",13,"A","""A"", ""B"", ""C""",14.41,"control","VISA_13_A"
-"VISA",13,"B","""A"", ""B"", ""C""",32.94,"control","VISA_13_B"
-"VISA",15,"A","A",4.66,"drought","VISA_15_A"
-"VUSP",2,"A","""A"", ""B"", ""C""",6.33,"control","VUSP_2_A"
-"VUSP",5,"A","""A"", ""B"", ""C"", ""D""",8.54,"drought","VUSP_5_A"
-"VUSP",6,"A","""A"", ""B"", ""C"", ""D""",3.64,"irrigated","VUSP_6_A"
-"VUSP",6,"B","""A"", ""B"", ""C"", ""D"", ""E""",6.48,"irrigated","VUSP_6_B"
-"VUSP",7,"C","""A"", ""B"", ""C"", ""D""",3.69,"drought","VUSP_7_C"
-"VUSP",13,"A","""A"", ""B""",4.59,"control","VUSP_13_A"
-"VUSP",13,"B","""A"", ""B""",6.37,"control","VUSP_13_B"
+VEAR,7,A,"""A"", ""B"", ""C""",5.46,drought,VEAR_7_A
+VEAR,15,A,"""A"", ""B"", ""C""",3.55,drought,VEAR_15_A
+VIHI,1,A,"""A"", ""B"", ""C""",3.17,irrigated,VIHI_1_A
+VIHI,3,A,"""A"", ""B"", ""C""",15.72,control,VIHI_3_A
+VIHI,5,A,"""B"", ""C""",5.44,drought,VIHI_5_A
+VIHI,7,A,"""A"", ""B"", ""C""",13.39,drought,VIHI_7_A
+VIHI,9,A,"""A"", ""B"", ""C""",15.45,irrigated,VIHI_9_A
+VIHI,9,B,"""A"", ""B"", ""C""",24.74,irrigated,VIHI_9_B
+VIHI,10,A,"""A"", ""B"", ""C""",22.33,drought,VIHI_10_A
+VIHI,11,A,A,9.28,control,VIHI_11_A
+VIHI,13,A,"""A"", ""B"", ""C""",26.88,control,VIHI_13_A
+VIHI,13,B,"""A"", ""B"", ""C""",14.29,control,VIHI_13_B
+VISA,1,A,"""A"", ""B"", ""C""",4.6,irrigated,VISA_1_A
+VISA,3,A,"""A"", ""B"", ""C""",31.69,control,VISA_3_A
+VISA,4,A,A,3.25,irrigated,VISA_4_A
+VISA,5,A,"""A"", ""B"", ""C""",32.01,drought,VISA_5_A
+VISA,6,A,"""A"", ""B"", ""C""",27.21,irrigated,VISA_6_A
+VISA,7,A,"""A"", ""B"", ""C""",11.14,drought,VISA_7_A
+VISA,9,A,"""A"", ""B"", ""C""",11.6,irrigated,VISA_9_A
+VISA,9,B,"""A"", ""B""",9.97,irrigated,VISA_9_B
+VISA,10,A,"""A"", ""B"", ""C""",26.39,drought,VISA_10_A
+VISA,13,A,"""A"", ""B"", ""C""",14.41,control,VISA_13_A
+VISA,13,B,"""A"", ""B"", ""C""",32.94,control,VISA_13_B
+VISA,15,A,A,4.66,drought,VISA_15_A
+VUSP,2,A,"""A"", ""B"", ""C""",6.33,control,VUSP_2_A
+VUSP,5,A,"""A"", ""B"", ""C"", ""D""",8.54,drought,VUSP_5_A
+VUSP,6,A,"""A"", ""B"", ""C"", ""D""",3.64,irrigated,VUSP_6_A
+VUSP,6,B,"""A"", ""B"", ""C"", ""D"", ""E""",6.48,irrigated,VUSP_6_B
+VUSP,7,C,"""A"", ""B"", ""C"", ""D""",3.69,drought,VUSP_7_C
+VUSP,13,A,"""A"", ""B""",4.59,control,VUSP_13_A
+VUSP,13,B,"""A"", ""B""",6.37,control,VUSP_13_B

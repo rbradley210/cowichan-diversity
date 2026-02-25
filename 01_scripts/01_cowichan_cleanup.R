@@ -2,7 +2,7 @@
 # Adapted from code by Lauren Smith (plants_cleanup.Rmd)
 # email: robinbradley210@gmail.com
 # created: June 2024
-# last updated: 25 November 2025
+# last updated: 23 February 2026
 
 
 # Set Up ----
@@ -290,6 +290,16 @@ weather_gs <- weather_clean %>%
 weather.prev.gs <- weather_gs[, -c(3, 4, 6)]
 colnames(weather.prev.gs) <- paste("prev", colnames(weather.prev.gs), sep = ".")
 weather.prev.gs$year <- as.character(as.numeric(weather.prev.gs$prev.year) + 1)
+
+# summarize by difference in g.s. weather from prev. year and 2016
+rm(weather.diff.gs)
+weather.diff.gs <- weather_gs[, -c(3, 4, 6)] %>%
+  mutate(temp.diff.prev.gs = gs.mean.temp - lag(gs.mean.temp))%>%
+  mutate(precip.diff.prev.gs = gs.precip - lag(gs.precip))%>%
+  mutate(temp.diff.2016.gs = gs.mean.temp - gs.mean.temp[weather_gs$year == "2016"])%>%
+  mutate(precip.diff.2016.gs = gs.precip - gs.precip[weather_gs$year == "2016"])
+
+
 
 # summarize by 365 days prior to community sampling
 wea.2015 <- weather_clean %>%

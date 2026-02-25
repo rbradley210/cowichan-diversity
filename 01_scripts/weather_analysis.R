@@ -241,7 +241,7 @@ ggplot(weather, aes(x = month, y = total_precip_mm))+
 
 ### Temperature
 #### Yearly averages
-ggplot(long_year_weather, aes(x = year, y = temp, color = temp_stat))+
+ggplot(long_year_weather[long_year_weather$temp_stat != "mean.range.temp", ], aes(x = year, y = temp, color = temp_stat))+
   geom_point()+
   ylab("Daily Temperature (C)")+
   xlab("Year")+
