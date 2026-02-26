@@ -796,18 +796,26 @@ plot(tbi.pre.2025)
 
 ggplot(TBI.beg, aes(B, C, color = year))+
   geom_point()+
-  labs(title = "Losses vs. Gains When Comparing Plot to 2016")+
+  labs(title = "Losses vs. Gains When Comparing Plot to 2016", x = "B (losses)", y = "C (gains)")+
   geom_abline(intercept = 0, slope = 1)+
   theme_classic()
 
 ggplot(TBI.pre, aes(B, C, color = year))+
   geom_point()+
   geom_abline(intercept = 0, slope = 1)+
-  labs(title = "Losses vs. Gains When Comparing Plot to Prev. Year")+
+  labs(title = "Losses vs. Gains When Comparing Plot to Prev. Year", x = "B (losses)", y = "C (gains)")+
+  theme_classic()
+
+ggplot(TBI.beg, aes(B, C, color = trt))+
+  geom_point()+
+  labs(title = "Losses vs. Gains When Comparing Plot to 2016", x = "B (losses)", y = "C (gains)")+
+  scale_color_manual(values=c("black", "coral", "deepskyblue3")) +
+  geom_abline(intercept = 0, slope = 1)+
   theme_classic()
 
 ggplot(TBI.pre, aes(B, C, color = trt))+
   geom_point()+
   geom_abline(intercept = 0, slope = 1)+
-  labs(title = "Losses vs. Gains When Comparing Plot to Prev. Year")+
+  labs(title = "Losses vs. Gains When Comparing Plot to Prev. Year", x = "B (losses)", y = "C (gains)")+
+  scale_color_manual(values=c("black", "coral", "deepskyblue3")) +
   theme_classic()
