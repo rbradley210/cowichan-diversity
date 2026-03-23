@@ -2,7 +2,7 @@
 # Robin Bradley
 # robinbradley210@gmail.com
 # created: 14 July 2025
-# last updated: 28 Oct 2025
+# last updated: 26 March 2026
 
 # Set up ----
 ## set WD
@@ -50,38 +50,74 @@ names(rich)[names(rich) == "specnumber(spe.matrix)"] <- "richness" # rename rich
 rich <- left_join(plot_year, rich, by = "plot_year") # join with plot_year values
 
 rich <- left_join(rich, weather.prev.gs) # add weather
-rich <- left_join(rich, weather.prev.365)
+rich <- left_join(rich, weather.prev.sp)
+rich <- left_join(rich, weather.prev.su)
 rich <- rich[, -6]
 
 rich$year <- as.integer(as.factor(rich$year))
 
 
-## Scatterplot of richness vs. sampling year
-ggplot(rich, aes(x = year, y = richness, color = trt))+
-  geom_jitter()+
-  scale_color_manual(values=c("black", "coral", "deepskyblue3")) +
-  ylab("Species Richness")+
-  xlab("Year")+
-  theme_classic()
-
 ## linear mixed effects models ----
 ### response variable: species richness
 ### treatment as between-plots fixed variable
 ### plot as random variable
+# null models
+a.null <- lme(richness~1, 
+              data = rich, 
+              random = ~1|plot)
 
-a <- lme(richness ~ trt+year, # base
-         data = rich,
-         random = ~1|plot)
-  
-a.base <- lme(richness ~ trt*year, # base.int
+a.null.cor <- lme(richness ~ 1,
+                  data = rich,
+                  random = ~1|plot,
+                  correlation = corAR1(form = ~year|plot))
+
+a.yr <- lme(richness~year,
+            data = rich,
+            random = ~1|plot)
+
+a.yr.cor <- lme(richness ~ year,
+                data = rich,
+                random = ~1|plot,
+                correlation = corAR1(form = ~year|plot))
+
+a.trt <- lme(richness~trt,
+             data = rich,
+             random = ~1|plot)
+
+a.trt.cor <- lme(richness ~ trt,
+                 data = rich,
+                 random = ~1|plot,
+                 correlation = corAR1(form = ~year|plot))
+
+# base models
+a.base <- lme(richness ~ trt+year, # base
               data = rich,
               random = ~1|plot)
-plot(a.base) # examine residuals, look fine
+plot(a.base)
 
+a.base.int <- lme(richness ~ trt*year, # base + int
+                  data = rich,
+                  random = ~1|plot)
+plot(a.base.int)
+
+a.base.cor <- lme(richness ~ trt+year, # base + cor
+                  data = rich,
+                  random = ~1|plot,
+                  correlation = corAR1(form = ~year|plot))
+plot(a.base.cor)
+
+a.base.int.cor <- lme(richness ~ trt*year, # base + int + cor
+                      data = rich,
+                      random = ~1|plot,
+                      correlation = corAR1(form = ~year|plot))
+plot(a.base.int.cor)
+
+# weather models 
+## previous growing season
 a.pgs.p <- lme(richness ~ trt+year+prev.gs.precip, # base + prev gs precip
                data = rich,
                random = ~1|plot)
-plot(a.pgs.p) # examine residuals
+plot(a.pgs.p) 
 
 a.pgs.t <- lme(richness ~ trt+year+prev.gs.mean.temp, # base + prev gs temp
                data = rich,
@@ -93,30 +129,40 @@ a.pgs.p.t <- lme(richness ~ trt+year+prev.gs.mean.temp+prev.gs.precip, # base + 
                  random = ~1|plot)
 plot(a.pgs.p.t) # examine residuals
 
-a.365.p <- lme(richness ~ trt+year+tot.precip.365, # base + prev 365 precip
-               data = rich,
-               random = ~1|plot)
-plot(a.pgs.p) # examine residuals
+## previous spring
+a.sp.p <- lme(richness ~ trt+year+prev.sp.precip, # base + prev sp precip
+              data = rich,
+              random = ~1|plot)
+plot(a.sp.p) 
 
-a.365.t <- lme(richness ~ trt+year+mean.temp.365, # base + prev 365 temp
-               data = rich,
-               random = ~1|plot)
-plot(a.365.t) # examine residuals,
+a.sp.t <- lme(richness ~ trt+year+prev.sp.mean.temp, # base + prev sp temp
+              data = rich,
+              random = ~1|plot)
+plot(a.sp.t) # examine residuals,
 
-a.365.p.t <- lme(richness ~ trt+year+tot.precip.365+mean.temp.365, # base + prev 365 temp + precip
-                 data = rich,
-                 random = ~1|plot)
-plot(a.365.p.t) # examine residuals
+a.sp.p.t <- lme(richness ~ trt+year+prev.sp.mean.temp+prev.sp.precip, # base + prev sp temp + precip
+                data = rich,
+                random = ~1|plot)
+plot(a.sp.p.t) # examine residuals
 
+## previous summer
+a.su.p <- lme(richness ~ trt+year+prev.su.precip, # base + prev su precip
+              data = rich,
+              random = ~1|plot)
+plot(a.su.p) 
 
-# Model with AR(1) temporal autocorrelation structure
+a.su.t <- lme(richness ~ trt+year+prev.su.mean.temp, # base + prev su temp
+              data = rich,
+              random = ~1|plot)
+plot(a.su.t) # examine residuals,
 
-a.base.cor <- lme(richness ~ trt+year,  # base + cor
-                  data = rich,
-                  random = ~1|plot,
-                  correlation = corAR1(form = ~year|plot))
-plot(a.base.cor) # examine residuals
+a.su.p.t <- lme(richness ~ trt+year+prev.su.mean.temp+prev.su.precip, # base + prev su temp + precip
+                data = rich,
+                random = ~1|plot)
+plot(a.su.p.t) # examine residuals
 
+# weather models (no INT, with COR)
+## previous growing season
 a.pgs.p.cor <- lme(richness ~ trt+year+prev.gs.precip, # base + prev gs precip + cor
                    data = rich,
                    random = ~1|plot,
@@ -135,94 +181,183 @@ a.pgs.p.t.cor <- lme(richness ~ trt+year+prev.gs.mean.temp+prev.gs.precip, # bas
                      correlation = corAR1(form = ~year|plot))
 plot(a.pgs.p.t.cor) # examine residuals
 
-a.365.p.cor <- lme(richness ~ trt+year+tot.precip.365, # base + prev 365 precip + cor
-                   data = rich,
-                   random = ~1|plot,
-                   correlation = corAR1(form = ~year|plot))
-plot(a.pgs.p.cor) # examine residuals
+## previous spring
+a.sp.p.cor <- lme(richness ~ trt+year+prev.sp.precip, # base + prev sp precip + cor
+                  data = rich,
+                  random = ~1|plot,
+                  correlation = corAR1(form = ~year|plot))
+plot(a.sp.p.cor) # examine residuals
 
-a.365.t.cor <- lme(richness ~ trt+year+mean.temp.365, # base + prev 365 temp + cor
-                   data = rich,
-                   random = ~1|plot,
-                   correlation = corAR1(form = ~year|plot))
-plot(a.365.t.cor) # examine residuals
+a.sp.t.cor <- lme(richness ~ trt+year+prev.sp.mean.temp, # base + prev sp temp + cor
+                  data = rich,
+                  random = ~1|plot,
+                  correlation = corAR1(form = ~year|plot))
+plot(a.sp.t.cor) # examine residuals
 
-a.365.p.t.cor <- lme(richness ~ trt+year+tot.precip.365+mean.temp.365, # base + prev 365 temp + precip + cor
+a.sp.p.t.cor <- lme(richness ~ trt+year+prev.sp.mean.temp+prev.sp.precip, # base + prev sp temp + precip + cor
+                    data = rich,
+                    random = ~1|plot,
+                    correlation = corAR1(form = ~year|plot))
+plot(a.sp.p.t.cor) # examine residuals
+
+## previous summer
+a.su.p.cor <- lme(richness ~ trt+year+prev.su.precip, # base + prev su precip + cor
+                  data = rich,
+                  random = ~1|plot,
+                  correlation = corAR1(form = ~year|plot))
+plot(a.su.p.cor) # examine residuals
+
+a.su.t.cor <- lme(richness ~ trt+year+prev.su.mean.temp, # base + prev su temp + cor
+                  data = rich,
+                  random = ~1|plot,
+                  correlation = corAR1(form = ~year|plot))
+plot(a.su.t.cor) # examine residuals
+
+a.su.p.t.cor <- lme(richness ~ trt+year+prev.su.mean.temp+prev.su.precip, # base + prev su temp + precip + cor
+                    data = rich,
+                    random = ~1|plot,
+                    correlation = corAR1(form = ~year|plot))
+plot(a.su.p.t.cor) # examine residuals
+
+# weather models (with INT, no COR)
+## previous growing season
+a.pgs.p.int <- lme(richness ~ trt*year*prev.gs.precip, # base + prev gs precip + int
+                   data = rich,
+                   random = ~1|plot)
+plot(a.pgs.p.int) 
+
+a.pgs.t.int <- lme(richness ~ trt*year*prev.gs.mean.temp, # base + prev gs temp + int
+                   data = rich,
+                   random = ~1|plot)
+plot(a.pgs.t.int) # examine residuals
+
+a.pgs.p.t.int <- lme(richness ~ trt*year*prev.gs.mean.temp*prev.gs.precip, # base + prev gs temp + precip + int
                      data = rich,
-                     random = ~1|plot,
-                     correlation = corAR1(form = ~year|plot))
-plot(a.365.p.t.cor) # examine residuals
+                     random = ~1|plot)
+plot(a.pgs.p.t.int) # examine residuals
 
+## previous spring
+a.sp.p.int <- lme(richness ~ trt*year*prev.sp.precip, # base + prev sp precip + int
+                  data = rich,
+                  random = ~1|plot)
+plot(a.sp.p.int) 
 
-## Include interaction terms
-a.base.cor.int <- lme(richness ~ trt*year, # base + int
-                      data = rich,
-                      random = ~1|plot,
-                      correlation = corAR1(form = ~year|plot))
+a.sp.t.int <- lme(richness ~ trt*year*prev.sp.mean.temp, # base + prev sp temp + int
+                  data = rich,
+                  random = ~1|plot)
+plot(a.sp.t.int) # examine residuals
 
-plot(a.base.cor.int) # examine residuals
+a.sp.p.t.int <- lme(richness ~ trt*year*prev.sp.mean.temp*prev.sp.precip, # base + prev sp temp + precip + int
+                    data = rich,
+                    random = ~1|plot)
+plot(a.sp.p.t.int) # examine residuals
 
+## previous summer
+a.su.p.int <- lme(richness ~ trt*year*prev.su.precip, # base + prev su precip + int
+                  data = rich,
+                  random = ~1|plot)
+plot(a.su.p.int) 
+
+a.su.t.int <- lme(richness ~ trt*year*prev.su.mean.temp, # base + prev sp temp + int
+                  data = rich,
+                  random = ~1|plot)
+plot(a.su.t.int) # examine residuals
+
+a.su.p.t.int <- lme(richness ~ trt*year*prev.su.mean.temp*prev.su.precip, # base + prev sp temp + precip + int
+                    data = rich,
+                    random = ~1|plot)
+plot(a.su.p.t.int) # examine residuals
+
+# weather models (with INT, with COR)
+## previous growing season
 a.pgs.p.cor.int <- lme(richness ~ trt*year*prev.gs.precip, # base + prev gs precip + cor + int
                        data = rich,
                        random = ~1|plot,
                        correlation = corAR1(form = ~year|plot))
 plot(a.pgs.p.cor.int) # examine residuals
 
-
 a.pgs.t.cor.int <- lme(richness ~ trt*year*prev.gs.mean.temp, # base + prev gs temp + cor + int
-                   data = rich,
-                   random = ~1|plot,
-                   correlation = corAR1(form = ~year|plot))
+                       data = rich,
+                       random = ~1|plot,
+                       correlation = corAR1(form = ~year|plot))
 plot(a.pgs.t.cor.int) # examine residuals
 
-a.pgs.p.t.cor.int <- lme(richness ~ trt*year*prev.gs.mean.temp*prev.gs.precip, # base + prev gs temp + precip + cor
-                     data = rich,
-                     random = ~1|plot,
-                     correlation = corAR1(form = ~year|plot))
-plot(a.pgs.p.t.cor.int) # examine residuals
-
-
-a.365.p.cor.int <- lme(richness ~ trt*year*tot.precip.365, # base + prev 365 precip + cor
-                       data = rich,
-                       random = ~1|plot,
-                       correlation = corAR1(form = ~year|plot))
-plot(a.365.p.cor.int) # examine residuals
-  
-  
-a.365.t.cor.int <- lme(richness ~ trt*year*mean.temp.365, # base + prev 365 temp + cor + int
-                       data = rich,
-                       random = ~1|plot,
-                       correlation = corAR1(form = ~year|plot))
-plot(a.365.t.cor.int) # examine residuals
-
-a.365.p.t.cor.int <- lme(richness ~ trt*year*tot.precip.365*mean.temp.365, # base + prev 365 temp + precip + cor
+a.pgs.p.t.cor.int <- lme(richness ~ trt*year*prev.gs.mean.temp*prev.gs.precip, # base + prev gs temp + precip + cor + int
                          data = rich,
                          random = ~1|plot,
                          correlation = corAR1(form = ~year|plot))
-plot(a.365.p.t.cor.int) # examine residuals
+plot(a.pgs.p.t.cor.int) # examine residuals
 
+## previous spring
+a.sp.p.cor.int <- lme(richness ~ trt*year*prev.sp.precip, # base + prev sp precip + cor + int
+                      data = rich,
+                      random = ~1|plot,
+                      correlation = corAR1(form = ~year|plot))
+plot(a.sp.p.cor.int) # examine residuals
 
-### Model selection ----
-#### Calculate AIC
-myAIC <- c(AIC(a), AIC(a.base), AIC(a.base.cor), 
-           AIC(a.pgs.p), AIC(a.pgs.t), AIC(a.pgs.p.t), 
-           AIC(a.pgs.p.cor), AIC(a.pgs.t.cor), AIC(a.pgs.p.t.cor),
-           AIC(a.365.p), AIC(a.365.t), AIC(a.365.p.t), 
-           AIC(a.365.p.cor), AIC(a.365.t.cor), AIC(a.365.p.t.cor),
-           AIC(a.base.cor.int), AIC(a.pgs.t.cor.int), AIC(a.pgs.p.cor.int), AIC(a.pgs.p.t.cor.int), 
-           AIC(a.365.p.cor.int), AIC(a.365.t.cor.int), AIC(a.365.p.t.cor.int)
-)
+a.sp.t.cor.int <- lme(richness ~ trt*year*prev.sp.mean.temp, # base + prev sp temp + cor + int
+                      data = rich,
+                      random = ~1|plot,
+                      correlation = corAR1(form = ~year|plot))
+plot(a.sp.t.cor.int) # examine residuals
+
+a.sp.p.t.cor.int <- lme(richness ~ trt*year*prev.sp.mean.temp*prev.sp.precip, # base + prev sp temp + precip + cor + int
+                        data = rich,
+                        random = ~1|plot,
+                        correlation = corAR1(form = ~year|plot))
+plot(a.sp.p.t.cor.int) # examine residuals
+
+## previous summer
+a.su.p.cor.int <- lme(richness ~ trt*year*prev.su.precip, # base + prev su precip + cor + int
+                      data = rich,
+                      random = ~1|plot,
+                      correlation = corAR1(form = ~year|plot))
+plot(a.su.p.cor.int) # examine residuals
+
+a.su.t.cor.int <- lme(richness ~ trt*year*prev.su.mean.temp, # base + prev su temp + cor + int
+                      data = rich,
+                      random = ~1|plot,
+                      correlation = corAR1(form = ~year|plot))
+plot(a.su.t.cor.int) # examine residuals
+
+a.su.p.t.cor.int <- lme(richness ~ trt*year*prev.su.mean.temp*prev.su.precip, # base + prev su temp + precip + cor + int
+                        data = rich,
+                        random = ~1|plot,
+                        correlation = corAR1(form = ~year|plot))
+plot(a.su.p.t.cor.int) # examine residuals
+
+## Calculate AIC
+myAIC <- c(AIC(a.null), AIC(a.null.cor), AIC(a.yr), AIC(a.yr.cor), AIC(a.trt), AIC(a.trt.cor),
+           AIC(a.base), AIC(a.base.cor), AIC(a.base.int), AIC(a.base.int.cor),
+           
+           AIC(a.pgs.p), AIC(a.pgs.p.cor), AIC(a.pgs.p.int), AIC(a.pgs.p.cor.int),
+           AIC(a.pgs.t), AIC(a.pgs.t.cor), AIC(a.pgs.t.int), AIC(a.pgs.t.cor.int),
+           AIC(a.pgs.p.t), AIC(a.pgs.p.t.cor), AIC(a.pgs.p.t.int), AIC(a.pgs.p.t.cor.int),
+           
+           AIC(a.sp.p), AIC(a.sp.p.cor), AIC(a.sp.p.int), AIC(a.sp.p.cor.int),
+           AIC(a.sp.t), AIC(a.sp.t.cor), AIC(a.sp.t.int), AIC(a.sp.t.cor.int),
+           AIC(a.sp.p.t), AIC(a.sp.p.t.cor), AIC(a.sp.p.t.int), AIC(a.sp.p.t.cor.int),
+           
+           AIC(a.su.p), AIC(a.su.p.cor), AIC(a.su.p.int), AIC(a.su.p.cor.int),
+           AIC(a.su.t), AIC(a.su.t.cor), AIC(a.su.t.int), AIC(a.su.t.cor.int),
+           AIC(a.su.p.t), AIC(a.su.p.t.cor), AIC(a.su.p.t.int), AIC(a.su.p.t.cor.int))
 delta <- myAIC - min(myAIC)
-model <- c("base", "base.int", "base.cor", 
-           "pgs.p", "pgs.t", "pgs.p.t", 
-           "pgs.p.cor", "pgs.t.cor", "pgs.p.t.cor",
-           "365.p", "365.t", "365.p.t", 
-           "365.p.cor", "365.t.cor", "365.p.t.cor",
-           "base.cor.int", "pgs.t.cor.int", "pgs.p.cor.int", "pgs.p.t.cor.int", 
-           "365.p.cor.int", "365.t.cor.int", "365.p.t.cor.int"
-           )
-tab1 <- data.frame(model = model, aic = myAIC, delta = delta,
-                   stringsAsFactors = FALSE)
+model <- c("null","null.cor", "year", "year.cor", "trt", "trt.cor",
+           "base", "base.cor", "base.int", "base.cor.int",
+           
+           "pgs.p", "pgs.p.cor", "pgs.p.int", "pgs.p.cor.int",
+           "pgs.t", "pgs.t.cor", "pgs.t.int", "pgs.t.cor.int",
+           "pgs.p.t", "pgs.p.t.cor", "pgs.p.t.int", "pgs.p.t.cor.int",
+           
+           "sp.p", "sp.p.cor", "sp.p.int", "sp.p.cor.int",
+           "sp.t", "sp.t.cor", "sp.t.int", "sp.t.cor.int",
+           "sp.p.t", "sp.p.t.cor", "sp.p.t.int", "sp.p.t.cor.int",
+           
+           "su.p", "su.p.cor", "su.p.int", "su.p.cor.int",
+           "su.t", "su.t.cor", "su.t.int", "su.t.cor.int",
+           "su.p.t", "su.p.t.cor", "su.p.t.int", "su.p.t.cor.int")
+rich.AIC <- data.frame(model = model, aic = myAIC, delta = delta,
+                          stringsAsFactors = FALSE)
 
 
 # summary
@@ -248,89 +383,22 @@ visreg(a.pgs.p.t.cor, xvar = "trt",
        ylab = "Species Richness",
        overlay = TRUE)
 
-### x = year, y = spp rich, split by trt
-plot(visreg(a.pgs.p.t.cor, xvar = "year", by = "trt", overlay = TRUE, plot = FALSE),
+### x = year, y = spp rich
+plot(visreg(a.pgs.p.t.cor, xvar = "year", overlay = TRUE, plot = FALSE),
      xaxp = c(1, 11, 10),
      legend = FALSE,
-       points = list(col = c("black", "darkorange", "deepskyblue2"), cex = 1),
-       line = list(col = c("black", "darkorange", "deepskyblue2")),
        main = "Overall Species Richness",
        xlab = "Year",
        ylab = "Species Richness",
        overlay = TRUE)
-legend(x = "bottomright", 
-       legend = c("Control", "Drought", "Irrigated"),
-       col = c("black", "darkorange", "deepskyblue3"),
-       lwd = 3,
-       pch = 1)
 
-### x = temperature, y = spp rich, split by trt
-plot(visreg(a.pgs.p.t.cor, xvar = "prev.gs.mean.temp", by = "trt", overlay = TRUE, plot = FALSE),
+### x = temperature, y = spp rich
+plot(visreg(a.pgs.p.t.cor, xvar = "prev.gs.mean.temp", overlay = TRUE, plot = FALSE),
      legend = FALSE,
-       points = list(col = c("black", "darkorange", "deepskyblue2"), cex = 1),
-       line = list(col = c("black", "darkorange", "deepskyblue2")),
      main = "Overall Species Richness",
        xlab = "Mean Temperature (°C) in Previous Growing Season",
        ylab = "Species Richness",
        overlay = TRUE)
-legend(x = "bottomright", 
-       legend = c("Control", "Drought", "Irrigated"),
-       col = c("black", "darkorange", "deepskyblue3"),
-       lwd = 3,
-       pch = 1)
-
-## x = precip, y = spp rich, split by trt
-plot(visreg(a.pgs.p.t.cor, xvar = "prev.gs.precip", by = "trt", overlay = TRUE, plot = FALSE),
-     legend = FALSE,
-     points = list(col = c("black", "darkorange", "deepskyblue2"), cex = 1),
-     line = list(col = c("black", "darkorange", "deepskyblue2")),
-     main = "Overall Species Richness",
-     xlab = "Total Precipitation (mm) in Previous Growing Season",
-     ylab = "Species Richness",
-     overlay = TRUE)
-legend(x = "bottomright", 
-       legend = c("Control", "Drought", "Irrigated"),
-       col = c("black", "darkorange", "deepskyblue3"),
-       lwd = 3,
-       pch = 1)
-
-
-
-# v <- visreg(a.365.t.cor.int,  xvar = "mean.temp.365",
-#             gg = TRUE) 
-# 
-# visreg(a.365.t.cor.int,  xvar = "year", by = "trt",
-#        overlay = TRUE,
-#        gg = TRUE) +
-#   geom_point(aes(color = rich$trt))+
-#   labs(x = "Year", y = "Species Richness/Plot", color = "Treatment")+
-#   scale_x_continuous(breaks = seq(1, 11, by = 1))+
-#   theme_classic()
-# 
-# visreg(a.365.t.cor.int,  xvar = "mean.temp.365", by = "year",
-#             gg = TRUE) +
-#   geom_point(aes(color = rich$trt))+
-#   theme_classic()
-# 
-# visreg(a.365.t.cor.int,  xvar = "year", by = "mean.temp.365", 
-#        overlay = TRUE,
-#        legend = FALSE,
-#        gg = TRUE) +
-#   labs(x = "Year", y = "Species Richness/Plot", color = "Temp")+
-#   scale_x_continuous(breaks = seq(1, 11, by = 1))+
-#   theme_classic()
-# 
-# visreg2d(a.365.t.cor.int, "year", "mean.temp.365")
-# 
-# visreg(a.365.t.cor.int,  xvar = "mean.temp.365", by = "year", 
-#        overlay = TRUE,
-#        breaks=3,
-#        legend = FALSE,
-#        gg = TRUE) +
-#   labs(x = "temp", y = "Species Richness/Plot", color = "year")+
-#   #scale_x_continuous(breaks = seq(1, 11, by = 1))+
-#   theme_classic()
-
 
 # 3. Model annual species richness as a function of year, treatment, and climate ----
 ## Number of annual plants per plot per year
@@ -340,163 +408,310 @@ rich.annual <- plants %>%
   dplyr::summarize(richness = n())%>%
   filter(duration == "annual") %>%
   left_join(weather.prev.gs) %>% # add weather data
-  left_join(weather.prev.365)
+  left_join(weather.prev.sp)%>%
+  left_join(weather.prev.su)
 
 names(rich.annual)[names(rich.annual) == "treatment"] <- "trt"
 rich.annual$year <- as.integer(as.factor(rich.annual$year)) # change year to an integer for modeling
 
 ## linear mixed effects models ----
-an <- lme(richness ~ trt+year, # base
-         data = rich.annual,
-         random = ~1|plot)
-plot(an)
+# null models
+an.null <- lme(richness~1, 
+               data = rich.annual, 
+               random = ~1|plot)
 
-an.base <- lme(richness ~ trt*year, # base.int
+an.null.cor <- lme(richness ~ 1,
+                   data = rich.annual,
+                   random = ~1|plot,
+                   correlation = corAR1(form = ~year|plot))
+
+an.yr <- lme(richness~year,
+             data = rich.annual,
+             random = ~1|plot)
+
+an.yr.cor <- lme(richness ~ year,
+                 data = rich.annual,
+                 random = ~1|plot,
+                 correlation = corAR1(form = ~year|plot))
+
+an.trt <- lme(richness~trt,
               data = rich.annual,
               random = ~1|plot)
-plot(an.base) # examine residuals, look fine
 
-an.pgs.p <- lme(richness ~ trt+year+prev.gs.precip, # base + prev gs precip
-               data = rich.annual,
-               random = ~1|plot)
-plot(an.pgs.p) # examine residuals
-
-an.pgs.t <- lme(richness ~ trt+year+prev.gs.mean.temp, # base + prev gs temp
-               data = rich.annual,
-               random = ~1|plot)
-plot(an.pgs.t) # examine residuals,
-
-an.pgs.p.t <- lme(richness ~ trt+year+prev.gs.mean.temp+prev.gs.precip, # base + prev gs temp + precip
-                 data = rich.annual,
-                 random = ~1|plot)
-plot(an.pgs.p.t) # examine residuals
-
-an.365.p <- lme(richness ~ trt+year+tot.precip.365, # base + prev 365 precip
-               data = rich.annual,
-               random = ~1|plot)
-plot(an.pgs.p) # examine residuals
-
-an.365.t <- lme(richness ~ trt+year+mean.temp.365, # base + prev 365 temp
-               data = rich.annual,
-               random = ~1|plot)
-plot(an.365.t) # examine residuals,
-
-an.365.p.t <- lme(richness ~ trt+year+tot.precip.365+mean.temp.365, # base + prev 365 temp + precip
-                 data = rich.annual,
-                 random = ~1|plot)
-plot(an.365.p.t) # examine residuals
-
-
-# Model with AR(1) temporal autocorrelation structure
-an.base.cor <- lme(richness ~ trt+year,  # base + cor
+an.trt.cor <- lme(richness ~ trt,
                   data = rich.annual,
                   random = ~1|plot,
                   correlation = corAR1(form = ~year|plot))
-plot(an.base.cor) # examine residuals
 
-an.pgs.p.cor <- lme(richness ~ trt+year+prev.gs.precip, # base + prev gs precip + cor
+# base models
+an.base <- lme(richness ~ trt+year, # base
+               data = rich.annual,
+               random = ~1|plot)
+plot(an.base)
+
+an.base.int <- lme(richness ~ trt*year, # base + int
+                   data = rich.annual,
+                   random = ~1|plot)
+plot(an.base.int)
+
+an.base.cor <- lme(richness ~ trt+year, # base + cor
                    data = rich.annual,
                    random = ~1|plot,
                    correlation = corAR1(form = ~year|plot))
+plot(an.base.cor)
+
+an.base.int.cor <- lme(richness ~ trt*year, # base + int + cor
+                       data = rich.annual,
+                       random = ~1|plot,
+                       correlation = corAR1(form = ~year|plot))
+plot(an.base.int.cor)
+
+# weather models 
+## previous growing season
+an.pgs.p <- lme(richness ~ trt+year+prev.gs.precip, # base + prev gs precip
+                data = rich.annual,
+                random = ~1|plot)
+plot(an.pgs.p) 
+
+an.pgs.t <- lme(richness ~ trt+year+prev.gs.mean.temp, # base + prev gs temp
+                data = rich.annual,
+                random = ~1|plot)
+plot(an.pgs.t) # examine residuals,
+
+an.pgs.p.t <- lme(richness ~ trt+year+prev.gs.mean.temp+prev.gs.precip, # base + prev gs temp + precip
+                  data = rich.annual,
+                  random = ~1|plot)
+plot(an.pgs.p.t) # examine residuals
+
+## previous spring
+an.sp.p <- lme(richness ~ trt+year+prev.sp.precip, # base + prev sp precip
+               data = rich.annual,
+               random = ~1|plot)
+plot(an.sp.p) 
+
+an.sp.t <- lme(richness ~ trt+year+prev.sp.mean.temp, # base + prev sp temp
+               data = rich.annual,
+               random = ~1|plot)
+plot(an.sp.t) # examine residuals,
+
+an.sp.p.t <- lme(richness ~ trt+year+prev.sp.mean.temp+prev.sp.precip, # base + prev sp temp + precip
+                 data = rich.annual,
+                 random = ~1|plot)
+plot(an.sp.p.t) # examine residuals
+
+## previous summer
+an.su.p <- lme(richness ~ trt+year+prev.su.precip, # base + prev su precip
+               data = rich.annual,
+               random = ~1|plot)
+plot(an.su.p) 
+
+an.su.t <- lme(richness ~ trt+year+prev.su.mean.temp, # base + prev su temp
+               data = rich.annual,
+               random = ~1|plot)
+plot(an.su.t) # examine residuals,
+
+an.su.p.t <- lme(richness ~ trt+year+prev.su.mean.temp+prev.su.precip, # base + prev su temp + precip
+                 data = rich.annual,
+                 random = ~1|plot)
+plot(an.su.p.t) # examine residuals
+
+# weather models (no INT, with COR)
+## previous growing season
+an.pgs.p.cor <- lme(richness ~ trt+year+prev.gs.precip, # base + prev gs precip + cor
+                    data = rich.annual,
+                    random = ~1|plot,
+                    correlation = corAR1(form = ~year|plot))
 plot(an.pgs.p.cor) # examine residuals
 
 an.pgs.t.cor <- lme(richness ~ trt+year+prev.gs.mean.temp, # base + prev gs temp + cor
-                   data = rich.annual,
-                   random = ~1|plot,
-                   correlation = corAR1(form = ~year|plot))
+                    data = rich.annual,
+                    random = ~1|plot,
+                    correlation = corAR1(form = ~year|plot))
 plot(an.pgs.t.cor) # examine residuals
 
 an.pgs.p.t.cor <- lme(richness ~ trt+year+prev.gs.mean.temp+prev.gs.precip, # base + prev gs temp + precip + cor
-                     data = rich.annual,
-                     random = ~1|plot,
-                     correlation = corAR1(form = ~year|plot))
+                      data = rich.annual,
+                      random = ~1|plot,
+                      correlation = corAR1(form = ~year|plot))
 plot(an.pgs.p.t.cor) # examine residuals
 
-an.365.p.cor <- lme(richness ~ trt+year+tot.precip.365, # base + prev 365 precip + cor
+## previous spring
+an.sp.p.cor <- lme(richness ~ trt+year+prev.sp.precip, # base + prev sp precip + cor
                    data = rich.annual,
                    random = ~1|plot,
                    correlation = corAR1(form = ~year|plot))
-plot(an.365.p.cor) # examine residuals
+plot(an.sp.p.cor) # examine residuals
 
-an.365.t.cor <- lme(richness ~ trt+year+mean.temp.365, # base + prev 365 temp + cor
+an.sp.t.cor <- lme(richness ~ trt+year+prev.sp.mean.temp, # base + prev sp temp + cor
                    data = rich.annual,
                    random = ~1|plot,
                    correlation = corAR1(form = ~year|plot))
-plot(an.365.t.cor) # examine residuals
+plot(an.sp.t.cor) # examine residuals
 
-an.365.p.t.cor <- lme(richness ~ trt+year+tot.precip.365+mean.temp.365, # base + prev 365 temp + precip + cor
+an.sp.p.t.cor <- lme(richness ~ trt+year+prev.sp.mean.temp+prev.sp.precip, # base + prev sp temp + precip + cor
                      data = rich.annual,
                      random = ~1|plot,
                      correlation = corAR1(form = ~year|plot))
-plot(an.365.p.t.cor) # examine residuals
+plot(an.sp.p.t.cor) # examine residuals
 
-
-## Include interaction terms
-an.base.cor.int <- lme(richness ~ trt*year,  # base + cor
+## previous summer
+an.su.p.cor <- lme(richness ~ trt+year+prev.su.precip, # base + prev su precip + cor
                    data = rich.annual,
                    random = ~1|plot,
                    correlation = corAR1(form = ~year|plot))
-plot(an.base.cor.int) # examine residuals
+plot(an.su.p.cor) # examine residuals
 
+an.su.t.cor <- lme(richness ~ trt+year+prev.su.mean.temp, # base + prev su temp + cor
+                   data = rich.annual,
+                   random = ~1|plot,
+                   correlation = corAR1(form = ~year|plot))
+plot(an.su.t.cor) # examine residuals
+
+an.su.p.t.cor <- lme(richness ~ trt+year+prev.su.mean.temp+prev.su.precip, # base + prev su temp + precip + cor
+                     data = rich.annual,
+                     random = ~1|plot,
+                     correlation = corAR1(form = ~year|plot))
+plot(an.su.p.t.cor) # examine residuals
+
+# weather models (with INT, no COR)
+## previous growing season
+an.pgs.p.int <- lme(richness ~ trt*year*prev.gs.precip, # base + prev gs precip + int
+                    data = rich.annual,
+                    random = ~1|plot)
+plot(an.pgs.p.int) 
+
+an.pgs.t.int <- lme(richness ~ trt*year*prev.gs.mean.temp, # base + prev gs temp + int
+                    data = rich.annual,
+                    random = ~1|plot)
+plot(an.pgs.t.int) # examine residuals
+
+an.pgs.p.t.int <- lme(richness ~ trt*year*prev.gs.mean.temp*prev.gs.precip, # base + prev gs temp + precip + int
+                      data = rich.annual,
+                      random = ~1|plot)
+plot(an.pgs.p.t.int) # examine residuals
+
+## previous spring
+an.sp.p.int <- lme(richness ~ trt*year*prev.sp.precip, # base + prev sp precip + int
+                   data = rich.annual,
+                   random = ~1|plot)
+plot(an.sp.p.int) 
+
+an.sp.t.int <- lme(richness ~ trt*year*prev.sp.mean.temp, # base + prev sp temp + int
+                   data = rich.annual,
+                   random = ~1|plot)
+plot(an.sp.t.int) # examine residuals
+
+an.sp.p.t.int <- lme(richness ~ trt*year*prev.sp.mean.temp*prev.sp.precip, # base + prev sp temp + precip + int
+                     data = rich.annual,
+                     random = ~1|plot)
+plot(an.sp.p.t.int) # examine residuals
+
+## previous summer
+an.su.p.int <- lme(richness ~ trt*year*prev.su.precip, # base + prev su precip + int
+                   data = rich.annual,
+                   random = ~1|plot)
+plot(an.su.p.int) 
+
+an.su.t.int <- lme(richness ~ trt*year*prev.su.mean.temp, # base + prev sp temp + int
+                   data = rich.annual,
+                   random = ~1|plot)
+plot(an.su.t.int) # examine residuals
+
+an.su.p.t.int <- lme(richness ~ trt*year*prev.su.mean.temp*prev.su.precip, # base + prev sp temp + precip + int
+                     data = rich.annual,
+                     random = ~1|plot)
+plot(an.su.p.t.int) # examine residuals
+
+# weather models (with INT, with COR)
+## previous growing season
 an.pgs.p.cor.int <- lme(richness ~ trt*year*prev.gs.precip, # base + prev gs precip + cor + int
-                       data = rich.annual,
-                       random = ~1|plot,
-                       correlation = corAR1(form = ~year|plot))
+                        data = rich.annual,
+                        random = ~1|plot,
+                        correlation = corAR1(form = ~year|plot))
 plot(an.pgs.p.cor.int) # examine residuals
 
-
 an.pgs.t.cor.int <- lme(richness ~ trt*year*prev.gs.mean.temp, # base + prev gs temp + cor + int
-                       data = rich.annual,
-                       random = ~1|plot,
-                       correlation = corAR1(form = ~year|plot))
+                        data = rich.annual,
+                        random = ~1|plot,
+                        correlation = corAR1(form = ~year|plot))
 plot(an.pgs.t.cor.int) # examine residuals
 
-an.pgs.p.t.cor.int <- lme(richness ~ trt*year*prev.gs.mean.temp*prev.gs.precip, # base + prev gs temp + precip + cor
-                         data = rich.annual,
-                         random = ~1|plot,
-                         correlation = corAR1(form = ~year|plot))
+an.pgs.p.t.cor.int <- lme(richness ~ trt*year*prev.gs.mean.temp*prev.gs.precip, # base + prev gs temp + precip + cor + int
+                          data = rich.annual,
+                          random = ~1|plot,
+                          correlation = corAR1(form = ~year|plot))
 plot(an.pgs.p.t.cor.int) # examine residuals
 
-
-an.365.p.cor.int <- lme(richness ~ trt*year*tot.precip.365, # base + prev 365 precip + cor
+## previous spring
+an.sp.p.cor.int <- lme(richness ~ trt*year*prev.sp.precip, # base + prev sp precip + cor + int
                        data = rich.annual,
                        random = ~1|plot,
                        correlation = corAR1(form = ~year|plot))
-plot(an.365.p.cor.int) # examine residuals
+plot(an.sp.p.cor.int) # examine residuals
 
-
-an.365.t.cor.int <- lme(richness ~ trt*year*mean.temp.365, # base + prev 365 temp + cor + int
+an.sp.t.cor.int <- lme(richness ~ trt*year*prev.sp.mean.temp, # base + prev sp temp + cor + int
                        data = rich.annual,
                        random = ~1|plot,
                        correlation = corAR1(form = ~year|plot))
-plot(an.365.t.cor.int) # examine residuals
+plot(an.sp.t.cor.int) # examine residuals
 
-an.365.p.t.cor.int <- lme(richness ~ trt*year*tot.precip.365*mean.temp.365, # base + prev 365 temp + precip + cor
+an.sp.p.t.cor.int <- lme(richness ~ trt*year*prev.sp.mean.temp*prev.sp.precip, # base + prev sp temp + precip + cor + int
                          data = rich.annual,
                          random = ~1|plot,
                          correlation = corAR1(form = ~year|plot))
-plot(an.365.p.t.cor.int) # examine residuals
+plot(an.sp.p.t.cor.int) # examine residuals
 
-## Model selection ----
-myAIC <- c(AIC(an), AIC(an.base), AIC(an.base.cor), 
-           AIC(an.pgs.p), AIC(an.pgs.t), AIC(an.pgs.p.t), 
-           AIC(an.pgs.p.cor), AIC(an.pgs.t.cor), AIC(an.pgs.p.t.cor),
-           AIC(an.365.p), AIC(an.365.t), AIC(an.365.p.t), 
-           AIC(an.365.p.cor), AIC(an.365.t.cor), AIC(an.365.p.t.cor),
-           AIC(an.base.cor.int), AIC(an.pgs.t.cor.int), AIC(an.pgs.p.cor.int), AIC(an.pgs.p.t.cor.int), 
-           AIC(an.365.p.cor.int), AIC(an.365.t.cor.int), AIC(an.365.p.t.cor.int)
-)
+## previous summer
+an.su.p.cor.int <- lme(richness ~ trt*year*prev.su.precip, # base + prev su precip + cor + int
+                       data = rich.annual,
+                       random = ~1|plot,
+                       correlation = corAR1(form = ~year|plot))
+plot(an.su.p.cor.int) # examine residuals
+
+an.su.t.cor.int <- lme(richness ~ trt*year*prev.su.mean.temp, # base + prev su temp + cor + int
+                       data = rich.annual,
+                       random = ~1|plot,
+                       correlation = corAR1(form = ~year|plot))
+plot(an.su.t.cor.int) # examine residuals
+
+an.su.p.t.cor.int <- lme(richness ~ trt*year*prev.su.mean.temp*prev.su.precip, # base + prev su temp + precip + cor + int
+                         data = rich.annual,
+                         random = ~1|plot,
+                         correlation = corAR1(form = ~year|plot))
+plot(an.su.p.t.cor.int) # examine residuals
+
+## Calculate AIC
+myAIC <- c(AIC(an.null), AIC(an.null.cor), AIC(an.yr), AIC(an.yr.cor), AIC(an.trt), AIC(an.trt.cor),
+           AIC(an.base), AIC(an.base.cor), AIC(an.base.int), AIC(an.base.int.cor),
+           
+           AIC(an.pgs.p), AIC(an.pgs.p.cor), AIC(an.pgs.p.int), AIC(an.pgs.p.cor.int),
+           AIC(an.pgs.t), AIC(an.pgs.t.cor), AIC(an.pgs.t.int), AIC(an.pgs.t.cor.int),
+           AIC(an.pgs.p.t), AIC(an.pgs.p.t.cor), AIC(an.pgs.p.t.int), AIC(an.pgs.p.t.cor.int),
+           
+           AIC(an.sp.p), AIC(an.sp.p.cor), AIC(an.sp.p.int), AIC(an.sp.p.cor.int),
+           AIC(an.sp.t), AIC(an.sp.t.cor), AIC(an.sp.t.int), AIC(an.sp.t.cor.int),
+           AIC(an.sp.p.t), AIC(an.sp.p.t.cor), AIC(an.sp.p.t.int), AIC(an.sp.p.t.cor.int),
+           
+           AIC(an.su.p), AIC(an.su.p.cor), AIC(an.su.p.int), AIC(an.su.p.cor.int),
+           AIC(an.su.t), AIC(an.su.t.cor), AIC(an.su.t.int), AIC(an.su.t.cor.int),
+           AIC(an.su.p.t), AIC(an.su.p.t.cor), AIC(an.su.p.t.int), AIC(an.su.p.t.cor.int))
 delta <- myAIC - min(myAIC)
-model <- c("base", "base.int", "base.cor", 
-           "pgs.p", "pgs.t", "pgs.p.t", 
-           "pgs.p.cor", "pgs.t.cor", "pgs.p.t.cor",
-           "365.p", "365.t", "365.p.t", 
-           "365.p.cor", "365.t.cor", "365.p.t.cor",
-           "base.cor.int","pgs.t.cor.int", "pgs.p.cor.int", "pgs.p.t.cor.int", 
-           "365.p.cor.int", "365.t.cor.int", "365.p.t.cor.int"
-)
-tab1 <- data.frame(model = model, aic = myAIC, delta = delta,
-                   stringsAsFactors = FALSE)
+model <- c("null","null.cor", "year", "year.cor", "trt", "trt.cor",
+           "base", "base.cor", "base.int", "base.cor.int",
+           
+           "pgs.p", "pgs.p.cor", "pgs.p.int", "pgs.p.cor.int",
+           "pgs.t", "pgs.t.cor", "pgs.t.int", "pgs.t.cor.int",
+           "pgs.p.t", "pgs.p.t.cor", "pgs.p.t.int", "pgs.p.t.cor.int",
+           
+           "sp.p", "sp.p.cor", "sp.p.int", "sp.p.cor.int",
+           "sp.t", "sp.t.cor", "sp.t.int", "sp.t.cor.int",
+           "sp.p.t", "sp.p.t.cor", "sp.p.t.int", "sp.p.t.cor.int",
+           
+           "su.p", "su.p.cor", "su.p.int", "su.p.cor.int",
+           "su.t", "su.t.cor", "su.t.int", "su.t.cor.int",
+           "su.p.t", "su.p.t.cor", "su.p.t.int", "su.p.t.cor.int")
+rich.an.AIC <- data.frame(model = model, aic = myAIC, delta = delta,
+                           stringsAsFactors = FALSE)
 
 # summary
 summary(an.pgs.t.cor)$tTable %>%
@@ -517,38 +732,30 @@ visreg(an.pgs.t.cor, xvar = "trt",
        ylab = "Species Richness (annuals)",
        overlay = TRUE)
 
-### x = year, y = annual spp. rich, by trt
-plot(visreg(an.pgs.t.cor, xvar = "year", by = "trt", overlay = TRUE, plot = FALSE),
+### x = year, y = annual spp. rich
+plot(visreg(an.pgs.t.cor, xvar = "year", overlay = TRUE, plot = FALSE),
      xaxp = c(1, 11, 10),
      legend = FALSE,
-     points = list(col = c("black", "darkorange", "deepskyblue2"), cex = 1),
-     line = list(col = c("black", "darkorange", "deepskyblue2")),
      main = "Species Richness (Annuals)",
      xlab = "Year",
      ylab = "Species Richness (annuals)",
      overlay = TRUE)
-legend(x = "bottomright", 
-       legend = c("Control", "Drought", "Irrigated"),
-       col = c("black", "darkorange", "deepskyblue3"),
-       lwd = 3,
-       pch = 1)
 
-### x = temp, y = annual spp rich, by trt
-plot(visreg(an.pgs.t.cor, xvar = "prev.gs.mean.temp", by = "trt", overlay = TRUE, plot = FALSE),
+### x = temp, y = annual spp rich
+plot(visreg(an.pgs.t.cor, xvar = "prev.gs.mean.temp", overlay = TRUE, plot = FALSE),
      legend = FALSE,
-       points = list(col = c("black", "darkorange", "deepskyblue2"), cex = 1),
-       line = list(col = c("black", "darkorange", "deepskyblue2")),
      main = "Species Richness (Annuals)",
        xlab = "Mean Temperature (°C) in Previous Growing Season",
        ylab = "Species Richness (annuals)",
        overlay = TRUE)
-legend(x = "bottomright", 
-       legend = c("Control", "Drought", "Irrigated"),
-       col = c("black", "darkorange", "deepskyblue3"),
-       lwd = 3,
-       pch = 1)
 
-
+### x = precip, y = annual spp rich, by trt
+plot(visreg(an.pgs.t.cor, xvar = "prev.gs.precip", overlay = TRUE, plot = FALSE),
+     legend = FALSE,
+     main = "Species Richness (Annuals)",
+     xlab = "Total Precipitation (mm) in Previous Growing Season",
+     ylab = "Species Richness (annuals)",
+     overlay = TRUE)
 
 
 # 4. Model perennial species richness as a function of year, treatment, and climate ----
@@ -559,26 +766,71 @@ rich.perennial <- plants %>%
   dplyr::summarize(richness = n())%>%
   filter(duration == "perennial") %>%
   left_join(weather.prev.gs) %>% # add weather data
-  left_join(weather.prev.365)
+  left_join(weather.prev.sp) %>%
+  left_join(weather.prev.su)
+  
 
 names(rich.perennial)[names(rich.perennial) == "treatment"] <- "trt"
 rich.perennial$year <- as.integer(as.factor(rich.perennial$year)) # change year to an integer for modeling
 
 ## linear mixed effects models ----
-pe <- lme(richness ~ trt+year, # base
-          data = rich.perennial,
-          random = ~1|plot)
-plot(pe)
+# null models
+pe.null <- lme(richness~1, 
+               data = rich.perennial, 
+               random = ~1|plot)
 
-pe.base <- lme(richness ~ trt*year, # base
+pe.null.cor <- lme(richness ~ 1,
+                   data = rich.perennial,
+                   random = ~1|plot,
+                   correlation = corAR1(form = ~year|plot))
+
+pe.yr <- lme(richness~year,
+             data = rich.perennial,
+             random = ~1|plot)
+
+pe.yr.cor <- lme(richness ~ year,
+                 data = rich.perennial,
+                 random = ~1|plot,
+                 correlation = corAR1(form = ~year|plot))
+
+pe.trt <- lme(richness~trt,
+              data = rich.perennial,
+              random = ~1|plot)
+
+pe.trt.cor <- lme(richness ~ trt,
+                  data = rich.perennial,
+                  random = ~1|plot,
+                  correlation = corAR1(form = ~year|plot))
+
+# base models
+pe.base <- lme(richness ~ trt+year, # base
                data = rich.perennial,
                random = ~1|plot)
-plot(pe.base) # examine residuals, look fine
+plot(pe.base)
 
+pe.base.int <- lme(richness ~ trt*year, # base + int
+                   data = rich.perennial,
+                   random = ~1|plot)
+plot(pe.base.int)
+
+pe.base.cor <- lme(richness ~ trt+year, # base + cor
+                   data = rich.perennial,
+                   random = ~1|plot,
+                   correlation = corAR1(form = ~year|plot))
+plot(pe.base.cor)
+
+pe.base.int.cor <- lme(richness ~ trt*year, # base + int + cor
+                       data = rich.perennial,
+                       random = ~1|plot,
+                       correlation = corAR1(form = ~year|plot))
+plot(pe.base.int.cor)
+
+# weather models 
+## previous growing season
 pe.pgs.p <- lme(richness ~ trt+year+prev.gs.precip, # base + prev gs precip
                 data = rich.perennial,
                 random = ~1|plot)
-plot(pe.pgs.p) # examine residuals
+plot(pe.pgs.p) 
 
 pe.pgs.t <- lme(richness ~ trt+year+prev.gs.mean.temp, # base + prev gs temp
                 data = rich.perennial,
@@ -590,30 +842,40 @@ pe.pgs.p.t <- lme(richness ~ trt+year+prev.gs.mean.temp+prev.gs.precip, # base +
                   random = ~1|plot)
 plot(pe.pgs.p.t) # examine residuals
 
-pe.365.p <- lme(richness ~ trt+year+tot.precip.365, # base + prev 365 precip
-                data = rich.perennial,
-                random = ~1|plot)
-plot(pe.pgs.p) # examine residuals
+## previous spring
+pe.sp.p <- lme(richness ~ trt+year+prev.sp.precip, # base + prev sp precip
+               data = rich.perennial,
+               random = ~1|plot)
+plot(pe.sp.p) 
 
-pe.365.t <- lme(richness ~ trt+year+mean.temp.365, # base + prev 365 temp
-                data = rich.perennial,
-                random = ~1|plot)
-plot(pe.365.t) # examine residuals,
+pe.sp.t <- lme(richness ~ trt+year+prev.sp.mean.temp, # base + prev sp temp
+               data = rich.perennial,
+               random = ~1|plot)
+plot(pe.sp.t) # examine residuals,
 
-pe.365.p.t <- lme(richness ~ trt+year+tot.precip.365+mean.temp.365, # base + prev 365 temp + precip
-                  data = rich.perennial,
-                  random = ~1|plot)
-plot(pe.365.p.t) # examine residuals
+pe.sp.p.t <- lme(richness ~ trt+year+prev.sp.mean.temp+prev.sp.precip, # base + prev sp temp + precip
+                 data = rich.perennial,
+                 random = ~1|plot)
+plot(pe.sp.p.t) # examine residuals
 
+## previous summer
+pe.su.p <- lme(richness ~ trt+year+prev.su.precip, # base + prev su precip
+               data = rich.perennial,
+               random = ~1|plot)
+plot(pe.su.p) 
 
-# Model with AR(1) temporal autocorrelation structure
+pe.su.t <- lme(richness ~ trt+year+prev.su.mean.temp, # base + prev su temp
+               data = rich.perennial,
+               random = ~1|plot)
+plot(pe.su.t) # examine residuals,
 
-pe.base.cor <- lme(richness ~ trt+year,  # base + cor
-                   data = rich.perennial,
-                   random = ~1|plot,
-                   correlation = corAR1(form = ~year|plot))
-plot(pe.base.cor) # examine residuals
+pe.su.p.t <- lme(richness ~ trt+year+prev.su.mean.temp+prev.su.precip, # base + prev su temp + precip
+                 data = rich.perennial,
+                 random = ~1|plot)
+plot(pe.su.p.t) # examine residuals
 
+# weather models (no INT, with COR)
+## previous growing season
 pe.pgs.p.cor <- lme(richness ~ trt+year+prev.gs.precip, # base + prev gs precip + cor
                     data = rich.perennial,
                     random = ~1|plot,
@@ -632,38 +894,100 @@ pe.pgs.p.t.cor <- lme(richness ~ trt+year+prev.gs.mean.temp+prev.gs.precip, # ba
                       correlation = corAR1(form = ~year|plot))
 plot(pe.pgs.p.t.cor) # examine residuals
 
-pe.365.p.cor <- lme(richness ~ trt+year+tot.precip.365, # base + prev 365 precip + cor
-                    data = rich.perennial,
-                    random = ~1|plot,
-                    correlation = corAR1(form = ~year|plot))
-plot(pe.pgs.p.cor) # examine residuals
-
-pe.365.t.cor <- lme(richness ~ trt+year+mean.temp.365, # base + prev 365 temp + cor
-                    data = rich.perennial,
-                    random = ~1|plot,
-                    correlation = corAR1(form = ~year|plot))
-plot(pe.365.t.cor) # examine residuals
-
-pe.365.p.t.cor <- lme(richness ~ trt+year+tot.precip.365+mean.temp.365, # base + prev 365 temp + precip + cor
-                      data = rich.perennial,
-                      random = ~1|plot,
-                      correlation = corAR1(form = ~year|plot))
-plot(pe.365.p.t.cor) # examine residuals
-
-
-## Include interaction terms
-pe.base.cor.int <- lme(richness ~ trt*year,  # base + cor +int
+## previous spring
+pe.sp.p.cor <- lme(richness ~ trt+year+prev.sp.precip, # base + prev sp precip + cor
                    data = rich.perennial,
                    random = ~1|plot,
                    correlation = corAR1(form = ~year|plot))
-plot(pe.base.cor.int) # examine residuals
+plot(pe.sp.p.cor) # examine residuals
 
+pe.sp.t.cor <- lme(richness ~ trt+year+prev.sp.mean.temp, # base + prev sp temp + cor
+                   data = rich.perennial,
+                   random = ~1|plot,
+                   correlation = corAR1(form = ~year|plot))
+plot(pe.sp.t.cor) # examine residuals
+
+pe.sp.p.t.cor <- lme(richness ~ trt+year+prev.sp.mean.temp+prev.sp.precip, # base + prev sp temp + precip + cor
+                     data = rich.perennial,
+                     random = ~1|plot,
+                     correlation = corAR1(form = ~year|plot))
+plot(pe.sp.p.t.cor) # examine residuals
+
+## previous summer
+pe.su.p.cor <- lme(richness ~ trt+year+prev.su.precip, # base + prev su precip + cor
+                   data = rich.perennial,
+                   random = ~1|plot,
+                   correlation = corAR1(form = ~year|plot))
+plot(pe.su.p.cor) # examine residuals
+
+pe.su.t.cor <- lme(richness ~ trt+year+prev.su.mean.temp, # base + prev su temp + cor
+                   data = rich.perennial,
+                   random = ~1|plot,
+                   correlation = corAR1(form = ~year|plot))
+plot(pe.su.t.cor) # examine residuals
+
+pe.su.p.t.cor <- lme(richness ~ trt+year+prev.su.mean.temp+prev.su.precip, # base + prev su temp + precip + cor
+                     data = rich.perennial,
+                     random = ~1|plot,
+                     correlation = corAR1(form = ~year|plot))
+plot(pe.su.p.t.cor) # examine residuals
+
+# weather models (with INT, no COR)
+## previous growing season
+pe.pgs.p.int <- lme(richness ~ trt*year*prev.gs.precip, # base + prev gs precip + int
+                    data = rich.perennial,
+                    random = ~1|plot)
+plot(pe.pgs.p.int) 
+
+pe.pgs.t.int <- lme(richness ~ trt*year*prev.gs.mean.temp, # base + prev gs temp + int
+                    data = rich.perennial,
+                    random = ~1|plot)
+plot(pe.pgs.t.int) # examine residuals
+
+pe.pgs.p.t.int <- lme(richness ~ trt*year*prev.gs.mean.temp*prev.gs.precip, # base + prev gs temp + precip + int
+                      data = rich.perennial,
+                      random = ~1|plot)
+plot(pe.pgs.p.t.int) # examine residuals
+
+## previous spring
+pe.sp.p.int <- lme(richness ~ trt*year*prev.sp.precip, # base + prev sp precip + int
+                   data = rich.perennial,
+                   random = ~1|plot)
+plot(pe.sp.p.int) 
+
+pe.sp.t.int <- lme(richness ~ trt*year*prev.sp.mean.temp, # base + prev sp temp + int
+                   data = rich.perennial,
+                   random = ~1|plot)
+plot(pe.sp.t.int) # examine residuals
+
+pe.sp.p.t.int <- lme(richness ~ trt*year*prev.sp.mean.temp*prev.sp.precip, # base + prev sp temp + precip + int
+                     data = rich.perennial,
+                     random = ~1|plot)
+plot(pe.sp.p.t.int) # examine residuals
+
+## previous summer
+pe.su.p.int <- lme(richness ~ trt*year*prev.su.precip, # base + prev su precip + int
+                   data = rich.perennial,
+                   random = ~1|plot)
+plot(pe.su.p.int) 
+
+pe.su.t.int <- lme(richness ~ trt*year*prev.su.mean.temp, # base + prev sp temp + int
+                   data = rich.perennial,
+                   random = ~1|plot)
+plot(pe.su.t.int) # examine residuals
+
+pe.su.p.t.int <- lme(richness ~ trt*year*prev.su.mean.temp*prev.su.precip, # base + prev sp temp + precip + int
+                     data = rich.perennial,
+                     random = ~1|plot)
+plot(pe.su.p.t.int) # examine residuals
+
+# weather models (with INT, with COR)
+## previous growing season
 pe.pgs.p.cor.int <- lme(richness ~ trt*year*prev.gs.precip, # base + prev gs precip + cor + int
                         data = rich.perennial,
                         random = ~1|plot,
                         correlation = corAR1(form = ~year|plot))
 plot(pe.pgs.p.cor.int) # examine residuals
-
 
 pe.pgs.t.cor.int <- lme(richness ~ trt*year*prev.gs.mean.temp, # base + prev gs temp + cor + int
                         data = rich.perennial,
@@ -671,65 +995,96 @@ pe.pgs.t.cor.int <- lme(richness ~ trt*year*prev.gs.mean.temp, # base + prev gs 
                         correlation = corAR1(form = ~year|plot))
 plot(pe.pgs.t.cor.int) # examine residuals
 
-pe.pgs.p.t.cor.int <- lme(richness ~ trt*year*prev.gs.mean.temp*prev.gs.precip, # base + prev gs temp + precip + cor
+pe.pgs.p.t.cor.int <- lme(richness ~ trt*year*prev.gs.mean.temp*prev.gs.precip, # base + prev gs temp + precip + cor + int
                           data = rich.perennial,
                           random = ~1|plot,
                           correlation = corAR1(form = ~year|plot))
 plot(pe.pgs.p.t.cor.int) # examine residuals
 
+## previous spring
+pe.sp.p.cor.int <- lme(richness ~ trt*year*prev.sp.precip, # base + prev sp precip + cor + int
+                       data = rich.perennial,
+                       random = ~1|plot,
+                       correlation = corAR1(form = ~year|plot))
+plot(pe.sp.p.cor.int) # examine residuals
 
-pe.365.p.cor.int <- lme(richness ~ trt*year*tot.precip.365, # base + prev 365 precip + cor
-                        data = rich.perennial,
-                        random = ~1|plot,
-                        correlation = corAR1(form = ~year|plot))
-plot(pe.365.p.cor.int) # examine residuals
+pe.sp.t.cor.int <- lme(richness ~ trt*year*prev.sp.mean.temp, # base + prev sp temp + cor + int
+                       data = rich.perennial,
+                       random = ~1|plot,
+                       correlation = corAR1(form = ~year|plot))
+plot(pe.sp.t.cor.int) # examine residuals
 
+pe.sp.p.t.cor.int <- lme(richness ~ trt*year*prev.sp.mean.temp*prev.sp.precip, # base + prev sp temp + precip + cor + int
+                         data = rich.perennial,
+                         random = ~1|plot,
+                         correlation = corAR1(form = ~year|plot))
+plot(pe.sp.p.t.cor.int) # examine residuals
 
-pe.365.t.cor.int <- lme(richness ~ trt*year*mean.temp.365, # base + prev 365 temp + cor + int
-                        data = rich.perennial,
-                        random = ~1|plot,
-                        correlation = corAR1(form = ~year|plot))
-plot(pe.365.t.cor.int) # examine residuals
+## previous summer
+pe.su.p.cor.int <- lme(richness ~ trt*year*prev.su.precip, # base + prev su precip + cor + int
+                       data = rich.perennial,
+                       random = ~1|plot,
+                       correlation = corAR1(form = ~year|plot))
+plot(pe.su.p.cor.int) # examine residuals
 
-pe.365.p.t.cor.int <- lme(richness ~ trt*year*tot.precip.365*mean.temp.365, # base + prev 365 temp + precip + cor
-                          data = rich.perennial,
-                          random = ~1|plot,
-                          correlation = corAR1(form = ~year|plot))
-plot(pe.365.p.t.cor.int) # examine residuals
+pe.su.t.cor.int <- lme(richness ~ trt*year*prev.su.mean.temp, # base + prev su temp + cor + int
+                       data = rich.perennial,
+                       random = ~1|plot,
+                       correlation = corAR1(form = ~year|plot))
+plot(pe.su.t.cor.int) # examine residuals
 
-## Model selection ----
-myAIC <- c(AIC(an), AIC(pe.base), AIC(pe.base.cor), 
-           AIC(pe.pgs.p), AIC(pe.pgs.t), AIC(pe.pgs.p.t), 
-           AIC(pe.pgs.p.cor), AIC(pe.pgs.t.cor), AIC(pe.pgs.p.t.cor),
-           AIC(pe.365.p), AIC(pe.365.t), AIC(pe.365.p.t), 
-           AIC(pe.365.p.cor), AIC(pe.365.t.cor), AIC(pe.365.p.t.cor),
-           AIC(pe.base.cor.int), AIC(pe.pgs.t.cor.int), AIC(pe.pgs.p.cor.int), AIC(pe.pgs.p.t.cor.int), 
-           AIC(pe.365.p.cor.int), AIC(pe.365.t.cor.int), AIC(pe.365.p.t.cor.int)
-)
+pe.su.p.t.cor.int <- lme(richness ~ trt*year*prev.su.mean.temp*prev.su.precip, # base + prev su temp + precip + cor + int
+                         data = rich.perennial,
+                         random = ~1|plot,
+                         correlation = corAR1(form = ~year|plot))
+plot(pe.su.p.t.cor.int) # examine residuals
+
+## Calculate AIC
+myAIC <- c(AIC(pe.null), AIC(pe.null.cor), AIC(pe.yr), AIC(pe.yr.cor), AIC(pe.trt), AIC(pe.trt.cor),
+           AIC(pe.base), AIC(pe.base.cor), AIC(pe.base.int), AIC(pe.base.int.cor),
+           
+           AIC(pe.pgs.p), AIC(pe.pgs.p.cor), AIC(pe.pgs.p.int), AIC(pe.pgs.p.cor.int),
+           AIC(pe.pgs.t), AIC(pe.pgs.t.cor), AIC(pe.pgs.t.int), AIC(pe.pgs.t.cor.int),
+           AIC(pe.pgs.p.t), AIC(pe.pgs.p.t.cor), AIC(pe.pgs.p.t.int), AIC(pe.pgs.p.t.cor.int),
+           
+           AIC(pe.sp.p), AIC(pe.sp.p.cor), AIC(pe.sp.p.int), AIC(pe.sp.p.cor.int),
+           AIC(pe.sp.t), AIC(pe.sp.t.cor), AIC(pe.sp.t.int), AIC(pe.sp.t.cor.int),
+           AIC(pe.sp.p.t), AIC(pe.sp.p.t.cor), AIC(pe.sp.p.t.int), AIC(pe.sp.p.t.cor.int),
+           
+           AIC(pe.su.p), AIC(pe.su.p.cor), AIC(pe.su.p.int), AIC(pe.su.p.cor.int),
+           AIC(pe.su.t), AIC(pe.su.t.cor), AIC(pe.su.t.int), AIC(pe.su.t.cor.int),
+           AIC(pe.su.p.t), AIC(pe.su.p.t.cor), AIC(pe.su.p.t.int), AIC(pe.su.p.t.cor.int))
 delta <- myAIC - min(myAIC)
-model <- c("base", "base.int", "base.cor", 
-           "pgs.p", "pgs.t", "pgs.p.t", 
-           "pgs.p.cor", "pgs.t.cor", "pgs.p.t.cor",
-           "365.p", "365.t", "365.p.t", 
-           "365.p.cor", "365.t.cor", "365.p.t.cor",
-           "base.cor.int", "pgs.t.cor.int", "pgs.p.cor.int", "pgs.p.t.cor.int", 
-           "365.p.cor.int", "365.t.cor.int", "365.p.t.cor.int"
-)
-tab1 <- data.frame(model = model, aic = myAIC, delta = delta,
-                   stringsAsFactors = FALSE)
+model <- c("null","null.cor", "year", "year.cor", "trt", "trt.cor",
+           "base", "base.cor", "base.int", "base.cor.int",
+           
+           "pgs.p", "pgs.p.cor", "pgs.p.int", "pgs.p.cor.int",
+           "pgs.t", "pgs.t.cor", "pgs.t.int", "pgs.t.cor.int",
+           "pgs.p.t", "pgs.p.t.cor", "pgs.p.t.int", "pgs.p.t.cor.int",
+           
+           "sp.p", "sp.p.cor", "sp.p.int", "sp.p.cor.int",
+           "sp.t", "sp.t.cor", "sp.t.int", "sp.t.cor.int",
+           "sp.p.t", "sp.p.t.cor", "sp.p.t.int", "sp.p.t.cor.int",
+           
+           "su.p", "su.p.cor", "su.p.int", "su.p.cor.int",
+           "su.t", "su.t.cor", "su.t.int", "su.t.cor.int",
+           "su.p.t", "su.p.t.cor", "su.p.t.int", "su.p.t.cor.int")
+
+rich.pe.AIC <- data.frame(model = model, aic = myAIC, delta = delta,
+                          stringsAsFactors = FALSE)
 
 # summary
-summary(pe.base)$tTable %>%
+summary(pe.su.t.cor)$tTable %>%
   as_tibble(rownames = "variable") %>%
   knitr::kable(digits = 3)
 
 # testing null hypothesis of no difference in mean species richness over time or between years
-Anova(pe.base, type = 3) #marginal, not sequential
+Anova(pe.su.t.cor, type = 3) #marginal, not sequential
 
 
 ## Plot model fit ----
 ### treatment
-visreg(pe.base, xvar = "trt",
+visreg(pe.su.t.cor, xvar = "trt",
        points = list(cex = 1),
        line = list(col = c("black")),
        main = "Species Richness (Perennials)",
@@ -738,21 +1093,22 @@ visreg(pe.base, xvar = "trt",
        overlay = TRUE)
 
 ### x = year, y = spp rich, by trt
-plot(visreg(pe.base, xvar = "year", by = "trt", overlay = TRUE, plot = FALSE),
+plot(visreg(pe.su.t.cor, xvar = "year", overlay = TRUE, plot = FALSE),
      xaxp = c(1, 11, 10),
      ylim = range(6, 15),
      legend = FALSE,
-       points = list(col = c("black", "darkorange", "deepskyblue2"), cex = 1),
-       line = list(col = c("black", "darkorange", "deepskyblue2")),
      main = "Species Richness (Perennials)",
        xlab = "Year",
        ylab = "Species Richness (perennials)",
        overlay = TRUE)
-legend(x = "bottomright", 
-       legend = c("Control", "Drought", "Irrigated"),
-       col = c("black", "darkorange", "deepskyblue3"),
-       lwd = 3,
-       pch = 1)
+
+
+plot(visreg(pe.su.t.cor, xvar = "prev.su.mean.temp", overlay = TRUE, plot = FALSE),
+     legend = FALSE,
+     main = "Species Richness (Perennials)",
+     xlab = "Mean Temperature (°C) in Previous Summer",
+     ylab = "Species Richness (perennials)",
+     overlay = TRUE)
 
 ## Calculating species richness averages ----
 rich.annual <- rich.annual %>%

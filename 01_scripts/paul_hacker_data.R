@@ -14,7 +14,7 @@ setwd("C:/Users/Robin/Documents/School/Williams Lab/cowichan-diversity")
 paul.dat <- read.csv("00_rawdata/cabo-leaf-CN-species.csv")
 
 # Data Cleaning ----
-clean.dat <- paul.dat %>%
+clean.paul.dat <- paul.dat %>%
   select(-c(2, 3, 4, 5, 13, 14, 15, 16))%>%
   filter(!(species %in% c("Camassia leichtlinii", "Festuca idahoensis Elmer",
                         "Polystichum munitum (Kaulfuss) C. Presl", "Holodiscus discolor (Pursh) Maximowicz",
@@ -22,30 +22,30 @@ clean.dat <- paul.dat %>%
                         "Rosa nutkana C. Presl", "Crataegus monogyna Jacquin", 
                         "Sericocarpus rigidus Lindley", "Cytisus scoparius (Linnaeus) Link",
                         "Quercus garryana Douglas ex Hooker")))%>%
-  mutate(species_code = case_when(
-    species == "Camassia quamash" ~ "CAQU",
-    species == "Plectritis congesta" ~ "PLCO",
-    species == "Lomatium utriculatum" ~"LOUT",
-    species == "Dactylis glomerata" ~ "DAGL",
-    species == "Lomatium utriculatum (Nuttall ex Torrey & A. Gray) J.M. Coulter & Rose" ~ "LOUT",
-    species == "Dactylis glomerata Linnaeus" ~ "DAGL",
-    species == "Plectritis congesta (Lindley) de Candolle" ~ "PLCO",
-    species == "Bromus sterilis Linnaeus" ~ "BRST",
-    species == "Bromus sitchensis var. carinatus (Hooker & Arnott) R.E. Brainerd & Otting" ~ "BRCA",
-    species == "Claytonia perfoliata Donn ex Willdenow" ~ "CLPE",
-    species == "Symphoricarpos albus (Linnaeus) S.F. Blake" ~ "SYAL",
-    species == "Berberis aquifolium Pursh" ~ "BEAQ",
-    species == "Sanicula crassicaulis Poeppig ex de Candolle" ~ "SACR",
-    species == "Sanicula crassicaulis Poeppig ex de Candolle var. crassicaulis" ~ "SACR",
-    species == "Vicia sativa Linnaeus" ~ "VISA",
-    species == "Lathyrus sphaericus Retzius" ~ "LASP",
-    species == "Poa pratensis Linnaeus" ~ "POPR",
+  mutate(species = case_when(
+    species == "Camassia quamash" ~ "Camassia_quamash",
+    species == "Plectritis congesta" ~ "Plectritis_congesta",
+    species == "Lomatium utriculatum" ~"Lomatium_utriculatum",
+    species == "Dactylis glomerata" ~ "Dactylis_glomerata",
+    species == "Lomatium utriculatum (Nuttall ex Torrey & A. Gray) J.M. Coulter & Rose" ~ "Lomatium_utriculatum",
+    species == "Dactylis glomerata Linnaeus" ~ "Dactylis_glomerata",
+    species == "Plectritis congesta (Lindley) de Candolle" ~ "Plectritis_congesta",
+    species == "Bromus sterilis Linnaeus" ~ "Bromus_sterilis",
+    species == "Bromus sitchensis var. carinatus (Hooker & Arnott) R.E. Brainerd & Otting" ~ "Bromus_carinatus",
+    species == "Claytonia perfoliata Donn ex Willdenow" ~ "Claytonia_perfoliata",
+    species == "Symphoricarpos albus (Linnaeus) S.F. Blake" ~ "Symporicarpos_albus",
+    species == "Berberis aquifolium Pursh" ~ "Berberis_aquifolium",
+    species == "Sanicula crassicaulis Poeppig ex de Candolle" ~ "Sanicula_crassicaulis",
+    species == "Sanicula crassicaulis Poeppig ex de Candolle var. crassicaulis" ~ "Sanicula_crassicaulis",
+    species == "Vicia sativa Linnaeus" ~ "Vicia_sativa",
+    species == "Lathyrus sphaericus Retzius" ~ "Lathyrus_sphaericus",
+    species == "Poa pratensis Linnaeus" ~ "Poa_pratensis",
     TRUE ~ "this is wrong"
   ))
 
 
 # Exploratory plots
-ggplot(clean.dat,aes(x=species_code, y=N_perc))+
+ggplot(clean.paul.dat,aes(x=species_code, y=N_perc))+
   geom_boxplot()+
   geom_jitter()+
   ylab("%N")+
